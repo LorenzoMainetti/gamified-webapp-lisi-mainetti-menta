@@ -1,2 +1,1 @@
-# db2-lisi-mainetti-menta
-prove
+Gamified DB2 LMM
