@@ -6,4 +6,6 @@
     <persistence-unit name="default">
 
     </persistence-unit>
+
+
 </persistence>
