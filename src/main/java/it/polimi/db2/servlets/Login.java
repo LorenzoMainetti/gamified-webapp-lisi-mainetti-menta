@@ -1,6 +1,6 @@
-package servlets;
+package it.polimi.db2.servlets;
 
-import entities.User;
+import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,16 +8,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.text.StringEscapeUtils;
-import services.UserService;
 
 import java.io.IOException;
-import java.io.IOException;
-import java.util.Random;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 
-   @EJB(name = "src/main/java/services/UserService.java")
+   @EJB(name = "it.polimi.db2.entities.services/UserService")
     private UserService usrService;
 
     private void writeUser (String email, String username, String password) {

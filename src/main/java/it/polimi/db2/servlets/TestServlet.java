@@ -1,4 +1,4 @@
-package servlets;
+package it.polimi.db2.servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

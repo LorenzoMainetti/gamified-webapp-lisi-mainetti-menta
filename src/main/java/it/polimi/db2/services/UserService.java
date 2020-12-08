@@ -1,18 +1,16 @@
-package services;
+package it.polimi.db2.services;
 
-import entities.User;
+import it.polimi.db2.entities.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 
 import java.security.InvalidParameterException;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Random;
 
 @Stateless
 
 public class UserService {
-    @PersistenceContext(unitName = "gamifiedapp")
+    @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 
     public UserService() {
@@ -20,27 +18,18 @@ public class UserService {
 
     //TODO da capire se è stato fatto bene
     public void insertUser(String username, String email, String password, boolean banned) throws PersistenceException{
-        try {
-            User user = new User();
-            user.setBanned(true);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setUsername(email);
-            em.persist(user);
-        }
-        catch (PersistenceException e) {
-            throw e;
-        }
+        User user = new User();
+        user.setBanned(true);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setUsername(email);
+        em.persist(user);
     }
 
     private User getUser(String username) throws PersistenceException, InvalidParameterException {
         List<User> usersFromDB = null;
-        try {
-            usersFromDB = em.createNamedQuery("User.getUser", User.class).setParameter(1, username)
-                    .getResultList();
-        } catch (PersistenceException e) {
-            throw e;
-        }
+        usersFromDB = em.createNamedQuery("User.getUser", User.class).setParameter(1, username)
+                .getResultList();
         if (usersFromDB == null) {
             throw new InvalidParameterException("Provided username or password is wrong");
         }
@@ -54,12 +43,8 @@ public class UserService {
 
     public User checkCredentials(String username, String password) throws PersistenceException, InvalidParameterException {
         List<User> usersFromDB = null;
-        try {
-            usersFromDB = em.createNamedQuery("User.checkCredentials", User.class).setParameter(1, username).setParameter(2, password)
-                    .getResultList();
-        } catch (PersistenceException e) {
-            throw e;
-        }
+        usersFromDB = em.createNamedQuery("User.checkCredentials", User.class).setParameter(1, username).setParameter(2, password)
+                .getResultList();
         if (usersFromDB == null) {
             throw new InvalidParameterException("Provided username or password is wrong");
         }

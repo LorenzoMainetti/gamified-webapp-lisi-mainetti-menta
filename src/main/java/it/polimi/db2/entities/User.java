@@ -1,12 +1,12 @@
-package entities;
+package it.polimi.db2.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name = "user", schema = "gamifiedapp")
+@Table(name = "user", schema = "db_gamified_app")
 @NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2")
 @NamedQuery(name = "User.getUser", query = "SELECT r FROM User r  WHERE r.username = ?1")
 public class User implements Serializable {
@@ -21,9 +21,13 @@ public class User implements Serializable {
 
     private boolean banned;
 
-    public User() {
+    @ManyToMany
+    @JoinTable(name="reward",
+            joinColumns={@JoinColumn(name="user_id")},
+            inverseJoinColumns={@JoinColumn(name="product_id")})
+    private List<Product> products;
 
-    }
+    public User() { }
 
     public String getUsername() {
         return username;
