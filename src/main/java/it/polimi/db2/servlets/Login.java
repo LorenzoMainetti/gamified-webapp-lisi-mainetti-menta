@@ -92,7 +92,7 @@ public class Login extends HttpServlet {
 
             return;
         }
-        else if (isSignUp == null) {
+        else if (isSignUp == null) { // *** LOGIN existing user
             //Check if valid (synthax, length)
             if (!isUsernameValid(username)) {
                 sendError(response,"invalid username or password format");
@@ -102,7 +102,7 @@ public class Login extends HttpServlet {
             try {
                 User credentialCheckResultUser = usrService.checkCredentials(username, password);
                 request.getSession().setAttribute("user", credentialCheckResultUser.getUsername());
-                String path = getServletContext().getContextPath() + "/Homepage";
+                String path = getServletContext().getContextPath() + "/homepage.html";
                 response.sendRedirect(path);
             }
             catch (Exception e) {
