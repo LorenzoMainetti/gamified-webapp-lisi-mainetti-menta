@@ -2,40 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="./scripts/login.js" defer></script>
     <title>Welcome</title>
 </head>
 <body>
 <h1>Welcome!</h1>
-<a href="./TestServlet"> test the fcking servlet bruh </a>
 
 <div class="container mx-auto my-5" style="max-width: 600px">
 
-<div class="row mx-auto mt-4">
-    <div class="col">
-        <form action="Login" method="POST">
-            <div class="form-group row">
-                <label for="email-input" class="col-form-label">Email:</label>
-                <input type="email" class="form-control" name="email" id="email-input"
-                       placeholder="email@meeting.com">
-            </div>
-            <div class="form-group row">
-                <label for="password-input" class="col-form-label">Password:</label>
-                <input type="password" class="form-control" name="password" id="password-input"
-                       placeholder="password">
-            </div>
-            <div class="form-group row">
-                <div class="col text-center">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
+    <div class="row mx-auto mt-4" id="id_login">
+        <div class="col">
+            <form action="Login" method="POST" id="form-login" style="display: none">
+
+                <div class="form-group row">
+                    <label for="username-input" class="col-form-label">Username:</label>
+                    <input type="username" class="form-control" name="username" id="username-input-login"
+                           placeholder="username">
+                    <small id="usernameHelp-login" class="form-text text-muted">this will be your unique
+                        identifier</small>
                 </div>
-            </div>
-        </form>
+
+
+                <div class="form-group row">
+                    <label for="password-input" class="col-form-label">Password:</label>
+                    <input type="password" class="form-control" name="password" id="password-input-login"
+                           placeholder="password">
+                </div>
+                <div class="form-group row">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary">Log in</button>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col text-center">
+                        <button type="button" class="btn btn-outline-secondary" onclick="showSignUp()"> First time here?
+                            Sign up instead
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <form action="Login" method="POST" id="form-signup" style="display: block">
+
+                <div class="form-group row">
+                    <label for="username-input" class="col-form-label">Username:</label>
+                    <input type="username" class="form-control" name="username" id="username-input"
+                           placeholder="username">
+                    <small id="usernameHelp" class="form-text text-muted">this will be your unique identifier</small>
+                </div>
+
+                <div class="form-group row">
+                    <label for="email-input" class="col-form-label">Email:</label>
+                    <input type="email" class="form-control" name="email" id="email-input"
+                           placeholder="email@meeting.com">
+                </div>
+                <div class="form-group row">
+                    <label for="password-input" class="col-form-label">Password:</label>
+                    <input type="password" class="form-control" name="password" id="password-input"
+                           placeholder="password">
+                </div>
+                <div class="form-group row">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col text-center">
+                        <button type="button" class="btn btn-outline-secondary" onclick="showLogin()"> Already
+                            registered? Log in
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-</div>
 
+
+<!--
 <h3> Random photo: </h3>
 <img src="https://source.unsplash.com/random" style="max-width: 45%;"  alt=""/>
+<a href="./TestServlet"> test the fcking servlet bruh </a>
+-->
 
 </body>
 </html>
