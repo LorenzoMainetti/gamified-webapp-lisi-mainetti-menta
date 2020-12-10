@@ -1,6 +1,7 @@
 package it.polimi.db2.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,10 +16,13 @@ public class User implements Serializable {
     @Id
     private String username;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String password;
 
+    @NotNull
     private boolean banned;
 
     @ManyToMany
@@ -26,6 +30,9 @@ public class User implements Serializable {
             joinColumns={@JoinColumn(name="user_id")},
             inverseJoinColumns={@JoinColumn(name="product_id")})
     private List<Product> products;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Question> questions;
 
     public User() { }
 

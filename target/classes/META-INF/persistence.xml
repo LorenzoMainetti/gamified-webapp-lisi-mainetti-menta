@@ -5,9 +5,12 @@
              version="2.2">
     <persistence-unit name="gamifiedApp" transaction-type="JTA">
         <jta-data-source>GamifiedDB</jta-data-source>
-        <class>it.polimi.db2.entities.User</class>
+        <class>it.polimi.db2.entities.Admin</class>
+        <class>it.polimi.db2.entities.Answer</class>
         <class>it.polimi.db2.entities.Product</class>
+        <class>it.polimi.db2.entities.Question</class>
         <class>it.polimi.db2.entities.Reward</class>
+        <class>it.polimi.db2.entities.User</class>
     </persistence-unit>
 
 

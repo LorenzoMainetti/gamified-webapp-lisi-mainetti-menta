@@ -1,6 +1,7 @@
 package it.polimi.db2.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,16 +16,22 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
 
+    @NotNull
     private String name;
 
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     private String description;
 
-    private String creatorId;
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "admin_id")
+    private Admin creator;
 
-    @ManyToMany(mappedBy="products")
+    @ManyToMany(mappedBy = "products")
     private List<User> users;
+
 
 
     public int getProductId() {

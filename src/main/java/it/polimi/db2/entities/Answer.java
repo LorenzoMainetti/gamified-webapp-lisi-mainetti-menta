@@ -1,8 +1,7 @@
 package it.polimi.db2.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import it.polimi.db2.entities.ids.AnswerKey;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
@@ -11,12 +10,23 @@ import java.io.Serializable;
 public class Answer implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private String userId;
-
-    @Id
-    private int questionId;
+    @EmbeddedId
+    private AnswerKey id;
 
     private String text;
+
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @MapsId("questionId")
+    @JoinColumns({
+            @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
+            //TODO check insertable and updatable
+            @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    })
+    private Question question;
 
 }

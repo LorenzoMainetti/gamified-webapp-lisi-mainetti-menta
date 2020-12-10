@@ -1,4 +1,4 @@
-package it.polimi.db2.entities;
+package it.polimi.db2.entities.ids;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -15,6 +15,7 @@ public class RewardKey implements Serializable {
 
     @Column(name = "product_id")
     private int productId;
+
 
     public String getUserId() {
         return userId;

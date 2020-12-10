@@ -1,9 +1,9 @@
 package it.polimi.db2.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name = "admin", schema = "db_gamified_app")
@@ -12,9 +12,14 @@ public class Admin {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String username;
+    private String adminId;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String password;
+
+    @OneToMany
+    private List<Product> products;
 }
