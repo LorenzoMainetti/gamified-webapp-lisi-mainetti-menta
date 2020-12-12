@@ -12,6 +12,7 @@ import java.util.List;
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    //auto-incremented id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
@@ -24,9 +25,9 @@ public class Product implements Serializable {
 
     private String description;
 
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "creator_id", referencedColumnName = "admin_id")
+    //Product is OWNER entity (has fk column)
+    @ManyToOne 
+    @JoinColumn(name = "creator_id", referencedColumnName = "admin_id") //foreign key that references an admin tuple,
     private Admin creator;
 
     @ManyToMany(mappedBy = "products")

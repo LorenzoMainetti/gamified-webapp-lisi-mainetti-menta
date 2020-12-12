@@ -11,6 +11,7 @@ import java.util.List;
 @NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2")
 @NamedQuery(name = "User.getUser", query = "SELECT r FROM User r  WHERE r.username = ?1")
 public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -25,12 +26,14 @@ public class User implements Serializable {
     @NotNull
     private boolean banned;
 
+    //Join columns refer to the foreign key column
     @ManyToMany
     @JoinTable(name="reward",
             joinColumns={@JoinColumn(name="user_id")},
             inverseJoinColumns={@JoinColumn(name="product_id")})
     private List<Product> products;
 
+    //mapped by: matched pair of uni-directional relationships
     @ManyToMany(mappedBy = "users")
     private List<Question> questions;
 
