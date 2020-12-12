@@ -4,7 +4,7 @@ import it.polimi.db2.entities.ids.QuestionKey;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @IdClass(QuestionKey.class)
@@ -21,7 +21,7 @@ public class Question implements Serializable {
 
     private String text;
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn(name="product_id", referencedColumnName="product_id")
     private Product product;
 
@@ -30,6 +30,6 @@ public class Question implements Serializable {
             joinColumns={@JoinColumn(name="question_id", referencedColumnName = "question_id"),
                          @JoinColumn(name="product_id", referencedColumnName = "product_id")},
             inverseJoinColumns={@JoinColumn(name="user_id")})
-    private List<User> users;
+    private Set<User> users;
 
 }

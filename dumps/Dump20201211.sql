@@ -77,7 +77,9 @@ CREATE TABLE `product` (
   `date` date DEFAULT NULL,
   `description` varchar(512) DEFAULT NULL,
   `creator_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`product_id`)
+  PRIMARY KEY (`product_id`),
+  KEY `creator_id_idx` (`creator_id`),
+  CONSTRAINT `creator_id` FOREIGN KEY (`creator_id`) REFERENCES `admin` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -160,7 +162,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('albi.gini@gmail.com','albi.gini@gmail.com','PHEGAA',1),('andre.menta@mail.ciao','andre.menta@mail.ciao','ciaocioa',1),('ciao@amico.it','ciao@amico.it','carissimo',1),('ciao@ciao.com','ciao@ciao.com','ciao',1),('fra@mail.com','fra@mail.com','uela',1),('jackThe@yahoo.com','jackThe@yahoo.com','YahoooO',1),('killnap','lorenzo.mainetti@gmail.com','Bombazza',0),('Lollo','lorenzo.mainetti@gmail.com','Lollo98',0),('lorenzo.mainetti@gmail.com','lorenzo.mainetti@gmail.com','pierofratm',1),('lorenzo.mainetti@jemp.it','lorenzo.mainetti@jemp.it','ciao',1),('luigi.mainetti@gmail.com','luigi.mainetti@gmail.com','Bomber',1),('Nemo','nemo@meet.com','PesceLesso',0),('ruru96000@gmail.com','ruru96000@gmail.com','FuckYOU',1),('simone.mainetti@hotmail.com','simone.mainetti@hotmail.com','Diooooo',1),('simone@simone.com','simone@simone.com','simone00',1),('uela@com','uela@com','uela',1);
+INSERT INTO `user` VALUES ('albi.gini@gmail.com','albi.gini@gmail.com','PHEGAA',1),('andre.menta@mail.ciao','andre.menta@mail.ciao','ciaocioa',1),('ciao@amico.it','ciao@amico.it','carissimo',1),('ciao@ciao.com','ciao@ciao.com','ciao',1),('fra@mail.com','fra@mail.com','uela',1),('jackThe@yahoo.com','jackThe@yahoo.com','YahoooO',1),('killnap','lorenzo.mainetti@gmail.com','Bombazza',0),('Lollo','lorenzo.mainetti@gmail.com','Lollo98',0),('lorenzo.mainetti@gmail.com','lorenzo.mainetti@gmail.com','pierofratm',1),('lorenzo.mainetti@jemp.it','lorenzo.mainetti@jemp.it','ciao',1),('luigi.mainetti@gmail.com','luigi.mainetti@gmail.com','Bomber',1),('Nemo','nemo@meet.com','PesceLesso',0),('ruru96000@gmail.com','ruru96000@gmail.com','FuckYOU',1),('Simo','simone.mainetti@good.com','VeryGood',0),('simone.mainetti@hotmail.com','simone.mainetti@hotmail.com','Diooooo',1),('simone@simone.com','simone@simone.com','simone00',1),('uela@com','uela@com','uela',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-10 12:03:17
+-- Dump completed on 2020-12-11 19:19:24

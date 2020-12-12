@@ -12,7 +12,6 @@ import java.util.Set;
 public class Admin {
     private static final long serialVersionUID = 1L;
 
-
     @Id
     private String adminId;
 
@@ -22,10 +21,8 @@ public class Admin {
     @NotNull
     private String password;
 
-    @OneToMany
-    private List<Product> products;
-
     //other side of 1:1 relationship with owner 'Product' that maps admin <> product
     @OneToMany(mappedBy = "creator")
-    private Set<Product> createdProduct; //no need to return a specific order
+    private Set<Product> createdProducts; //no need to return a specific order
+
 }

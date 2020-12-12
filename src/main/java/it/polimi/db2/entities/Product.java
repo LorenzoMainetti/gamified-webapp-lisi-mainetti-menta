@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "product", schema = "db_gamified_app")
@@ -25,13 +26,19 @@ public class Product implements Serializable {
 
     private String description;
 
+    @NotNull
+    private String creatorId;
+
     //Product is OWNER entity (has fk column)
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "admin_id") //foreign key that references an admin tuple,
     private Admin creator;
 
     @ManyToMany(mappedBy = "products")
-    private List<User> users;
+    private Set<User> users;
+
+    @OneToMany(mappedBy = "product")
+    private List<Question> questions;
 
 
 

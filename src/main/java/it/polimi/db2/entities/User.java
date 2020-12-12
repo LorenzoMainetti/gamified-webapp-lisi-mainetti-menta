@@ -37,6 +37,8 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "users")
     private List<Question> questions;
 
+
+
     public User() { }
 
     public String getUsername() {
