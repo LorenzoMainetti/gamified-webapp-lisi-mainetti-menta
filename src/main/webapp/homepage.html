@@ -5,7 +5,7 @@
     <title>Homepage</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="./scripts/homepageData.js" defer ></script>
+    <script src="./scripts/homepageData.js" defer></script>
 </head>
 <body>
 
@@ -32,13 +32,33 @@
         </ul>
 
         <li class="navbar-text">
-            <span class="nav-link" href="#" id ="var_username">Logged In: @Username</span>
+            <span class="nav-link" href="#" id="var_username">Logged In: @Username</span>
         </li>
         <form class="form-inline my-2 my-lg-0">
             <button class="btn btn-outline-light" type="submit">Log Out</button>
         </form>
     </div>
 </nav>
+
+<div class="container">
+    <div class="row">
+        <div class="column">
+            <div class="row"><h2> PRODUCT OF THE DAY: </h2></div>
+            <div class="row"><h4 id="id_product_title">Title</h4></div>
+            <div class="row"><img id="id_product_image" alt="error: image not found"/></div>
+            <div class="row">
+                <div id="id_product_descript"> this is the product description, you should buy it</div>
+            </div>
+            <div class="row">
+                <form action="..." method="post">
+
+                    <input type="submit" name="button1" value="Fill Questionnaire"/>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 </body>
 </html>

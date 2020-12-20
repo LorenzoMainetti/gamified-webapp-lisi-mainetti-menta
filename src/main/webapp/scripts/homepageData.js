@@ -21,13 +21,16 @@ function makeCall(method, url, formElement, cback, reset = true) {
 }
 
 window.addEventListener("load", () => {
-    makeCall("GET", "./Homepage", null,
+    makeCall("GET", "./HomepageData", null,
         function(req) {
             if (req.readyState == 4) {
                 var message = req.responseText;
                 if (req.status == 200) {
                     var con = JSON.parse(message);
                     document.getElementById("var_username").innerText = "Logged in: @" + con.username;
+                    document.getElementById("id_product_title").innerText = con.prodName;
+                   //TODO document.getElementById("id_product_image")
+                    document.getElementById("id_product_descript").innerText = con.prodDescription;
                     //document.getElementById("id_userEmail").innerText = user.email;
 
                 }

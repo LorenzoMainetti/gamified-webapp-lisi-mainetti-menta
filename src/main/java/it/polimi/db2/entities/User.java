@@ -29,8 +29,8 @@ public class User implements Serializable {
     //Join columns refer to the foreign key column
     @ManyToMany
     @JoinTable(name="reward",
-            joinColumns={@JoinColumn(name="user_id")},
-            inverseJoinColumns={@JoinColumn(name="product_id")})
+            joinColumns={@JoinColumn(name="userId")},
+            inverseJoinColumns={@JoinColumn(name="productId")})
     private List<Product> products;
 
     //mapped by: matched pair of uni-directional relationships

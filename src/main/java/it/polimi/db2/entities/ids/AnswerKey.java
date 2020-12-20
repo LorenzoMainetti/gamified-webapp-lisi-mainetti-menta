@@ -10,13 +10,13 @@ import java.util.Objects;
 public class AnswerKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "user_id")
+    @Column(name = "userId")
     private String userId;
 
-    @Column(name = "question_id")
+    @Column(name = "questionId")
     private int questionId;
 
-    @Column(name = "product_id")
+    @Column(name = "productId")
     private int productId;
 
 

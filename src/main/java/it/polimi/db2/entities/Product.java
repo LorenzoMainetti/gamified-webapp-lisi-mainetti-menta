@@ -10,6 +10,8 @@ import java.util.List;
 @Entity
 @Table(name = "product", schema = "db_gamified_app")
 @NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.productId = ?1")
+@NamedQuery(name = "Product.getProductDummy", query = "SELECT p FROM Product p WHERE p.name = ?1")
+@NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date = ?1")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +33,7 @@ public class Product implements Serializable {
 
     //Product is OWNER entity (has fk column)
     @ManyToOne
-    @JoinColumn(name = "creator_id", referencedColumnName = "admin_id") //foreign key that references an admin tuple,
+    @JoinColumn(name = "creatorId", referencedColumnName = "adminId", insertable = false, updatable = false) //foreign key that references an admin tuple,
     private Admin creator;
 
     @ManyToMany(mappedBy = "products")

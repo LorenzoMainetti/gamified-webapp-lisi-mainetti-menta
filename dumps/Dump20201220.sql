@@ -23,10 +23,10 @@ DROP TABLE IF EXISTS `admin`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin` (
-  `admin_id` varchar(255) NOT NULL,
+  `adminId` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  PRIMARY KEY (`admin_id`)
+  PRIMARY KEY (`adminId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,6 +36,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES ('0','ciao','ciao@ciao.com');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -47,11 +48,11 @@ DROP TABLE IF EXISTS `answer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `answer` (
-  `user_id` varchar(255) NOT NULL,
-  `question_id` int NOT NULL,
-  `product_id` int NOT NULL,
+  `userId` varchar(255) NOT NULL,
+  `questionId` int NOT NULL,
+  `productId` int NOT NULL,
   `text` varchar(1024) DEFAULT NULL,
-  PRIMARY KEY (`user_id`,`question_id`,`product_id`)
+  PRIMARY KEY (`userId`,`questionId`,`productId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -72,15 +73,16 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
-  `product_id` int NOT NULL AUTO_INCREMENT,
+  `productId` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `date` date DEFAULT NULL,
+  `date` date NOT NULL,
   `description` varchar(512) DEFAULT NULL,
-  `creator_id` varchar(255) NOT NULL,
-  PRIMARY KEY (`product_id`),
-  KEY `creator_id_idx` (`creator_id`),
-  CONSTRAINT `creator_id` FOREIGN KEY (`creator_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `creatorId` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  PRIMARY KEY (`productId`),
+  KEY `creator_id_idx` (`creatorId`),
+  CONSTRAINT `creator_id` FOREIGN KEY (`creatorId`) REFERENCES `admin` (`adminId`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +91,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (2,'Barca Giocattolo','2020-12-20','ciao bello, panino o piadina','0','ciao');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,10 +103,10 @@ DROP TABLE IF EXISTS `question`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `question` (
-  `question_id` int NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
+  `questionId` int NOT NULL AUTO_INCREMENT,
+  `productId` int NOT NULL,
   `text` varchar(512) DEFAULT NULL,
-  PRIMARY KEY (`question_id`,`product_id`)
+  PRIMARY KEY (`questionId`,`productId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,10 +127,10 @@ DROP TABLE IF EXISTS `reward`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reward` (
-  `user_id` varchar(255) NOT NULL,
-  `product_id` int NOT NULL,
+  `userId` varchar(255) NOT NULL,
+  `productId` int NOT NULL,
   `points` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`user_id`,`product_id`)
+  PRIMARY KEY (`userId`,`productId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -175,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-11 19:19:24
+-- Dump completed on 2020-12-20 17:46:34

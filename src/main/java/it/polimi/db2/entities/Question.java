@@ -23,14 +23,14 @@ public class Question implements Serializable {
     private String text;
 
     @ManyToOne
-    @PrimaryKeyJoinColumn(name="product_id", referencedColumnName="product_id")
+    @PrimaryKeyJoinColumn(name="productId", referencedColumnName="productId")
     private Product product;
 
     @ManyToMany
     @JoinTable(name="answer",
-            joinColumns={@JoinColumn(name="question_id", referencedColumnName = "question_id"),
-                         @JoinColumn(name="product_id", referencedColumnName = "product_id")},
-            inverseJoinColumns={@JoinColumn(name="user_id")})
+            joinColumns={@JoinColumn(name="questionId", referencedColumnName = "questionId"),
+                         @JoinColumn(name="productId", referencedColumnName = "productId")},
+            inverseJoinColumns={@JoinColumn(name="userId")})
     private Set<User> users;
 
     public boolean isStatQuestion(){
