@@ -22,6 +22,7 @@ public class Admin {
     private String password;
 
     //other side of 1:1 relationship with owner 'Product' that maps admin <> product
+    //Fetch = lazy is fine because we don't always need created product (es. during login or on creation)
     @OneToMany(mappedBy = "creator")
     private Set<Product> createdProducts; //no need to return a specific order
 

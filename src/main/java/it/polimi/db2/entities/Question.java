@@ -26,7 +26,7 @@ public class Question implements Serializable {
     @PrimaryKeyJoinColumn(name="productId", referencedColumnName="productId")
     private Product product;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name="answer",
             joinColumns={@JoinColumn(name="questionId", referencedColumnName = "questionId"),
                          @JoinColumn(name="productId", referencedColumnName = "productId")},
