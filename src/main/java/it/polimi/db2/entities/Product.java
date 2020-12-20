@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "product", schema = "db_gamified_app")
+@NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.productId = ?1")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,12 +35,26 @@ public class Product implements Serializable {
     private Admin creator;
 
     @ManyToMany(mappedBy = "products")
-    private Set<User> users;
+    private List<User> users;
 
     @OneToMany(mappedBy = "product")
     private List<Question> questions;
 
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
 
+    public void setCreator(Admin creator) {
+        this.creator = creator;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 
     public int getProductId() {
         return productId;
@@ -74,5 +88,20 @@ public class Product implements Serializable {
         this.description = description;
     }
 
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public Admin getCreator() {
+        return creator;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
 }
 

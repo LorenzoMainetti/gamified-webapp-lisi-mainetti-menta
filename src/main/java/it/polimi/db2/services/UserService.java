@@ -33,8 +33,7 @@ public class UserService {
     }
 
     private User getUser(String username) throws PersistenceException, InvalidParameterException {
-        List<User> usersFromDB = null;
-        usersFromDB = em.createNamedQuery("User.getUser", User.class).setParameter(1, username)
+        List<User> usersFromDB = em.createNamedQuery("User.getUser", User.class).setParameter(1, username)
                 .getResultList();
         if (usersFromDB == null) {
             throw new InvalidParameterException("username or password is wrong");
@@ -48,8 +47,7 @@ public class UserService {
     }
 
     public User checkCredentials(String username, String password) throws PersistenceException, Exception {
-        List<User> usersFromDB = null;
-        usersFromDB = em.createNamedQuery("User.checkCredentials", User.class).setParameter(1, username).setParameter(2, password)
+        List<User> usersFromDB = em.createNamedQuery("User.checkCredentials", User.class).setParameter(1, username).setParameter(2, password)
                 .getResultList();
         if (usersFromDB == null || usersFromDB.size()==0) {
             throw new Exception("Provided username or password is wrong");
@@ -60,7 +58,6 @@ public class UserService {
         else {
             throw new Exception("internal database error");
         }
-
     }
 
     public void banUser(String username) throws PersistenceException, InvalidParameterException {

@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @IdClass(QuestionKey.class)
 @Table(name = "question", schema = "db_gamified_app")
+@NamedQuery(name = "Question.getQuestion", query = "SELECT q FROM Question q  WHERE q.questionId = ?1 AND q.productId = ?2")
 public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -32,4 +33,47 @@ public class Question implements Serializable {
             inverseJoinColumns={@JoinColumn(name="user_id")})
     private Set<User> users;
 
+    public boolean isStatQuestion(){
+        return false;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
 }

@@ -13,4 +13,19 @@ public class QuestionKey implements Serializable {
     @Column(name = "product_id")
     private int productId;
 
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
 }
