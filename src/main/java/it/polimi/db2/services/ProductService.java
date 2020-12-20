@@ -8,9 +8,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Stateless
 public class ProductService {
@@ -51,6 +52,22 @@ public class ProductService {
      */
     public Product getProduct(int productID) throws InvalidParameterException{
         List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productID)
+                .getResultList();
+        if (products == null) {
+            throw new InvalidParameterException("invalid productID");
+        }
+        else if(products.size()==1) {
+            return products.get(0);
+        }
+        else {
+            throw new InvalidParameterException("internal database error");
+        }
+    }
+
+    public Product getProductOfTheDay() throws InvalidParameterException, ParseException {
+        //Date cal = Calendar.getInstance(TimeZone.getTimeZone("UTC+1")).getTime(); //hardcoded to italian timezone
+        //Date cal
+        List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo")
                 .getResultList();
         if (products == null) {
             throw new InvalidParameterException("invalid productID");
