@@ -10,10 +10,10 @@ import java.util.Objects;
 public class RewardKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "user_id")
+    @Column(name = "userId")
     private String userId;
 
-    @Column(name = "product_id")
+    @Column(name = "productId")
     private int productId;
 
 

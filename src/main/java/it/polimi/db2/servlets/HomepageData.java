@@ -13,14 +13,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.TimeZone;
 
 
-@WebServlet("/Homepage")
-public class Homepage extends HttpServlet {
+@WebServlet("/HomepageData")
+public class HomepageData extends HttpServlet {
 
 
     @EJB(name = "it.polimi.db2.entities.services/ProductService")

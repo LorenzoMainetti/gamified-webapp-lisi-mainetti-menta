@@ -20,15 +20,15 @@ public class Answer implements Serializable {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne
     @MapsId("questionId")
     @JoinColumns({
-            @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
+            @JoinColumn(name = "questionId", referencedColumnName = "questionId"),
             //TODO check insertable and updatable
-            @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+            @JoinColumn(name = "productId", referencedColumnName = "productId", insertable = false, updatable = false)
     })
     private Question question;
 

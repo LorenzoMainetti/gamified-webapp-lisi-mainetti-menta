@@ -21,7 +21,7 @@ function makeCall(method, url, formElement, cback, reset = true) {
 }
 
 window.addEventListener("load", () => {
-    makeCall("GET", "./Homepage", null,
+    makeCall("GET", "./HomepageData", null,
         function(req) {
             if (req.readyState == 4) {
                 var message = req.responseText;

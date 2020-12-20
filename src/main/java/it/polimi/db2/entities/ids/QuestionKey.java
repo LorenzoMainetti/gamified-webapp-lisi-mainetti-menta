@@ -7,10 +7,10 @@ import java.io.Serializable;
 public class QuestionKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "question_id")
+    @Column(name = "questionId")
     private int questionId;
 
-    @Column(name = "product_id")
+    @Column(name = "productId")
     private int productId;
 
     public void setQuestionId(int questionId) {
