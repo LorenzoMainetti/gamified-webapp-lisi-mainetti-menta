@@ -15,6 +15,7 @@ import java.util.*;
 
 @Stateless
 public class ProductService {
+
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 
@@ -64,9 +65,8 @@ public class ProductService {
         }
     }
 
-    public Product getProductOfTheDay() throws InvalidParameterException, ParseException {
-        //Date cal = Calendar.getInstance(TimeZone.getTimeZone("UTC+1")).getTime(); //hardcoded to italian timezone
-        //Date cal
+    public Product getProductOfTheDay() throws InvalidParameterException {
+
         List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo")
                 .getResultList();
         if (products == null) {
@@ -133,5 +133,16 @@ public class ProductService {
                 return notFilled;
             }
         }
+    }
+
+    public static List<String> getQuestions(Product product) {
+
+            List <String> questionTexts = new LinkedList<>();
+            List<Question> questions = product.getQuestions();
+            questions.forEach( question -> {
+                questionTexts.add(question.getText());
+            });
+            return questionTexts;
+
     }
 }

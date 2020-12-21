@@ -14,7 +14,7 @@ public class QuestionnaireContent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     String name, description;
-    List<String> optional_Questions = new ArrayList<String>();
+    List<String> optionalQuestions = new ArrayList<String>();
 
     //Todo find a way to send an Image image;
 
@@ -22,7 +22,7 @@ public class QuestionnaireContent implements Serializable {
 
         this.name = name;
         this.description = description;
-        this.optional_Questions = optional_Questions;
+        this.optionalQuestions = optional_Questions;
     }
 
     public String getName() {
@@ -42,11 +42,11 @@ public class QuestionnaireContent implements Serializable {
     }
 
     public List<String> getOptional_Questions() {
-        return optional_Questions;
+        return optionalQuestions;
     }
 
     public void setOptional_Questions(List<String> optional_Questions) {
-        this.optional_Questions = optional_Questions;
+        this.optionalQuestions = optional_Questions;
     }
 
     public String toJson() {
