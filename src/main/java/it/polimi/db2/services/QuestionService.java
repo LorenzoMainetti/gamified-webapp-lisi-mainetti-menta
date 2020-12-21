@@ -1,14 +1,11 @@
 package it.polimi.db2.services;
 
-import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.entities.ids.QuestionKey;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.security.InvalidParameterException;
 import java.util.List;

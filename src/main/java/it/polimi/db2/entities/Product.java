@@ -41,8 +41,11 @@ public class Product implements Serializable {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true) //amount of questions is limited
     private List<Question> questions;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) //removing a product must cancel all its reviews
     private List <Reward> rewards;
+
+
     public void setCreatorId(String creatorId) {
         this.creatorId = creatorId;
     }
