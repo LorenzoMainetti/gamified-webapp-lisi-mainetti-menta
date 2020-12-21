@@ -17,4 +17,6 @@ public class ImageProcessor {
         result = cropped.resultImage.getScaledInstance(STORED_H, STORED_W, Image.SCALE_SMOOTH);
         return result;
     }
+
+
 }
