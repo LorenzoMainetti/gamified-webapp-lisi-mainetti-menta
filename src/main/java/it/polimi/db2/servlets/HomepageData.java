@@ -2,6 +2,7 @@ package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
 import it.polimi.db2.auxiliary.HomepageContent;
+import it.polimi.db2.auxiliary.images.ImageProcessor;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.ReviewService;
@@ -49,8 +50,9 @@ public class HomepageData extends HttpServlet {
             e.printStackTrace();
         }
         //TODO HARDCODED
+        String productImageURI = "#";
         HomepageContent gg = new HomepageContent(username, false, podt.getName(),
-                podt.getDescription(), podt.getImage(), reviewService.getRandomReviews());
+                podt.getDescription(), productImageURI, reviewService.getRandomReviews());
         String jsonHomepage = new Gson().toJson(gg);
         out.print(jsonHomepage);
     }

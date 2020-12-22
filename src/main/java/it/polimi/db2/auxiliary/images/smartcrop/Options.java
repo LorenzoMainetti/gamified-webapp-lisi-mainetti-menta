@@ -1,4 +1,4 @@
-package it.polimi.db2.auxiliary.smartcrop;
+package it.polimi.db2.auxiliary.images.smartcrop;
 
 import java.awt.image.BufferedImage;
 

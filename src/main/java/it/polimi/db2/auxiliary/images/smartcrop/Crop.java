@@ -1,4 +1,4 @@
-package it.polimi.db2.auxiliary.smartcrop;
+package it.polimi.db2.auxiliary.images.smartcrop;
 
 public class Crop {
 	public int x, y, width, height;
