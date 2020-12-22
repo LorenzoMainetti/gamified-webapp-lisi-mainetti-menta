@@ -5,6 +5,7 @@ import it.polimi.db2.entities.Product;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class HomepageContent implements Serializable {
 
@@ -16,19 +17,20 @@ public class HomepageContent implements Serializable {
     String prodName, prodDescription;
     BufferedImage prodImage;
     String imgPath;
+    ArrayList<String> reviews;
 
     public HomepageContent(String username) {
         this.username = username;
         this.admin = false;
     }
 
-    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, String imgPath) {
+    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, String imgPath, ArrayList<String> reviews) {
         this.username = username;
         this.admin = admin;
         this.prodName = prodName;
         this.prodDescription = prodDescription;
-        //this.prodImage = prodImage;
         this.imgPath = imgPath;
+        this.reviews = reviews;
     }
 
     public String getUsername() {

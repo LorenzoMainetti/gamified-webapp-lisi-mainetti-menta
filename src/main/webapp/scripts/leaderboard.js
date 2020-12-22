@@ -21,22 +21,19 @@ function makeCall(method, url, formElement, cback, reset = true) {
 }
 
 window.addEventListener("load", () => {
-    makeCall("GET", "./HomepageData", null,
+    makeCall("GET", "./Leaderboard", null,
         function(req) {
             if (req.readyState == 4) {
                 var message = req.responseText;
                 if (req.status == 200) {
                     var con = JSON.parse(message);
-                    document.getElementById("var_username").innerText = "Logged in: @" + con.username;
-                    document.getElementById("id_product_title").innerText = con.prodName;
-                    document.getElementById("id_product_image").src = "src/main/resources/images/" + con.imgPath + ".jpg";
-                    document.getElementById("id_product_descript").innerText = con.prodDescription;
-                    //document.getElementById("id_userEmail").innerText = user.email;
-                    const table = document.getElementById("id_ReviewBody");
-                    Object.keys(con.reviews).forEach(function (k) {
+                    const table = document.getElementById("id_tableBody");
+                    Object.keys(con.leaderboard).forEach(function (k) {
                         let row = table.insertRow();
-                        let review = row.insertCell(0);
-                        review.innerHTML = con.reviews[k];
+                        let username = row.insertCell(0);
+                        username.innerHTML = con.leaderboard[k].userId;
+                        let score = row.insertCell(1);
+                        score.innerHTML = con.leaderboard[k].score;
                     })
                 }
             } else {

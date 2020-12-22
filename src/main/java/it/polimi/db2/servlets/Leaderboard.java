@@ -5,6 +5,7 @@ import it.polimi.db2.auxiliary.HomepageContent;
 import it.polimi.db2.auxiliary.LeaderboardContent;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Reward;
+import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.RewardService;
 import jakarta.ejb.EJB;
@@ -56,6 +57,6 @@ public class Leaderboard extends HttpServlet {
         //TODO HARDCODED
         LeaderboardContent leaderboardContent = new LeaderboardContent(leaderboard);
         String jsonLeaderboard = new Gson().toJson(leaderboardContent);
-        out.print(jsonLeaderboard);
+        out.write(jsonLeaderboard);
     }
 }
