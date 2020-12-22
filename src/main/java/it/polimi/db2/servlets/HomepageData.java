@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -28,8 +31,6 @@ public class HomepageData extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,9 +47,8 @@ public class HomepageData extends HttpServlet {
             e.printStackTrace();
         }
         //TODO HARDCODED
-        HomepageContent gg = new HomepageContent(username, false, podt.getName(), "prova descrizione", null);
+        HomepageContent gg = new HomepageContent(username, false, podt.getName(), podt.getDescription(), podt.getImage());
         String jsonHomepage = new Gson().toJson(gg);
         out.print(jsonHomepage);
-
     }
 }

@@ -31,6 +31,9 @@ public class Product implements Serializable {
     @NotNull
     private String creatorId;
 
+    @NotNull
+    private String image;
+
     //Product is OWNER entity (has fk column)
     @ManyToOne
     @JoinColumn(name = "creatorId", referencedColumnName = "adminId", insertable = false, updatable = false) //foreign key that references an admin tuple,
@@ -108,6 +111,14 @@ public class Product implements Serializable {
 
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
 

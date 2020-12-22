@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
-@WebServlet("/HomepageData")
+@WebServlet("/QuestionnairePageDate")
 public class QuestionnairePageData extends HttpServlet {
 
 

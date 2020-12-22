@@ -73,7 +73,7 @@ public class Login extends HttpServlet {
             try {
                 usrService.insertUser(username,email,password,false);
                 request.getSession().setAttribute("user", username);
-                String path = getServletContext().getContextPath() + "/HomepageData";
+                String path = getServletContext().getContextPath() + "/homepage.html";
                 response.sendRedirect(path);
             }
             catch (PersistenceException | EJBTransactionRolledbackException e) {

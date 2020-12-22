@@ -3,6 +3,7 @@ package it.polimi.db2.auxiliary;
 import it.polimi.db2.entities.Product;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public class HomepageContent implements Serializable {
@@ -13,19 +14,21 @@ public class HomepageContent implements Serializable {
     boolean admin;
 
     String prodName, prodDescription;
-    Image  prodImage;
+    BufferedImage prodImage;
+    String imgPath;
 
     public HomepageContent(String username) {
         this.username = username;
         this.admin = false;
     }
 
-    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, Image prodImage) {
+    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, String imgPath) {
         this.username = username;
         this.admin = admin;
         this.prodName = prodName;
         this.prodDescription = prodDescription;
-        this.prodImage = prodImage;
+        //this.prodImage = prodImage;
+        this.imgPath = imgPath;
     }
 
     public String getUsername() {
@@ -60,11 +63,11 @@ public class HomepageContent implements Serializable {
         this.prodDescription = prodDescription;
     }
 
-    public Image getProdImage() {
+    public BufferedImage getProdImage() {
         return prodImage;
     }
 
-    public void setProdImage(Image prodImage) {
+    public void setProdImage(BufferedImage prodImage) {
         this.prodImage = prodImage;
     }
 }

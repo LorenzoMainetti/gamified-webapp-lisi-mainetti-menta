@@ -23,20 +23,21 @@
             <li class="nav-item active">
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <!--li class="nav-item">
                 <a class="nav-link" href="#">Leaderboard</a>
-            </li>
+            </li!-->
+            <form class="form-inline my-2 my-lg-0" action="Leaderboard" method="GET">
+                <button class="btn btn-outline-light" type="submit">Leaderboard</button>
+            </form>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Admin Panel</a>
             </li>
-
         </ul>
-
         <li class="navbar-text">
             <span class="nav-link" href="#" id="var_username">Logged In: @Username</span>
         </li>
-        <form class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-light" type="submit">Log Out</button>
+        <form class="form-inline my-2 my-lg-0" action="Logout" method="POST">
+            <button class="btn btn-outline-light" type="submit">Logout</button>
         </form>
     </div>
 </nav>
@@ -46,7 +47,8 @@
         <div class="column">
             <div class="row"><h2> PRODUCT OF THE DAY: </h2></div>
             <div class="row"><h4 id="id_product_title">Title</h4></div>
-            <div class="row"><img id="id_product_image" alt="error: image not found"/></div>
+            <!--div class="row"><img id="id_product_image" alt="error: image not found"/></div!-->
+            <div class="row"><img id="id_product_image"/></div>
             <div class="row">
                 <div id="id_product_descript"> this is the product description, you should buy it</div>
             </div>

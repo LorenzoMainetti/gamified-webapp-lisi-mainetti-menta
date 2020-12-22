@@ -7,6 +7,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,5 +148,16 @@ public class ProductService {
             });
             return questionTexts;
 
+    }
+
+    public BufferedImage loadImage(Product product){
+        String imgName = product.getImage();
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(getClass().getResource("/resources/images/" + imgName + ".jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return img;
     }
 }

@@ -29,10 +29,9 @@ window.addEventListener("load", () => {
                     var con = JSON.parse(message);
                     document.getElementById("var_username").innerText = "Logged in: @" + con.username;
                     document.getElementById("id_product_title").innerText = con.prodName;
-                    //TODO document.getElementById("id_product_image")
+                    document.getElementById("id_product_image").src = "/resources/images/" + con.imgPath + ".jpg";
                     document.getElementById("id_product_descript").innerText = con.prodDescription;
                     //document.getElementById("id_userEmail").innerText = user.email;
-
                 }
             } else {
                 //display error
