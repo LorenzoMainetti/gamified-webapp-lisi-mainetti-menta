@@ -18,8 +18,10 @@ public class ImageProcessor {
         BufferedImage bufferedImage = fromByteArray(imageToCrop);
         CropResult cropped = new SmartCrop().analyze(bufferedImage);
         BufferedImage result;
-        result = (BufferedImage) cropped.resultImage.getScaledInstance(STORED_H, STORED_W, Image.SCALE_SMOOTH);
+        //result = (BufferedImage) cropped.resultImage.getScaledInstance(STORED_H, STORED_W, Image.SCALE_SMOOTH);
+        //result = (BufferedImage) bufferedImage.getScaledInstance(STORED_H, STORED_W, Image.SCALE_SMOOTH);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        result = cropped.resultImage;
         try {
             ImageIO.write(result, "jpg", bos );
         } catch (IOException e) {

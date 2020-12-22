@@ -1,12 +1,15 @@
 package it.polimi.db2.servlets;
 
 import it.polimi.db2.auxiliary.images.ImageProcessor;
+import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.User;
+import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.persistence.PersistenceException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,8 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @WebServlet("/UploadImage")
+@MultipartConfig
 public class UploadImage extends HttpServlet {
-
+    @EJB(name = "it.polimi.db2.entities.services/ProductService")
+    private ProductService productService;
 
     public static byte[] readImage(InputStream imageInputStream) throws IOException {
 
@@ -45,7 +50,9 @@ public class UploadImage extends HttpServlet {
         InputStream imgStream = request.getPart("image").getInputStream();
         byte [] file = readImage(imgStream);
         assert file.length <= 2048;
-        file = ImageProcessor.AI_Cropper(file);
+        //file = ImageProcessor.AI_Cropper(file);
+        Product product = productService.getProductOfTheDay();
+        productService.dummyImageLoad(product, file);
         //write image to db
         request.getParameter("imgId");
 

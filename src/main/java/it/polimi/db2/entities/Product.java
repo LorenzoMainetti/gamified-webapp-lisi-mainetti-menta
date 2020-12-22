@@ -32,7 +32,8 @@ public class Product implements Serializable {
     private String creatorId;
 
     @NotNull
-    private String image;
+    @Lob
+    private byte[] image;
 
     //Product is OWNER entity (has fk column)
     @ManyToOne
@@ -113,12 +114,12 @@ public class Product implements Serializable {
         return questions;
     }
 
-    public String getImage() {
-        return image;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public byte[] getImage() {
+        return image;
     }
 }
 

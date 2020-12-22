@@ -7,7 +7,7 @@
 <body>
 <h1>WELCOME TO THE ADMIN CONSOLE</h1>
 <h4>Upload an Image to the DB:</h4>
-<form method="POST" action="/UploadImage">
+<form method="POST" action="./UploadImage" enctype="multipart/form-data">
     <input type="text" id="imgid" name = "imgId" />
     <input type="file" id="myFile" name="image" />
     <input type="submit">

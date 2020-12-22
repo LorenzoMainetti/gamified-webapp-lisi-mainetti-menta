@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Base64;
 
 
 @WebServlet("/HomepageData")
@@ -51,8 +52,9 @@ public class HomepageData extends HttpServlet {
         }
         //TODO HARDCODED
         String productImageURI = "#";
+        String encoded = Base64.getEncoder().encodeToString(podt.getImage());
         HomepageContent gg = new HomepageContent(username, false, podt.getName(),
-                podt.getDescription(), productImageURI, reviewService.getRandomReviews());
+                podt.getDescription(), podt.getImage(), encoded, reviewService.getRandomReviews());
         String jsonHomepage = new Gson().toJson(gg);
         out.print(jsonHomepage);
     }
