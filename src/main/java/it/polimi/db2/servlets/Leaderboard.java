@@ -25,7 +25,7 @@ import java.util.List;
 
 @WebServlet("/Leaderboard")
 public class Leaderboard extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
     @EJB(name = "it.polimi.db2.entities.services/RewardService")
     private RewardService rewardService;
     @EJB(name = "it.polimi.db2.entities.services/ProductService")

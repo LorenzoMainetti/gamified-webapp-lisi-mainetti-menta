@@ -14,9 +14,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -52,7 +50,6 @@ public class Login extends HttpServlet {
             sendError(response, "some fields are missing");
             return;
         }
-
 
 
 

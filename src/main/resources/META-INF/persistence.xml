@@ -10,6 +10,7 @@
         <class>it.polimi.db2.entities.Product</class>
         <class>it.polimi.db2.entities.Question</class>
         <class>it.polimi.db2.entities.Reward</class>
+        <class>it.polimi.db2.entities.Review</class>
         <class>it.polimi.db2.entities.User</class>
     </persistence-unit>
 

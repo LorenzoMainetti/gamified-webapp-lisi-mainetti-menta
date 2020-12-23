@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 @WebServlet("/HomepageData")
 public class HomepageData extends HttpServlet {
+
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/ReviewService")

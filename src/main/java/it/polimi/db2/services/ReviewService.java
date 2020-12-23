@@ -1,12 +1,10 @@
 package it.polimi.db2.services;
 
-import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Review;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

@@ -17,7 +17,6 @@ import java.io.PrintWriter;
 @WebServlet("/QuestionnairePageDate")
 public class QuestionnairePageData extends HttpServlet {
 
-
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
 
