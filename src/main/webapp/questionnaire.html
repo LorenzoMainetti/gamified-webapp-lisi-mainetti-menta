@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="./scripts/questionnaire.js" defer></script>
+</head>
+
+
+<body>
+
+<div class="container">
+    <div class="mandatoryQuestions" id="id_mandatory">
+        <h2>Questions of the day</h2>
+        <form>
+            <h4 id="id_product_name">Title</h4>
+            <label id="id_product_description">Description</label>
+        </form>
+
+        <label class="col-form-label">Question</label>
+        <form class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="answer">Answer here:</label>
+                <textarea class="form-control" id="answer" rows="3" placeholder="Answer" required></textarea>
+                <div class="invalid-tooltip">
+                    Please provide a valid answer. This field is mandatory.
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container" id="id_optional">
+    <h2>Personal Data</h2>
+    <label>Please answer also these questions. Your answers will be used just for statistical purposes.</label>
+    <p>
+        <form action="/action_page.php">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="1" max="120">
+        </form>
+    </p>
+
+    <label>Gender:</label>
+    <form>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label><br>
+    </form>
+    <p>
+        <label for="expertise level">Expertise level:</label>
+        <select name="expertise level" id="expertise level">
+            <option value="choose">choose</option>
+            <option value="low">low</option>
+            <option value="medium">medium</option>
+            <option value="high">high</option>
+        </select>
+    </p>
+    <form action="..." method="post">
+        <input type="submit" name="button1" value="Submit"/>
+    </form>
+</div>
+
+</body>
+</html>
