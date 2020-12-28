@@ -17,9 +17,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static it.polimi.db2.auxiliary.images.ImageProcessor.*;
 
 @WebServlet("/UploadImage")
 @MultipartConfig
@@ -45,12 +48,38 @@ public class UploadImage extends HttpServlet {
         }
 
     }
+
+    private void sendBackError(String error, HttpServletResponse response) throws IOException {
+        response.setContentType("text/plain");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.getWriter().println(error);
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         InputStream imgStream = request.getPart("image").getInputStream();
-        byte [] file = readImage(imgStream);
-        assert file.length <= 2048;
+        byte[] file = readImage(imgStream);
+
         //file = ImageProcessor.AI_Cropper(file);
+        switch (getImageType(file)) {
+            case "image/png":
+                //convert to jpeg
+                file = toByteArray(prepareImage(file, true), "jpg");
+                break;
+
+            case "image/jpeg":
+                file = toByteArray(prepareImage(file, false), "jpg");
+                break;
+            default:
+                sendBackError("format not supported. It would probably jeopardize the whole web application", response);
+                return;
+
+
+        }
+
+        if (file.length < 2048) {
+            sendBackError("file is too large. It would probably jeopardize the whole web application", response);
+            return;
+        }
         Product product = productService.getProductOfTheDay();
         productService.dummyImageLoad(product, file);
         //write image to db
