@@ -48,4 +48,20 @@ public class Answer implements Serializable {
     public Question getQuestion() {
         return question;
     }
+
+    public void setId(AnswerKey id) {
+        this.id = id;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 }

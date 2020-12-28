@@ -4,9 +4,12 @@ import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
+import it.polimi.db2.entities.ids.AnswerKey;
+import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -47,6 +50,25 @@ public class AnswerService {
         }
         else {
             throw new InvalidParameterException("internal database error");
+        }
+    }
+
+    public void createAnswer(User user, int productId, Question question, String text) throws PersistenceException, EJBTransactionRolledbackException {
+        AnswerKey answerKey = new AnswerKey();
+        answerKey.setUserId(user.getUsername());
+        answerKey.setQuestionId(question.getQuestionId());
+        answerKey.setProductId(productId);
+
+        Answer answer = new Answer();
+        answer.setId(answerKey);
+        answer.setText(text);
+        answer.setUser(user);
+        answer.setQuestion(question);
+
+        try {
+            em.persist(answer);
+        } catch (EJBTransactionRolledbackException | PersistenceException e) {
+            throw e;
         }
     }
 

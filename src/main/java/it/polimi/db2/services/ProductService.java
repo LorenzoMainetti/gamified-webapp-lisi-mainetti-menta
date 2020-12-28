@@ -141,12 +141,15 @@ public class ProductService {
 
     public static List<String> getQuestions(Product product) {
 
-            List <String> questionTexts = new LinkedList<>();
-            List<Question> questions = product.getQuestions();
-            questions.forEach( question -> {
-                questionTexts.add(question.getText());
-            });
-            return questionTexts;
+        List <String> questionTexts = new ArrayList<>();
+        List<Question> questions = product.getQuestions();
+        questions.forEach( question -> {
+            questionTexts.add(question.getText());
+        });
+        questionTexts.remove(questionTexts.size()-1);
+        questionTexts.remove(questionTexts.size()-1);
+        questionTexts.remove(questionTexts.size()-1);
+        return questionTexts;
 
     }
 
