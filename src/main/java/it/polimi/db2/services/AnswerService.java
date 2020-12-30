@@ -54,7 +54,7 @@ public class AnswerService {
         }
     }
 
-    public void createAnswer(User user, int productId, Question question, String text) throws PersistenceException, EJBTransactionRolledbackException {
+    public void createAnswer(User user, Question question, String text) throws PersistenceException, EJBTransactionRolledbackException {
         AnswerKey answerKey = new AnswerKey();
         answerKey.setUserId(user.getUsername());
         answerKey.setQuestionKey(question.getQuestionKey());

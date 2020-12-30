@@ -49,16 +49,16 @@ public class SubmitAnswer extends HttpServlet {
         response.getWriter().println("funziona");
 
         for (int i = 0; i < mandatoryAnswers.size(); i++) {
-            answerService.createAnswer(user, product.getProductId(), questions.get(i), mandatoryAnswers.get(i));
+            answerService.createAnswer(user, questions.get(i), mandatoryAnswers.get(i));
         }
 
         String age = request.getParameterValues("age")[0];
         String gender = request.getParameterValues("gender")[0];
         String expertise = request.getParameterValues("expertise level")[0];
         int index = mandatoryAnswers.size();
-        answerService.createAnswer(user, product.getProductId(), questions.get(index), age);
-        answerService.createAnswer(user, product.getProductId(), questions.get(index+1), gender);
-        answerService.createAnswer(user, product.getProductId(), questions.get(index+2), expertise);
+        answerService.createAnswer(user, questions.get(index), age);
+        answerService.createAnswer(user, questions.get(index+1), gender);
+        answerService.createAnswer(user, questions.get(index+2), expertise);
 
     }
 
