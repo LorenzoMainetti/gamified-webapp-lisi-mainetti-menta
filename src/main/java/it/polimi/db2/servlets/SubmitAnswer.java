@@ -1,7 +1,5 @@
 package it.polimi.db2.servlets;
 
-import it.polimi.db2.auxiliary.QuestionnaireContent;
-import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
@@ -15,7 +13,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.util.Arrays;

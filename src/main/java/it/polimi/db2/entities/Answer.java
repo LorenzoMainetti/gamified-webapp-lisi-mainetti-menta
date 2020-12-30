@@ -24,11 +24,10 @@ public class Answer implements Serializable {
     private User user;
 
     @ManyToOne
-    @MapsId("questionId")
+    @MapsId("questionKey")
     @JoinColumns({
             @JoinColumn(name = "questionId", referencedColumnName = "questionId"),
-            //TODO check insertable and updatable
-            @JoinColumn(name = "productId", referencedColumnName = "productId", insertable = false, updatable = false)
+            @JoinColumn(name = "productId", referencedColumnName = "productId")
     })
     private Question question;
 

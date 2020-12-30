@@ -13,11 +13,8 @@ public class AnswerKey implements Serializable {
     @Column(name = "userId")
     private String userId;
 
-    @Column(name = "questionId")
-    private int questionId;
+    private QuestionKey questionKey;
 
-    @Column(name = "productId")
-    private int productId;
 
     public String getUserId() {
         return userId;
@@ -27,20 +24,12 @@ public class AnswerKey implements Serializable {
         this.userId = userId;
     }
 
-    public int getQuestionId() {
-        return questionId;
+    public QuestionKey getQuestionKey() {
+        return questionKey;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setQuestionKey(QuestionKey questionKey) {
+        this.questionKey = questionKey;
     }
 
     @Override
@@ -48,14 +37,11 @@ public class AnswerKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AnswerKey answerKey = (AnswerKey) o;
-        return questionId == answerKey.questionId &&
-                productId == answerKey.productId &&
-                Objects.equals(userId, answerKey.userId);
+        return Objects.equals(userId, answerKey.userId) && Objects.equals(questionKey, answerKey.questionKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, questionId, productId);
+        return Objects.hash(userId, questionKey);
     }
-
 }

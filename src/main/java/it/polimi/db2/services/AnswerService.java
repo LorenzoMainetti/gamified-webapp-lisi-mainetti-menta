@@ -5,6 +5,7 @@ import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.entities.ids.AnswerKey;
+import it.polimi.db2.entities.ids.QuestionKey;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -39,7 +40,7 @@ public class AnswerService {
      * @param product object of the questionnaire
      * @return the answer of the user
      */
-    public Answer getSpecificAnswer(User user, Question question, Product product){
+    public Answer getSpecificAnswer(User user, Question question, Product product) {
         List<Answer> ans = em.createNamedQuery("Answer.getSpecificAnswer", Answer.class).setParameter(1, user.getUsername())
                 .setParameter(2, question.getQuestionId()).setParameter(3, product.getProductId()).getResultList();
         if (ans == null) {
@@ -56,8 +57,7 @@ public class AnswerService {
     public void createAnswer(User user, int productId, Question question, String text) throws PersistenceException, EJBTransactionRolledbackException {
         AnswerKey answerKey = new AnswerKey();
         answerKey.setUserId(user.getUsername());
-        answerKey.setQuestionId(question.getQuestionId());
-        answerKey.setProductId(productId);
+        answerKey.setQuestionKey(question.getQuestionKey());
 
         Answer answer = new Answer();
         answer.setId(answerKey);

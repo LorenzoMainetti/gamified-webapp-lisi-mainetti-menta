@@ -33,6 +33,7 @@ public class Question implements Serializable {
             inverseJoinColumns={@JoinColumn(name="userId")})
     private Set<User> users;
 
+
     public boolean isStatQuestion(){
         return false;
     }
@@ -65,6 +66,10 @@ public class Question implements Serializable {
         return productId;
     }
 
+    public QuestionKey getQuestionKey() {
+        return new QuestionKey(questionId, productId);
+    }
+
     public String getText() {
         return text;
     }
@@ -76,4 +81,5 @@ public class Question implements Serializable {
     public Set<User> getUsers() {
         return users;
     }
+
 }
