@@ -14,23 +14,23 @@ public class HomepageContent implements Serializable {
     String username;
     boolean admin;
 
-    String prodName, prodDescription;
-    BufferedImage prodImage;
-    String imgPath;
+    String prodName, prodDescription, encodedImg;
     ArrayList<String> reviews;
+    byte[] img;
 
     public HomepageContent(String username) {
         this.username = username;
         this.admin = false;
     }
 
-    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, String imgPath, ArrayList<String> reviews) {
+    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, byte[] img, String encodedImg, ArrayList<String> reviews) {
         this.username = username;
         this.admin = admin;
         this.prodName = prodName;
         this.prodDescription = prodDescription;
-        this.imgPath = imgPath;
+        this.img = img;
         this.reviews = reviews;
+        this.encodedImg = encodedImg;
     }
 
     public String getUsername() {
@@ -63,13 +63,5 @@ public class HomepageContent implements Serializable {
 
     public void setProdDescription(String prodDescription) {
         this.prodDescription = prodDescription;
-    }
-
-    public BufferedImage getProdImage() {
-        return prodImage;
-    }
-
-    public void setProdImage(BufferedImage prodImage) {
-        this.prodImage = prodImage;
     }
 }

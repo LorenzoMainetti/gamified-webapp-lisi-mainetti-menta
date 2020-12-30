@@ -70,7 +70,6 @@ public class ProductService {
     }
 
     public Product getProductOfTheDay() throws InvalidParameterException {
-
         List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo")
                 .getResultList();
         if (products == null) {
@@ -153,14 +152,9 @@ public class ProductService {
 
     }
 
-    public BufferedImage loadImage(Product product){
-        String imgName = product.getImage();
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(getClass().getResource("/resources/images/" + imgName + ".jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return img;
+    public void dummyImageLoad(Product product, byte[] img){
+        product.setImage(img);
+        em.merge(product);
+        em.flush();
     }
 }
