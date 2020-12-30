@@ -32,7 +32,7 @@ public class UserService {
 
     }
 
-    private User getUser(String username) throws PersistenceException, InvalidParameterException {
+    public User getUser(String username) throws PersistenceException, InvalidParameterException {
         List<User> usersFromDB = em.createNamedQuery("User.getUser", User.class).setParameter(1, username)
                 .getResultList();
         if (usersFromDB == null) {

@@ -4,9 +4,13 @@ import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
+import it.polimi.db2.entities.ids.AnswerKey;
+import it.polimi.db2.entities.ids.QuestionKey;
+import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -36,7 +40,7 @@ public class AnswerService {
      * @param product object of the questionnaire
      * @return the answer of the user
      */
-    public Answer getSpecificAnswer(User user, Question question, Product product){
+    public Answer getSpecificAnswer(User user, Question question, Product product) {
         List<Answer> ans = em.createNamedQuery("Answer.getSpecificAnswer", Answer.class).setParameter(1, user.getUsername())
                 .setParameter(2, question.getQuestionId()).setParameter(3, product.getProductId()).getResultList();
         if (ans == null) {
@@ -47,6 +51,24 @@ public class AnswerService {
         }
         else {
             throw new InvalidParameterException("internal database error");
+        }
+    }
+
+    public void createAnswer(User user, Question question, String text) throws PersistenceException, EJBTransactionRolledbackException {
+        AnswerKey answerKey = new AnswerKey();
+        answerKey.setUserId(user.getUsername());
+        answerKey.setQuestionKey(question.getQuestionKey());
+
+        Answer answer = new Answer();
+        answer.setId(answerKey);
+        answer.setText(text);
+        answer.setUser(user);
+        answer.setQuestion(question);
+
+        try {
+            em.persist(answer);
+        } catch (EJBTransactionRolledbackException | PersistenceException e) {
+            throw e;
         }
     }
 

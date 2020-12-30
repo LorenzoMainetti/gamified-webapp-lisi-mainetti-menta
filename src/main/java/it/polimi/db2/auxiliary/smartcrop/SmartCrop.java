@@ -5,9 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by flask on 2015. 10. 30..
- */
+
 public class SmartCrop {
 	private Options options;
 	private int[] cd;

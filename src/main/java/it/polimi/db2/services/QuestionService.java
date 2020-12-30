@@ -24,7 +24,7 @@ public class QuestionService {
      * @param questions list of the Marketing questions created by the answer
      * @return the updated list
      */
-    public List<Question> addStatQuestions(List<Question> questions){
+    public List<Question> addStatQuestions(List<Question> questions) {
         Question base = questions.get(0);
         questions.add(copyProductInfo(base, "What's your age?"));
         questions.add(copyProductInfo(base,"What's your gender?"));
