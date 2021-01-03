@@ -23,11 +23,18 @@ public class ReviewService {
         long totalReview = em.createNamedQuery("Review.getReviewNumber", long.class).getSingleResult();
         Random random = new Random();
         List<Review> review;
-        for(int i=0; i<reviewNumber; i++){
-            review = em.createNamedQuery("Review.getReviewById", Review.class)
-                    .setParameter(1,( random.nextInt((int)totalReview -1) + 1)).getResultList();
+        ArrayList<Integer> selected = new ArrayList<Integer>();
+        int index;
+        int i = 0;
+        while(i < reviewNumber){
+            index = ( random.nextInt((int)totalReview -1) + 1);
+            if(selected.contains(index))
+                continue;
+            review = em.createNamedQuery("Review.getReviewById", Review.class).setParameter(1,index).getResultList();
+            selected.add(index);
             result.add(review.get(0).getText());
+            i++;
         }
         return result;
-        }
     }
+}

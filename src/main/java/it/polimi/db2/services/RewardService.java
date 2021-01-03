@@ -101,29 +101,6 @@ public class RewardService {
         }
     }
 
-    /**
-     * Method to compute the score of a questionnaire
-     * if a mandatory answer is empty returns -1 (Exception is handled at servlet level)
-     * @param answers list of all the answer of the user's questionnaire
-     * @return score of the answers or -1 if there is an error
-     */
-    public int computeGamification(List<Answer> answers){
-        int points = 0;
-        for(Answer ans : answers){
-            if(ans.getQuestion().isStatQuestion()){
-                points += 2;
-            }
-            else{
-                if(ans.getText().isEmpty()){
-                    return -1;
-                }
-                else{
-                    points += 1;
-                }
-            }
-        }
-        return points;
-    }
 
 
 }

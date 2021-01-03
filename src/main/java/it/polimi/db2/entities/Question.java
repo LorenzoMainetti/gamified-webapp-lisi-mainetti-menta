@@ -2,6 +2,7 @@ package it.polimi.db2.entities;
 
 import it.polimi.db2.entities.ids.QuestionKey;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -22,6 +23,9 @@ public class Question implements Serializable {
 
     private String text;
 
+    @NotNull
+    private boolean isMandatory;
+
     @ManyToOne
     @PrimaryKeyJoinColumn(name="productId", referencedColumnName="productId")
     private Product product;
@@ -33,6 +37,14 @@ public class Question implements Serializable {
             inverseJoinColumns={@JoinColumn(name="userId")})
     private Set<User> users;
 
+
+    public boolean isMandatory() {
+        return isMandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        isMandatory = mandatory;
+    }
 
     public boolean isStatQuestion(){
         return false;

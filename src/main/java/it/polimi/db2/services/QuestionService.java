@@ -26,9 +26,10 @@ public class QuestionService {
      */
     public List<Question> addStatQuestions(List<Question> questions) {
         Question base = questions.get(0);
-        questions.add(copyProductInfo(base, "What's your age?"));
-        questions.add(copyProductInfo(base,"What's your gender?"));
-        questions.add(copyProductInfo(base, "What's your experience level?"));
+        questions.add(copyProductInfoOptional(base, "What's your age?"));
+        questions.add(copyProductInfoOptional(base,"What's your gender?"));
+        questions.add(copyProductInfoOptional(base, "What's your experience level?"));
+
         return questions;
     }
 
@@ -38,12 +39,14 @@ public class QuestionService {
      * @param text text to insert in the new question
      * @return the copy
      */
-    public Question copyProductInfo(Question base, String text){
+    private Question copyProductInfoOptional(Question base, String text){
         Question copy = new Question();
         copy.setProduct(base.getProduct());
         copy.setProductId(base.getProductId());
         copy.setText(text);
+        copy.setMandatory(false);
         return copy;
+
     }
 
     /**
