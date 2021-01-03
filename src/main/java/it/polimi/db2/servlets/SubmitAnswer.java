@@ -54,7 +54,7 @@ public class SubmitAnswer extends HttpServlet {
         if(!user.isBanned()) {
             Product product = productService.getProductOfTheDay();
             List<Question> questions = product.getQuestions();
-
+    //TODO ESCAPE WHEN READING CHARACTERS
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("text/plain");
             response.getWriter().println("funziona");
@@ -67,9 +67,9 @@ public class SubmitAnswer extends HttpServlet {
             String gender = request.getParameterValues("gender")[0];
             String expertise = request.getParameterValues("expertise level")[0];
             int index = mandatoryAnswers.size();
-            answerService.createAnswer(user, questions.get(index), age);
-            answerService.createAnswer(user, questions.get(index + 1), gender);
-            answerService.createAnswer(user, questions.get(index + 2), expertise);
+            if (!age.equals("")) answerService.createAnswer(user, questions.get(index), age);
+            if (!gender.equals("not-specified")) answerService.createAnswer(user, questions.get(index + 1), gender);
+            if (!expertise.equals("choose")) answerService.createAnswer(user, questions.get(index + 2), expertise);
         }
 
         else displayBanError(response);
