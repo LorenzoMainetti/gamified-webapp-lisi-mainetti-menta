@@ -1,9 +1,6 @@
 package it.polimi.db2.services;
 
-import it.polimi.db2.entities.Answer;
-import it.polimi.db2.entities.Product;
-import it.polimi.db2.entities.Question;
-import it.polimi.db2.entities.User;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.entities.ids.AnswerKey;
 import it.polimi.db2.entities.ids.QuestionKey;
 import jakarta.ejb.EJBTransactionRolledbackException;
@@ -13,6 +10,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Stateless
@@ -24,13 +23,27 @@ public class AnswerService {
     }
 
     /**
-     * TODO
-     * Methods that checks if an answer contains a bad word
-     * @param answer answer to check
+     * Method that checks if an answer contains a bad word
+     * @param answerText answer to be checked
      * @return true if is acceptable otherwise false
      */
-    public Boolean checkValidity(Answer answer){
-        return true;
+    public Boolean checkValidity(String answerText) {
+        String[] splitted = answerText.split(" ");
+        List<DirtyWords> dirtyWords = new ArrayList<>();
+        for (String s : splitted) {
+            dirtyWords.addAll(em.createNamedQuery("DirtyWords.checkAnswer", DirtyWords.class).setParameter(1, s).getResultList());
+            if(!dirtyWords.isEmpty())
+                break;
+        }
+        return dirtyWords.isEmpty();
+    }
+
+    public boolean multipleWordsCheck(String string){
+        String[] words = string.split("\\W+");
+        ArrayList<String> sentence = new ArrayList<>(Arrays.asList(words));
+        List<DirtyWords> result = em.createNamedQuery("DirtyWords.CheckSentence", DirtyWords.class).setParameter(1, sentence).getResultList();
+
+        return !result.isEmpty();
     }
 
     /**

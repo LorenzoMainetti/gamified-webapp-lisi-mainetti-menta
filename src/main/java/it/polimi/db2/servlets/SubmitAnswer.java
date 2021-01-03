@@ -33,32 +33,42 @@ public class SubmitAnswer extends HttpServlet {
 
         List<String> mandatoryAnswers = Arrays.asList(request.getParameterValues("man[]"));
         System.out.println(mandatoryAnswers);
+        String username = (String) request.getSession().getAttribute("user");
+
+        //check validity (no bad words) or reject and ban user
+        for(String answer: mandatoryAnswers)
+            if(answerService.multipleWordsCheck(answer)) {
+                userService.banUser(username);
+                //TODO client side: tell user that he is been banned
+                break;
+            }
 
         /*Enum ... = (String) request.getParameter("gender");
         (int) request.getParameter("age")
                 if () */
 
-        String username = (String) request.getSession().getAttribute("user");
-        System.out.println(username);
         User user = userService.getUser(username);
-        Product product = productService.getProductOfTheDay();
-        List<Question> questions = product.getQuestions();
+        //if the user has not been banned, save his answers in the database
+        if(!user.isBanned()) {
+            Product product = productService.getProductOfTheDay();
+            List<Question> questions = product.getQuestions();
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("text/plain");
-        response.getWriter().println("funziona");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("text/plain");
+            response.getWriter().println("funziona");
 
-        for (int i = 0; i < mandatoryAnswers.size(); i++) {
-            answerService.createAnswer(user, questions.get(i), mandatoryAnswers.get(i));
+            for (int i = 0; i < mandatoryAnswers.size(); i++) {
+                answerService.createAnswer(user, questions.get(i), mandatoryAnswers.get(i));
+            }
+
+            String age = request.getParameterValues("age")[0];
+            String gender = request.getParameterValues("gender")[0];
+            String expertise = request.getParameterValues("expertise level")[0];
+            int index = mandatoryAnswers.size();
+            answerService.createAnswer(user, questions.get(index), age);
+            answerService.createAnswer(user, questions.get(index + 1), gender);
+            answerService.createAnswer(user, questions.get(index + 2), expertise);
         }
-
-        String age = request.getParameterValues("age")[0];
-        String gender = request.getParameterValues("gender")[0];
-        String expertise = request.getParameterValues("expertise level")[0];
-        int index = mandatoryAnswers.size();
-        answerService.createAnswer(user, questions.get(index), age);
-        answerService.createAnswer(user, questions.get(index+1), gender);
-        answerService.createAnswer(user, questions.get(index+2), expertise);
 
     }
 
