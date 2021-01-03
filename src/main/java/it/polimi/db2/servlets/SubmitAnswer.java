@@ -39,9 +39,11 @@ public class SubmitAnswer extends HttpServlet {
         for(String answer: mandatoryAnswers)
             if(answerService.multipleWordsCheck(answer)) {
                 userService.banUser(username);
-                //TODO client side: tell user that he is been banned
-                break;
+                displayBanError(response);
+                return;
+
             }
+
 
         /*Enum ... = (String) request.getParameter("gender");
         (int) request.getParameter("age")
@@ -70,6 +72,13 @@ public class SubmitAnswer extends HttpServlet {
             answerService.createAnswer(user, questions.get(index + 2), expertise);
         }
 
+        else displayBanError(response);
+    }
+
+    private void displayBanError(HttpServletResponse response) throws IOException {
+        response.setContentType("text/plain");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.getWriter().println("You've been banned. Unable to process your request");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

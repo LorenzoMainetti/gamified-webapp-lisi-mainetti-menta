@@ -21,10 +21,6 @@ function makeCall(method, url, formElement, cback, reset = true) {
 }
 
 
-function sendQuestionnaire () {
-
-}
-
 function fillQuestions(questionsList) {
 
     var container = document.getElementById("id_question_container");
@@ -114,17 +110,17 @@ document.getElementById("id_submit_questionnaire").addEventListener('click', (e)
     var target = e.target;
     var form = document.getElementById("questionnaire_form");
     if (form.checkValidity()) {
-        displayError("Please check invalid fields");
+        displayError("sending...");
         makeCall("POST", './SubmitAnswer', form,
             function (req) {
                 if (req.readyState == XMLHttpRequest.DONE) {
                     var message = req.responseText;
                     switch (req.status) {
                         case 200:
-                            displayError("Ha funzionato, gg")
+                            window.location.assign("./thanks.html");
                             break;
                         case 400: // bad request
-                            //backToWebApp("invalid request.");
+                            displayError(message);
                             break;
                         case 401: // unauthorized
                             //forceLocalLogout();
