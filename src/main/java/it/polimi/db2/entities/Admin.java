@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "admin", schema = "db_gamified_app")
-@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2")
+@NamedQuery(name = "Admin.getAdmin", query = "SELECT r FROM Admin r  WHERE r.adminId = ?1")
 public class Admin {
     private static final long serialVersionUID = 1L;
 
@@ -25,5 +25,10 @@ public class Admin {
     //Fetch = lazy is fine because we don't always need created product (es. during login or on creation)
     @OneToMany(mappedBy = "creator")
     private Set<Product> createdProducts; //no need to return a specific order
+
+
+    public String getAdminId() {
+        return adminId;
+    }
 
 }

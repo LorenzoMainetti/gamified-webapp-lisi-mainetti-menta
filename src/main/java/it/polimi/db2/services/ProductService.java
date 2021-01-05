@@ -27,27 +27,27 @@ public class ProductService {
     }
 
     /**
-     * Methpd that creates and inserts a new questionnaire in the Database
+     * Method that creates and inserts a new questionnaire in the Database
      * @param name name of the product
      * @param date date of the questionnaire
      * @param description small description of the product
      * @param admin the admin who created the questionnaire
-     * @param questions list of questions created by the admin
      * @throws EJBTransactionRolledbackException
      * @throws PersistenceException
      */
-    public void insertProduct(String name, Date date, String description, Admin admin, List<Question> questions) throws EJBTransactionRolledbackException, PersistenceException{
+    public Product insertProduct(String name, Date date, String description, Admin admin) throws EJBTransactionRolledbackException, PersistenceException{
         Product product = new Product();
         product.setName(name);
         product.setDate(date);
         product.setDescription(description);
-        product.setQuestions(questions);
+        product.setCreatorId(admin.getAdminId());
         product.setCreator(admin);
         try {
             em.persist(product);
         } catch (EJBTransactionRolledbackException | PersistenceException e) {
             throw e;
         }
+        return product;
     }
 
     /**

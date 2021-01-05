@@ -121,5 +121,13 @@ public class Product implements Serializable {
     public byte[] getImage() {
         return image;
     }
+
+    public List<Reward> getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(List<Reward> rewards) {
+        this.rewards = rewards;
+    }
 }
 

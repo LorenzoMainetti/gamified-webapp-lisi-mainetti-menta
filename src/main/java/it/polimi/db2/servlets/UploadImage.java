@@ -1,23 +1,15 @@
 package it.polimi.db2.servlets;
 
-import it.polimi.db2.auxiliary.images.ImageProcessor;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
-import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
-import jakarta.ejb.EJBTransactionRolledbackException;
-import jakarta.persistence.PersistenceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.text.StringEscapeUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,8 +33,7 @@ public class UploadImage extends HttpServlet {
                 outputStream.write(buffer, 0, bytesRead);
             }
 
-            byte[] imageBytes = outputStream.toByteArray();
-            return imageBytes;
+            return outputStream.toByteArray();
         } catch (IOException e) {
             throw e;
         }

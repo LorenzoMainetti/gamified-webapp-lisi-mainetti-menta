@@ -41,9 +41,7 @@ public class SubmitAnswer extends HttpServlet {
                 userService.banUser(username);
                 displayBanError(response);
                 return;
-
             }
-
 
         /*Enum ... = (String) request.getParameter("gender");
         (int) request.getParameter("age")
@@ -54,22 +52,26 @@ public class SubmitAnswer extends HttpServlet {
         if(!user.isBanned()) {
             Product product = productService.getProductOfTheDay();
             List<Question> questions = product.getQuestions();
-    //TODO ESCAPE WHEN READING CHARACTERS
+            //TODO ESCAPE WHEN READING CHARACTERS
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("text/plain");
             response.getWriter().println("funziona");
 
             for (int i = 0; i < mandatoryAnswers.size(); i++) {
-                answerService.createAnswer(user, questions.get(i), mandatoryAnswers.get(i));
+                answerService.insertAnswer(user, questions.get(i), mandatoryAnswers.get(i));
             }
 
             String age = request.getParameterValues("age")[0];
             String gender = request.getParameterValues("gender")[0];
             String expertise = request.getParameterValues("expertise level")[0];
             int index = mandatoryAnswers.size();
-            if (!age.equals("")) answerService.createAnswer(user, questions.get(index), age);
-            if (!gender.equals("not-specified")) answerService.createAnswer(user, questions.get(index + 1), gender);
-            if (!expertise.equals("choose")) answerService.createAnswer(user, questions.get(index + 2), expertise);
+
+            if (!age.equals(""))
+                answerService.insertAnswer(user, questions.get(index), age);
+            if (!gender.equals("not-specified"))
+                answerService.insertAnswer(user, questions.get(index + 1), gender);
+            if (!expertise.equals("choose"))
+                answerService.insertAnswer(user, questions.get(index + 2), expertise);
         }
 
         else displayBanError(response);
