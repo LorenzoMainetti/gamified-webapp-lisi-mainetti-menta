@@ -1,5 +1,7 @@
 package it.polimi.db2.servlets;
 
+import com.google.gson.Gson;
+import it.polimi.db2.auxiliary.ErrorContent;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
@@ -14,6 +16,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 @WebServlet("/Login")
@@ -27,16 +30,25 @@ public class Login extends HttpServlet {
         return true;
     }
 
-    void sendError(HttpServletResponse response, String errorText) throws IOException {
-        response.setContentType("text/plain");
-        response.getWriter().println(errorText);
+    protected void sendError(HttpServletResponse response, HttpServletRequest request, String errorType, String errorInfo) throws IOException {
+        String path = getServletContext().getContextPath() + "/error.html";
+        //response.sendRedirect(path);
+        request.getSession().setAttribute ("errorType", errorType);
+        request.getSession().setAttribute ("errorInfo", errorInfo);
+        try {
+            getServletConfig().getServletContext().getRequestDispatcher("/error.html").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
+
     boolean isEmailValid(String email) {
         return EmailValidator.getInstance().isValid(email);
     }
     boolean isUsernameValid(String username) {
         return username.length()<32 && username.length() > 3;
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
@@ -47,7 +59,7 @@ public class Login extends HttpServlet {
         //CHECK NULLITY
         if (username == null || password == null) {
             //TODO invalid request parameters
-            sendError(response, "some fields are missing");
+            sendError(response, request, "Invalid Completion","some fields are missing");
             return;
         }
 
@@ -58,12 +70,12 @@ public class Login extends HttpServlet {
         if (isSignUp != null && isSignUp.equals("true")) {
 
             if (email == null) {
-                sendError(response, "missing email address");
+                sendError(response, request, "Invalid Completion","missing email address");
                 return;
             }
             //Check if valid (synthax, length)
             if (!(isEmailValid(email) && isUsernameValid(username))) {
-                sendError(response,"invalid username or password format");
+                sendError(response, request,"Invalid Completion","invalid username or password format");
                 return;
             }
             //try to register a new user
@@ -77,10 +89,10 @@ public class Login extends HttpServlet {
                 //TODO send internal server error
 
                 if (e.getCause().getCause().getMessage().contains("Duplicate entry")) {
-                    sendError(response, "username already taken");
+                    sendError(response, request,"Invalid Completion", "username already taken");
                 }
                 else {
-                    sendError(response, "internal server error");
+                    sendError(response, request, "Invalid Completion","internal server error");
                 }
 
             }
@@ -92,7 +104,7 @@ public class Login extends HttpServlet {
         else if (isSignUp == null) { // *** LOGIN existing user
             //Check if valid (synthax, length)
             if (!isUsernameValid(username)) {
-                sendError(response,"invalid username or password format");
+                sendError(response, request,"Invalid Completion","invalid username or password format");
                 return;
             }
 
@@ -103,7 +115,7 @@ public class Login extends HttpServlet {
                 response.sendRedirect(path);
             }
             catch (Exception e) {
-                sendError(response, e.getMessage());
+                sendError(response, request, "Invalid Completion",e.getMessage());
             }
         }
         else {

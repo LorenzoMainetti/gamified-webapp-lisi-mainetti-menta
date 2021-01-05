@@ -57,6 +57,7 @@ public class HomepageData extends HttpServlet {
         HomepageContent gg = new HomepageContent(username, false, podt.getName(),
                 podt.getDescription(), podt.getImage(), encoded, reviewService.getRandomReviews());
         String jsonHomepage = new Gson().toJson(gg);
-        out.print(jsonHomepage);
+        //out.print(jsonHomepage);
+        out.write(jsonHomepage);
     }
 }
