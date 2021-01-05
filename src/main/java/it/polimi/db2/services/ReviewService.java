@@ -5,6 +5,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,23 +19,33 @@ public class ReviewService {
     public ReviewService(){
     }
 
-    public ArrayList<String> getRandomReviews(){
+    /**
+     * Method to get a fixed number of random reviews
+     * @return list of reviews
+     * @throws InvalidParameterException if there are no review with the argument number
+     */
+    public ArrayList<String> getRandomReviews() throws InvalidParameterException {
         ArrayList<String> result = new ArrayList<>();
         long totalReview = em.createNamedQuery("Review.getReviewNumber", long.class).getSingleResult();
-        Random random = new Random();
-        List<Review> review;
-        ArrayList<Integer> selected = new ArrayList<Integer>();
-        int index;
-        int i = 0;
-        while(i < reviewNumber){
-            index = ( random.nextInt((int)totalReview -1) + 1);
-            if(selected.contains(index))
-                continue;
-            review = em.createNamedQuery("Review.getReviewById", Review.class).setParameter(1,index).getResultList();
-            selected.add(index);
-            result.add(review.get(0).getText());
-            i++;
+        if((int) totalReview < reviewNumber){
+            throw new InvalidParameterException("Not enough review in the DB");
         }
-        return result;
+        else {
+            Random random = new Random();
+            List<Review> review;
+            ArrayList<Integer> selected = new ArrayList<Integer>();
+            int index;
+            int i = 0;
+            while (i < reviewNumber) {
+                index = (random.nextInt((int) totalReview - 1) + 1);
+                if (selected.contains(index))
+                    continue;
+                review = em.createNamedQuery("Review.getReviewById", Review.class).setParameter(1, index).getResultList();
+                selected.add(index);
+                result.add(review.get(0).getText());
+                i++;
+            }
+            return result;
+        }
     }
 }

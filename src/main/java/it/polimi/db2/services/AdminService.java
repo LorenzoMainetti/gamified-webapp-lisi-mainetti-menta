@@ -6,7 +6,6 @@ import jakarta.persistence.PersistenceContext;
 
 @Stateless
 public class AdminService {
-
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 
