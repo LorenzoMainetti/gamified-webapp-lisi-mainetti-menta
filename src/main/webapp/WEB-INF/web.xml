@@ -3,14 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <!--
     <filter>
         <filter-name>Checker</filter-name>
         <filter-class>it.polimi.db2.filters.LoggedIn</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Checker</filter-name>
-        <url-pattern>/Error</url-pattern>
+        <!--<url-pattern>/Error</url-pattern>-->
         <url-pattern>/HomepageData</url-pattern>
         <url-pattern>/Leaderboard</url-pattern>
         <url-pattern>/Logout</url-pattern>
@@ -18,5 +17,4 @@
         <url-pattern>/SubmitAnswer</url-pattern>
         <url-pattern>/UploadImage</url-pattern>
     </filter-mapping>
-    -->
 </web-app>
