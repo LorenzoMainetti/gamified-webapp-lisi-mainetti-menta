@@ -1,5 +1,8 @@
 package it.polimi.db2.services;
 
+import it.polimi.db2.auxiliary.UserStatus;
+import it.polimi.db2.entities.Answer;
+import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.User;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
@@ -96,5 +99,28 @@ public class UserService {
      */
     public void updateProfile(User user) throws PersistenceException, IllegalArgumentException {
         em.merge(user);
+    }
+
+    public UserStatus checkUserStatus(User user, Product product, ProductService productService) throws InvalidParameterException{
+        if(user.isBanned()){
+            return UserStatus.BANNED;
+        }
+        else{
+            List<Answer> ans = em.createNamedQuery("Answer.getUserAnswers", Answer.class)
+                    .setParameter(1, user).setParameter(2, product.getProductId()).getResultList();
+            if (ans == null || ans.isEmpty()) {
+                //no user answer related to the product
+                List<User> cancelled = productService.getProductUsers(product, false);
+                if(cancelled.contains(user)){
+                    return UserStatus.COMPLETED;
+                }
+                else {
+                    return UserStatus.NOT_COMPLETED;
+                }
+            }
+            else {
+                return UserStatus.COMPLETED;
+            }
+        }
     }
 }

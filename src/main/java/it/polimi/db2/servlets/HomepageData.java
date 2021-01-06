@@ -2,10 +2,12 @@ package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
 import it.polimi.db2.auxiliary.HomepageContent;
+import it.polimi.db2.auxiliary.UserStatus;
 import it.polimi.db2.auxiliary.images.ImageProcessor;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.ReviewService;
+import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Provider;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -25,7 +28,8 @@ import java.util.Base64;
 
 @WebServlet("/HomepageData")
 public class HomepageData extends HttpServlet {
-
+    @EJB(name = "it.polimi.db2.entities.services/UserService")
+    private UserService userService;
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/ReviewService")
@@ -52,10 +56,11 @@ public class HomepageData extends HttpServlet {
             e.printStackTrace();
         }
         //TODO HARDCODED
+        UserStatus userStatus = userService.checkUserStatus(userService.getUser(username), podt, productService);
         String productImageURI = "#";
         String encoded = Base64.getEncoder().encodeToString(podt.getImage());
         HomepageContent gg = new HomepageContent(username, false, podt.getName(),
-                podt.getDescription(), podt.getImage(), encoded, reviewService.getRandomReviews());
+                podt.getDescription(), podt.getImage(), encoded, reviewService.getRandomReviews(), userStatus);
         String jsonHomepage = new Gson().toJson(gg);
         //out.print(jsonHomepage);
         out.write(jsonHomepage);

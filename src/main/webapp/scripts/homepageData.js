@@ -38,6 +38,36 @@ window.addEventListener("load", () => {
                         let review = row.insertCell(0);
                         review.innerHTML = con.reviews[k];
                     })
+                    if (con.userStatus == "BANNED"){
+                        document.getElementById("id_action_row").innerHTML=
+                            "<div id=\"bannedStuff\" >\n" +
+                            " <form id=\"bannedButton\" >\n" +
+                            "  <button type=\"button\" class=\"btn btn-danger\" disabled>Banned</button>\n" +
+                            " </form>\n" +
+                            " <blockquote class=\"blockquote text-center\">\n" +
+                            "  <p class=\"mb-0\">You've been banned due to \"inappropriate language during the questionnaire submission</p>\n" +
+                            "  <footer class=\"blockquote-footer\">Staff </footer>\n" +
+                            " </blockquote>\n" +
+                            "</div>";
+                    }
+                    else if(con.userStatus == "COMPLETED"){
+                        document.getElementById("id_action_row").innerHTML=
+                            "<div id=\"bannedStuff\" >\n" +
+                            " <form id=\"bannedButton\" >\n" +
+                            "  <button type=\"button\" class=\"btn btn-success\" disabled>Completed</button>\n" +
+                            " </form>\n" +
+                            " <blockquote class=\"blockquote text-center\">\n" +
+                            "  <p class=\"mb-0\">You've already submitted the questionnaire, thank you</p>\n" +
+                            "  <footer class=\"blockquote-footer\">Staff </footer>\n" +
+                            " </blockquote>\n" +
+                            "</div>";
+                    }
+                    else if (con.userStatus == "NOT_COMPLETED"){
+                        document.getElementById("id_action_row").innerHTML=
+                            "<form action=\"questionnaire.html\" method=\"post\">\n" +
+                            " <input type=\"submit\" name=\"button1\" value=\"Fill Questionnaire\"/>\n" +
+                            "</form>";
+                    }
                 }
             } else {
                 //display error
