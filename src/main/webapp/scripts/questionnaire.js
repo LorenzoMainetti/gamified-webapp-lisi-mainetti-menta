@@ -120,7 +120,7 @@ document.getElementById("id_submit_questionnaire").addEventListener('click', (e)
                             window.location.assign("./thanks.html");
                             break;
                         case 400: // bad request
-                            displayError(message);
+                            displayError("NO BRO");
                             break;
                         case 401: // unauthorized
                             //forceLocalLogout();
