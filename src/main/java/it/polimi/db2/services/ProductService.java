@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ProductService {
@@ -88,8 +90,14 @@ public class ProductService {
 
     public Map<Date, String> getPastQuestionnairesMinimal(Date currentDate) {
 
-        Map <Date, String> queryResult = (Map<Date, String>) em.createNamedQuery("Product.getPastProducts", Tuple.class).setParameter(1, currentDate);
-        return queryResult;
+        Map<Date, String> pastProducts;
+        List<Product> result = em.createNamedQuery("Product.getPastProducts", Product.class).setParameter(1, currentDate).getResultList();
+
+        if (result.size() == 0) {
+            //ERROR - throw exception //TODO MENTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        }
+        pastProducts = result.stream().collect(Collectors.toMap( Product::getDate, Product::getName));
+        return pastProducts;
     }
     /**
      * Method that retrieves the answers of a user about a product

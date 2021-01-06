@@ -18,13 +18,26 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 @WebServlet("/GetAdminPageData")
 public class GetAdminPageData extends HttpServlet {
 
+    Date getCurrentDateSQLFormat() throws ParseException {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+        return sdf.parse(date);
+    }
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/ReviewService")
@@ -62,7 +75,14 @@ public class GetAdminPageData extends HttpServlet {
         content.setAdminId(admax.getAdminId());
         content.setEncodedImg(encodedImage);
 
-        LinkedHashMap<Date, String> listOfPastQuest = new LinkedHashMap<>();
+        try {
+            Date currentDate = getCurrentDateSQLFormat();
+            Map<Date, String> listOfPastQuest =  new LinkedHashMap<>(productService.getPastQuestionnairesMinimal(currentDate));
+            content.setPastQuestionnaires(listOfPastQuest);
+        } catch (ParseException e) {
+            //sendError() //todo MENTAAA
+        }
+
 
 
         out.print(new Gson().toJson(content));
