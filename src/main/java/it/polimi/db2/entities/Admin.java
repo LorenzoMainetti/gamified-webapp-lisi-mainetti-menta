@@ -26,6 +26,21 @@ public class Admin {
     @OneToMany(mappedBy = "creator")
     private Set<Product> createdProducts; //no need to return a specific order
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Product> getCreatedProducts() {
+        return createdProducts;
+    }
+
+    public void setCreatedProducts(Set<Product> createdProducts) {
+        this.createdProducts = createdProducts;
+    }
 
     public String getAdminId() {
         return adminId;

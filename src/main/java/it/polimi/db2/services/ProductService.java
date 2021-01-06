@@ -1,11 +1,13 @@
 package it.polimi.db2.services;
 
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exception.ProductNotFoundException;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Tuple;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -69,11 +71,12 @@ public class ProductService {
         }
     }
 
-    public Product getProductOfTheDay() throws InvalidParameterException {
+    public Product getProductOfTheDay() throws InvalidParameterException{
         List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo")
                 .getResultList();
         if (products == null) {
-            throw new InvalidParameterException("invalid productID");
+            throw new InvalidParameterException("product not found");
+            //throw new ProductNotFoundException("no product of the day has been found"); //todo da sostituire
         }
         else if(products.size()==1) {
             return products.get(0);
@@ -83,6 +86,11 @@ public class ProductService {
         }
     }
 
+    public Map<Date, String> getPastQuestionnairesMinimal(Date currentDate) {
+
+        Map <Date, String> queryResult = (Map<Date, String>) em.createNamedQuery("Product.getPastProducts", Tuple.class).setParameter(1, currentDate);
+        return queryResult;
+    }
     /**
      * Method that retrieves the answers of a user about a product
      * @param product product of interest
