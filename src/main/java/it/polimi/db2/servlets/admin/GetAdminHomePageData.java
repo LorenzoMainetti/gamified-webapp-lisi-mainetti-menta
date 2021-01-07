@@ -16,11 +16,25 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Date;
+
 
 @WebServlet("/GetAdminHomePageData")
 public class GetAdminHomePageData extends HttpServlet {
 
+    Date getCurrentDateSQLFormat() throws ParseException {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+        return sdf.parse(date);
+    }
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/ReviewService")
