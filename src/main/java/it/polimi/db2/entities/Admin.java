@@ -8,7 +8,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "admin", schema = "db_gamified_app")
-@NamedQuery(name = "Admin.getAdmin", query = "SELECT r FROM Admin r  WHERE r.adminId = ?1")
 public class Admin {
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +22,7 @@ public class Admin {
 
     //other side of 1:1 relationship with owner 'Product' that maps admin <> product
     //Fetch = lazy is fine because we don't always need created product (es. during login or on creation)
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.PERSIST)
     private Set<Product> createdProducts; //no need to return a specific order
 
     public String getEmail() {
@@ -44,6 +43,10 @@ public class Admin {
 
     public String getAdminId() {
         return adminId;
+    }
+
+    public void removeCreatedProduct(Product product) {
+        createdProducts.remove(product);
     }
 
 }

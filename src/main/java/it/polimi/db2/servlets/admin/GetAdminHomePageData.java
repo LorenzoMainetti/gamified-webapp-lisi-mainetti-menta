@@ -1,10 +1,9 @@
 package it.polimi.db2.servlets.admin;
 
 import com.google.gson.Gson;
-import it.polimi.db2.admin.AdminPageContent;
+import it.polimi.db2.admin.AdminHomePageContent;
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.exception.ProductNotFoundException;
 import it.polimi.db2.services.AdminService;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.ReviewService;
@@ -17,13 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.util.Base64;
-import java.util.Date;
-import java.util.LinkedHashMap;
 
-@WebServlet("/GetAdminPageData")
-public class GetAdminPageData extends HttpServlet {
+@WebServlet("/GetAdminHomePageData")
+public class GetAdminHomePageData extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
@@ -39,7 +35,7 @@ public class GetAdminPageData extends HttpServlet {
 
         PrintWriter out = setJsonResponse(response);
 
-        AdminPageContent content = new AdminPageContent();
+        AdminHomePageContent content = new AdminHomePageContent();
 
         Product podt;
 
@@ -62,11 +58,10 @@ public class GetAdminPageData extends HttpServlet {
         content.setAdminId(admax.getAdminId());
         content.setEncodedImg(encodedImage);
 
-        LinkedHashMap<Date, String> listOfPastQuest = new LinkedHashMap<>();
+        //LinkedHashMap<Date, String> listOfPastQuest = new LinkedHashMap<>();
 
 
         out.print(new Gson().toJson(content));
-
 
 
     }

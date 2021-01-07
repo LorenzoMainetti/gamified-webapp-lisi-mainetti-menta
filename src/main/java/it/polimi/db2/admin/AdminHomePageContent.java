@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class AdminPageContent implements Serializable {
+public class AdminHomePageContent implements Serializable {
 
     //personal
     String adminId, email;

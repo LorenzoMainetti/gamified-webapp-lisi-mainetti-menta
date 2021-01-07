@@ -1,4 +1,4 @@
-package it.polimi.db2.servlets;
+package it.polimi.db2.servlets.admin;
 
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
@@ -22,8 +22,6 @@ import java.util.List;
 public class CreateQuestionnaire extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
-    @EJB(name = "it.polimi.db2.entities.services/RewardService")
-    private RewardService rewardService;
     @EJB(name = "it.polimi.db2.entities.services/QuestionService")
     private QuestionService questionService;
     @EJB(name = "it.polimi.db2.entities.services/AdminService")
@@ -38,6 +36,7 @@ public class CreateQuestionnaire extends HttpServlet {
         String sDate = request.getParameterValues("date")[0];
         Date date = null;
         try {
+            //TODO check if it the right date format, if not convert it
             date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -47,6 +46,7 @@ public class CreateQuestionnaire extends HttpServlet {
         Admin admin = adminService.getAdmin(adminId);
 
         Product product = productService.insertProduct(productName, date, description, admin);
+        //TODO the admin still needs to upload the image, if he wants
 
         List<String> adminInputs = Arrays.asList(request.getParameterValues("questions[]"));
         //create mandatory questions

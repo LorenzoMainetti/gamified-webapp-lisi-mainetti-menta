@@ -60,30 +60,6 @@ public class RewardService {
     }
 
     /**
-     * Method to insert a new entry in the reward table
-     * @param points points related to the gamification of the questionnaire
-     * @param user user who filled the questionnaire
-     * @param product the product object of the questionnaire
-     * @throws PersistenceException
-     * @throws EJBTransactionRolledbackException
-     */
-    public void insertReward(int points, User user, Product product) throws PersistenceException, EJBTransactionRolledbackException {
-        Reward reward = new Reward();
-        RewardKey rewardKey = new RewardKey();
-        rewardKey.setProductId(product.getProductId());
-        rewardKey.setUserId(user.getUsername());
-        reward.setId(rewardKey);
-        reward.setUser(user);
-        reward.setProduct(product);
-        try {
-            em.persist(reward);
-            em.flush();
-        } catch (EJBTransactionRolledbackException | PersistenceException e) {
-            throw e;
-        }
-    }
-
-    /**
      * Method to remove a questionnaire from the reward table
      * Removes all the entries related to a product
      * Could be used only by the ADMIN

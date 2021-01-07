@@ -1,7 +1,6 @@
 package it.polimi.db2.services;
 
 import it.polimi.db2.entities.*;
-import it.polimi.db2.exception.ProductNotFoundException;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -9,14 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Tuple;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Stateless
@@ -43,7 +35,8 @@ public class ProductService {
         product.setDate(date);
         product.setDescription(description);
         product.setCreatorId(admin.getAdminId());
-        product.setCreator(admin);
+        admin.getCreatedProducts().add(product); //TODO this should be better due to cascading, product should have the admin automatically
+        //product.setCreator(admin);
         try {
             em.persist(product);
         } catch (EJBTransactionRolledbackException | PersistenceException e) {
@@ -54,11 +47,11 @@ public class ProductService {
 
     /**
      * Method to retrieve the questionnaire related to a specific product
-     * @param productID identifier of the product
+     * @param productId id of the requested product
      * @return the product searched
      */
-    public Product getProduct(int productID) throws InvalidParameterException{
-        List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productID)
+    public Product getProduct(int productId) throws InvalidParameterException{
+        List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productId)
                 .getResultList();
         if (products == null) {
             throw new InvalidParameterException("invalid productID");
@@ -71,7 +64,7 @@ public class ProductService {
         }
     }
 
-    public Product getProductOfTheDay() throws InvalidParameterException{
+    public Product getProductOfTheDay() throws InvalidParameterException {
         List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo")
                 .getResultList();
         if (products == null) {
@@ -87,10 +80,22 @@ public class ProductService {
     }
 
     public Map<Date, String> getPastQuestionnairesMinimal(Date currentDate) {
-
+        //TODO I changed the NamedQuery, now it retrieves the whole product entity not just some attributes
         Map <Date, String> queryResult = (Map<Date, String>) em.createNamedQuery("Product.getPastProducts", Tuple.class).setParameter(1, currentDate);
         return queryResult;
     }
+
+    public List<Product> getPastQuestionnaires(Date currentDate) throws InvalidParameterException {
+        List<Product> products = em.createNamedQuery("Product.getPastProducts", Product.class).setParameter(1,  currentDate)
+                .getResultList();
+        if (products.isEmpty()) {
+            throw new InvalidParameterException("no product found");
+        }
+        else {
+            return products;
+        }
+    }
+
     /**
      * Method that retrieves the answers of a user about a product
      * @param product product of interest
@@ -165,4 +170,11 @@ public class ProductService {
         em.merge(product);
         em.flush();
     }
+
+    public void deleteProduct(Product product) {
+        for(User user : product.getUsers())
+            user.removeProduct(product);
+        em.remove(product);
+    }
+
 }
