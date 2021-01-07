@@ -150,7 +150,7 @@ document.getElementById("id_cancel_questionnaire").addEventListener('click', (e)
     makeCall("POST", './SubmitAnswer', form, sub,
         function (req) {
             if (req.readyState == XMLHttpRequest.DONE) {
-                window.location.assign("./thanks.html");
+                window.location.assign("./cancelled.html");
             }
         }
     );
