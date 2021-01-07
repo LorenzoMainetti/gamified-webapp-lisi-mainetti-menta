@@ -72,4 +72,8 @@ public class User implements Serializable {
     public void setBanned(boolean banned) {
         this.banned = banned;
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
 }

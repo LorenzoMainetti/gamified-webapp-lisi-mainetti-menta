@@ -97,7 +97,11 @@ public class ProductService {
      */
     public List<Answer> getUserAnswers(Product product, User user) throws InvalidParameterException{
         List<User> users = getProductUsers(product, false);
-        if(users.contains(user)){
+        ArrayList<String> ids = new ArrayList<>();
+        for(User u :users){
+            ids.add(u.getUsername());
+        }
+        if(ids.contains(user.getUsername())){
             throw new InvalidParameterException("The user has cancelled his questionnaire, so there are no answers");
         }
         else {
@@ -177,6 +181,14 @@ public class ProductService {
     public void dummyImageLoad(Product product, byte[] img) throws IllegalArgumentException, PersistenceException{
         product.setImage(img);
         em.merge(product);
+        em.flush();
+    }
+
+    public void addCancelledUser(Product product, User user) throws IllegalArgumentException, PersistenceException{
+        product.getUsers().add(user);
+        user.getProducts().add(product);
+        em.merge(product);
+        em.merge(user);
         em.flush();
     }
 }

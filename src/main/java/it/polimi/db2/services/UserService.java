@@ -9,6 +9,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -111,7 +112,11 @@ public class UserService {
             if (ans == null || ans.isEmpty()) {
                 //no user answer related to the product
                 List<User> cancelled = productService.getProductUsers(product, false);
-                if(cancelled.contains(user)){
+                ArrayList<String> ids = new ArrayList<>();
+                for(User u :cancelled){
+                    ids.add(u.getUsername());
+                }
+                if(ids.contains(user.getUsername())){
                     return UserStatus.COMPLETED;
                 }
                 else {
