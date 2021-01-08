@@ -1,6 +1,6 @@
 package it.polimi.db2.servlets;
 
-import it.polimi.db2.auxiliary.QuestionnaireContent;
+import it.polimi.db2.auxiliary.json.QuestionnaireContent;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import jakarta.ejb.EJB;

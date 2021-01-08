@@ -117,7 +117,7 @@ public class UserService {
                     ids.add(u.getUsername());
                 }
                 if(ids.contains(user.getUsername())){
-                    return UserStatus.COMPLETED;
+                    return UserStatus.DELETED;
                 }
                 else {
                     return UserStatus.NOT_COMPLETED;

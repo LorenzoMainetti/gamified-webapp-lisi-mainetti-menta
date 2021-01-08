@@ -1,10 +1,8 @@
 package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
-import it.polimi.db2.auxiliary.ErrorContent;
-import it.polimi.db2.auxiliary.HomepageContent;
+import it.polimi.db2.auxiliary.json.ErrorContent;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

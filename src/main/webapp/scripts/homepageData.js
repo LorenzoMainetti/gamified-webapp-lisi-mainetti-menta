@@ -87,6 +87,19 @@ window.addEventListener("load", () => {
                                 " <input type=\"submit\" name=\"button1\" value=\"Fill Questionnaire\"/>\n" +
                                 "</form>";
                         }
+                        else if (con.userStatus == "DELETED") {
+                            document.getElementById("id_action_row").innerHTML =
+                                "<div id=\"bannedStuff\" >\n" +
+                                " <form id=\"bannedButton\" >\n" +
+                                "  <button type=\"button\" class=\"btn btn-success\" disabled>Deleted</button>\n" +
+                                " </form>\n" +
+                                " <blockquote class=\"blockquote text-center\">\n" +
+                                "  <p class=\"mb-0\">You've deleted the questionnaire for the product of the day.</p>\n" +
+                                "  <footer class=\"blockquote-footer\">Staff </footer>\n" +
+                                " </blockquote>\n" +
+                                "</div>";
+                        }
+
                     }
                 }
             } else {

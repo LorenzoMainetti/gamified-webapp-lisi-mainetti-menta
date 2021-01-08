@@ -1,4 +1,4 @@
-package it.polimi.db2.auxiliary;
+package it.polimi.db2.auxiliary.json;
 
 import java.io.Serializable;
 

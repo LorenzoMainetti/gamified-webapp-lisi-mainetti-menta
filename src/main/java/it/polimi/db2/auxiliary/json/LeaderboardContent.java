@@ -1,6 +1,5 @@
-package it.polimi.db2.auxiliary;
+package it.polimi.db2.auxiliary.json;
 
-import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Reward;
 
 import java.io.Serializable;

@@ -4,14 +4,12 @@ import com.google.gson.Gson;
 import it.polimi.db2.admin.AdminHomePageContent;
 import it.polimi.db2.entities.*;
 import it.polimi.db2.exception.ProductNotFoundException;
-import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Tuple;
 
-import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -30,7 +28,7 @@ public class ProductService {
      * @param description small description of the product
      * @param admin the admin who created the questionnaire
 
-     * @param questions list of questions created by the admin
+
      * @throws PersistenceException if a problem happens managing the entity (for example it already exists)
      * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
@@ -138,6 +136,19 @@ public class ProductService {
         }
     }
 
+
+    private Set<String> getTable (List <User> users) {
+        Set<String> success = new HashSet<>();
+        for (User user : users) {
+            success.add(user.getUsername());
+        }
+        return success;
+
+    }
+
+    private boolean exists(User u, Set<String> usernames) {
+        return usernames.contains(u.getUsername());
+    }
     /**
      * Method that returns the list of user who compiled the questionnaire (if QuestFilled is true),
      * otherwise the list of user who cancelled their questionnaire
@@ -147,8 +158,9 @@ public class ProductService {
      * @throws InvalidParameterException if the product does not exist
      */
     public List<User> getProductUsers(Product product, Boolean QuestFilled) throws InvalidParameterException{
-        List<User> users = em.createNamedQuery("Answer.getUserFill", User.class).setParameter(1, product.getProductId()).getResultList();
-        if (users == null || users.isEmpty()) {
+        List<User> usersSucessfullyCompleted = em.createNamedQuery("Answer.getUserFill", User.class).setParameter(1, product.getProductId()).getResultList();
+
+        if (usersSucessfullyCompleted == null || usersSucessfullyCompleted.isEmpty()) {
             if(QuestFilled){
                 return null;
             }
@@ -158,14 +170,21 @@ public class ProductService {
         }
         else {
             if(QuestFilled){
-                return users;
+                return usersSucessfullyCompleted;
             }
+            //there is a list of user but I need to fetch only the one that had canceled the questionnaire
             else{
-                List<User> notFilled = new ArrayList<>();
-                for(User u : product.getUsers()){
-                    if(!users.contains(u)){
-                        notFilled.add(u);
-                    }
+                //to be filled
+                List<User> notFilled = new LinkedList<>();
+
+                //list of username of accounts that have a leaderboard entry
+                List <User> relatedToProduct = product.getUsers();
+                Set<String> successfullyCompletedHash = getTable(usersSucessfullyCompleted);
+
+                //for each leaderboard entry
+                for(User u : relatedToProduct){
+                    //check if this user has successfully completed the questionnaire
+                    if (!exists(u, successfullyCompletedHash)) notFilled.add(u);
                 }
                 return notFilled;
             }

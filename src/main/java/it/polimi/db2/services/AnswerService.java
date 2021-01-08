@@ -83,7 +83,7 @@ public class AnswerService {
      * @throws PersistenceException if a problem happens managing the entity (for example it already exists)
      * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
-    public void insertAnsw(User user, Question question, String text) throws PersistenceException, IllegalArgumentException {
+    public void insertAnswer(User user, Question question, String text) throws PersistenceException, IllegalArgumentException {
 
         AnswerKey answerKey = new AnswerKey();
         answerKey.setUserId(user.getUsername());
@@ -99,24 +99,6 @@ public class AnswerService {
     }
   
 
-
-    public List<String> getSubmissionUsernames(int productId) {
-
-        List<User> users = em.createNamedQuery("Answer.getSubmittedUsernames", User.class)
-                .setParameter(1, productId)
-                .getResultList();
-        if (users == null) {
-            throw new InvalidParameterException("No answer present for this combination");
-        }
-        else if(users.size()>0) {
-            List<String> usernames = new LinkedList<>();
-            for (User user : users) usernames.add(user.getUsername());
-            return usernames;
-        }
-        else {
-            throw new InvalidParameterException("internal database error");
-        }
-    }
 
 
 }

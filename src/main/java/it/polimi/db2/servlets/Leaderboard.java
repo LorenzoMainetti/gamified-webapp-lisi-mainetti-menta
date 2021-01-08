@@ -1,16 +1,13 @@
 package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
-import it.polimi.db2.auxiliary.HomepageContent;
-import it.polimi.db2.auxiliary.LeaderboardContent;
+import it.polimi.db2.auxiliary.json.LeaderboardContent;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Reward;
-import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.RewardService;
 import jakarta.ejb.EJB;
 import jakarta.ejb.EJBException;
-import jakarta.persistence.PersistenceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,8 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.InvalidParameterException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/Leaderboard")

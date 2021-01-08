@@ -1,9 +1,8 @@
 package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
-import it.polimi.db2.auxiliary.HomepageContent;
+import it.polimi.db2.auxiliary.json.HomepageContent;
 import it.polimi.db2.auxiliary.UserStatus;
-import it.polimi.db2.auxiliary.images.ImageProcessor;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.ReviewService;
@@ -16,15 +15,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.imageio.ImageIO;
-import javax.naming.directory.InvalidAttributesException;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.InvalidParameterException;
-import java.security.Provider;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 

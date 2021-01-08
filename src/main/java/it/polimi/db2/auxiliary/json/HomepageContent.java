@@ -1,5 +1,6 @@
-package it.polimi.db2.auxiliary;
+package it.polimi.db2.auxiliary.json;
 
+import it.polimi.db2.auxiliary.UserStatus;
 import it.polimi.db2.entities.Product;
 
 import java.awt.*;

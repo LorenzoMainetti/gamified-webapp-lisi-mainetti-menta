@@ -12,8 +12,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Link;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +31,7 @@ public class GetInspectionData extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
     }
-
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -43,10 +43,18 @@ public class GetInspectionData extends HttpServlet {
             List<String> usersWhoSubmitted, usersWhoCanceled;
             Map<String, Map<String, String>> qnaForEachUser;
 
-            /*
-            USERS WHO SUBMITTED THE QUESTIONNAIRE
-             */
-            usersWhoSubmitted = answerService.getSubmissionUsernames(productId);
+            usersWhoSubmitted = new LinkedList<>();
+            usersWhoCanceled = new LinkedList<>();
+
+            //get lists
+            Product product = productService.getProduct(productId);
+            productService.getProductUsers(product, false).forEach( u -> {
+                usersWhoCanceled.add(u.getUsername());
+            });
+            productService.getProductUsers(product, true).forEach( u -> {
+                usersWhoSubmitted.add(u.getUsername());
+            });
+
 
             /*
             USERS WHO CANCELED THE QUESTIONNAIRE
