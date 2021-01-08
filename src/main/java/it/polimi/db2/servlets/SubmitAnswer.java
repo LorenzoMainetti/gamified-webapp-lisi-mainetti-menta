@@ -43,6 +43,7 @@ public class SubmitAnswer extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = (String) request.getSession().getAttribute("user");
+
         String sub = request.getHeader("submitted");
         if(sub.equals("true")) {
             List<String> mandatoryAnswers = Arrays.asList(request.getParameterValues("man[]"));
@@ -70,18 +71,18 @@ public class SubmitAnswer extends HttpServlet {
                     response.getWriter().println("funziona");
 
                     for (int i = 0; i < mandatoryAnswers.size(); i++) {
-                        answerService.createAnswer(user, questions.get(i), mandatoryAnswers.get(i));
+                        answerService.insertAnswer(user, questions.get(i), mandatoryAnswers.get(i));
                     }
 
                     String age = request.getParameterValues("age")[0];
                     String gender = request.getParameterValues("gender")[0];
                     String expertise = request.getParameterValues("expertise level")[0];
                     int index = mandatoryAnswers.size();
-                    if (!age.equals("")) answerService.createAnswer(user, questions.get(index), age);
+                    if (!age.equals("")) answerService.insertAnswer(user, questions.get(index), age);
                     if (!gender.equals("not-specified"))
-                        answerService.createAnswer(user, questions.get(index + 1), gender);
+                        answerService.insertAnswer(user, questions.get(index + 1), gender);
                     if (!expertise.equals("choose"))
-                        answerService.createAnswer(user, questions.get(index + 2), expertise);
+                        answerService.insertAnswer(user, questions.get(index + 2), expertise);
                 } else {
                     displayBanError(response);
                 }
@@ -96,6 +97,7 @@ public class SubmitAnswer extends HttpServlet {
             catch (IllegalArgumentException | PersistenceException | EJBException e){
                 sendError(request, response, "Persistence Error", "Problem during questionnaire submission");
             }
+
         }
     }
 

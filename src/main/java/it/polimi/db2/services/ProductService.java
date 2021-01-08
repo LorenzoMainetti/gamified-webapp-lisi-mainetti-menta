@@ -1,20 +1,18 @@
 package it.polimi.db2.services;
 
+import com.google.gson.Gson;
+import it.polimi.db2.admin.AdminHomePageContent;
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exception.ProductNotFoundException;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Tuple;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.Serializable;
 import java.security.InvalidParameterException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Stateless
@@ -26,34 +24,41 @@ public class ProductService {
     }
 
     /**
-     * Methpd that creates and inserts a new questionnaire in the Database
+     * Method that creates and inserts a new questionnaire in the Database
      * @param name name of the product
      * @param date date of the questionnaire
      * @param description small description of the product
      * @param admin the admin who created the questionnaire
+
      * @param questions list of questions created by the admin
      * @throws PersistenceException if a problem happens managing the entity (for example it already exists)
      * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
-    public void insertProduct(String name, Date date, String description, Admin admin, List<Question> questions) throws PersistenceException, IllegalArgumentException{
+    public Product insertProduct(String name, Date date, String description, Admin admin) throws PersistenceException, IllegalArgumentException{
+
         Product product = new Product();
         product.setName(name);
         product.setDate(date);
         product.setDescription(description);
-        product.setQuestions(questions);
-        product.setCreator(admin);
+
+        product.setCreatorId(admin.getAdminId());
+        admin.getCreatedProducts().add(product); //TODO this should be better due to cascading, product should have the admin automatically
+        //product.setCreator(admin);
 
         em.persist(product);
+
+        return product;
+
     }
 
     /**
      * Method to retrieve the questionnaire related to a specific product
-     * @param productID identifier of the product
+     * @param productId id of the requested product
      * @return the product searched
      * @throws InvalidParameterException if the product does not exist or there is more than 1 product
      */
-    public Product getProduct(int productID) throws InvalidParameterException{
-        List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productID)
+    public Product getProduct(int productId) throws InvalidParameterException{
+        List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productId)
                 .getResultList();
         if (products == null || products.isEmpty()) {
             throw new InvalidParameterException("Invalid productID");
@@ -73,17 +78,36 @@ public class ProductService {
      * @// TODO: 05/01/2021 remove dummy query
      */
     public Product getProductOfTheDay() throws InvalidParameterException {
+
         List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo").getResultList();
         //Date date = java.sql.Date.valueOf(LocalDate.now());
         //List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
         if (products == null || products.isEmpty()) {
             throw new InvalidParameterException("No product of the Day");
+
         }
         else if(products.size()==1) {
             return products.get(0);
         }
         else {
             throw new InvalidParameterException("internal database error");
+        }
+    }
+
+    public Map<Date, String> getPastQuestionnairesMinimal(Date currentDate) {
+        //TODO I changed the NamedQuery, now it retrieves the whole product entity not just some attributes
+        Map <Date, String> queryResult = (Map<Date, String>) em.createNamedQuery("Product.getPastProducts", Tuple.class).setParameter(1, currentDate);
+        return queryResult;
+    }
+
+    public List<Product> getPastQuestionnaires(Date currentDate) throws InvalidParameterException {
+        List<Product> products = em.createNamedQuery("Product.getPastProducts", Product.class).setParameter(1,  currentDate)
+                .getResultList();
+        if (products.isEmpty()) {
+            throw new InvalidParameterException("no product found");
+        }
+        else {
+            return products;
         }
     }
 
@@ -184,6 +208,7 @@ public class ProductService {
         em.flush();
     }
 
+
     public void addCancelledUser(Product product, User user) throws IllegalArgumentException, PersistenceException{
         product.getUsers().add(user);
         user.getProducts().add(product);
@@ -191,4 +216,41 @@ public class ProductService {
         em.merge(user);
         em.flush();
     }
+
+    public void deleteProduct(Product product) {
+        for(User user : product.getUsers())
+            user.removeProduct(product);
+        em.remove(product);
+    }
+
+    /**
+     * @author ale
+     * @param productId pk for the product that will be retrieved from the database
+     * @return a json serialized version of the product
+     * @throws ProductNotFoundException if product do not exist or internal server error
+     */
+    public String getProductToGson(int productId) throws ProductNotFoundException {
+        List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productId)
+                .getResultList();
+        if (products == null) {
+            throw new ProductNotFoundException("invalid productID");
+        }
+        else if(products.size()==1) {
+
+            Product prod = products.get(0);
+            Gson gson = new Gson();
+            AdminHomePageContent content = new AdminHomePageContent();
+
+            String encodedImage = Base64.getEncoder().encodeToString(prod.getImage());
+            content.setProdDescription(prod.getDescription());
+            content.setProdName(prod.getName());
+            content.setEncodedImg(encodedImage);
+            return gson.toJson(content);
+        }
+        else {
+            throw new ProductNotFoundException("internal database error");
+        }
+    }
+
+
 }

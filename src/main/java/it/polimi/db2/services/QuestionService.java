@@ -1,8 +1,10 @@
 package it.polimi.db2.services;
 
+import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.entities.ids.QuestionKey;
+import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,7 +28,7 @@ public class QuestionService {
      * @return the updated list
      */
     public List<Question> addStatQuestions(List<Question> questions) {
-        Question base = questions.get(0);
+        Question base = questions.get(questions.size()-1);
         questions.add(copyProductInfoOptional(base, "What's your age?"));
         questions.add(copyProductInfoOptional(base,"What's your gender?"));
         questions.add(copyProductInfoOptional(base, "What's your experience level?"));
@@ -40,7 +42,7 @@ public class QuestionService {
      * @param text text to insert in the new question
      * @return the copy
      */
-    private Question copyProductInfoOptional(Question base, String text){
+    private Question copyProductInfoOptional(Question base, String text) {
         Question copy = new Question();
         copy.setProduct(base.getProduct());
         copy.setProductId(base.getProductId());
@@ -84,4 +86,19 @@ public class QuestionService {
         em.merge(question);
         em.flush();
     }
+
+    public Question insertQuestion(Product product, String text) {
+        Question question = new Question();
+        question.setProductId(product.getProductId());
+        question.setMandatory(true);
+        question.setText(text);
+        question.setProduct(product);
+        try {
+            em.persist(question);
+        } catch (EJBTransactionRolledbackException | PersistenceException e) {
+            throw e;
+        }
+        return question;
+    }
+
 }

@@ -30,7 +30,7 @@ public class Question implements Serializable {
     @PrimaryKeyJoinColumn(name="productId", referencedColumnName="productId")
     private Product product;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.REMOVE) //maybe orphan removal to delete answers too
     @JoinTable(name="answer",
             joinColumns={@JoinColumn(name="questionId", referencedColumnName = "questionId"),
                          @JoinColumn(name="productId", referencedColumnName = "productId")},

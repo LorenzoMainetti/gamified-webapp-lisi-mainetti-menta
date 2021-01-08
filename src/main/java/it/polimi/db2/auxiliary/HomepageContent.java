@@ -15,9 +15,11 @@ public class HomepageContent implements Serializable {
     private UserStatus userStatus;
     private boolean admin;
 
+
     private String prodName, prodDescription, encodedImg;
     private ArrayList<String> reviews;
     private byte[] img;
+
 
     public HomepageContent(String username) {
         this.username = username;

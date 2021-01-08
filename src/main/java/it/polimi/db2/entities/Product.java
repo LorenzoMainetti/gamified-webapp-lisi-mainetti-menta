@@ -12,6 +12,7 @@ import java.util.List;
 @NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.productId = ?1")
 @NamedQuery(name = "Product.getProductDummy", query = "SELECT p FROM Product p WHERE p.name = ?1")
 @NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date = ?1")
+@NamedQuery(name = "Product.getPastProducts", query = "SELECT p FROM Product p WHERE p.date < ?1")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -120,6 +121,14 @@ public class Product implements Serializable {
 
     public byte[] getImage() {
         return image;
+    }
+
+    public List<Reward> getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(List<Reward> rewards) {
+        this.rewards = rewards;
     }
 }
 
