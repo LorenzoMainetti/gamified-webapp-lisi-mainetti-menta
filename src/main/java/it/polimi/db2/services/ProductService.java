@@ -1,6 +1,9 @@
 package it.polimi.db2.services;
 
+import com.google.gson.Gson;
+import it.polimi.db2.admin.AdminHomePageContent;
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exception.ProductNotFoundException;
 import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -8,6 +11,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Tuple;
 
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -175,6 +179,35 @@ public class ProductService {
         for(User user : product.getUsers())
             user.removeProduct(product);
         em.remove(product);
+    }
+
+    /**
+     * @author ale
+     * @param productId pk for the product that will be retrieved from the database
+     * @return a json serialized version of the product
+     * @throws ProductNotFoundException if product do not exist or internal server error
+     */
+    public String getProductToGson(int productId) throws ProductNotFoundException {
+        List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productId)
+                .getResultList();
+        if (products == null) {
+            throw new ProductNotFoundException("invalid productID");
+        }
+        else if(products.size()==1) {
+
+            Product prod = products.get(0);
+            Gson gson = new Gson();
+            AdminHomePageContent content = new AdminHomePageContent();
+
+            String encodedImage = Base64.getEncoder().encodeToString(prod.getImage());
+            content.setProdDescription(prod.getDescription());
+            content.setProdName(prod.getName());
+            content.setEncodedImg(encodedImage);
+            return gson.toJson(content);
+        }
+        else {
+            throw new ProductNotFoundException("internal database error");
+        }
     }
 
 }

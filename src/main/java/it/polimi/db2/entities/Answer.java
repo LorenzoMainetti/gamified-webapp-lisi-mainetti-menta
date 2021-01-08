@@ -10,6 +10,8 @@ import java.io.Serializable;
 @NamedQuery(name = "Answer.getUserFill", query = "SELECT u FROM User u, Answer a WHERE a.user = u.username AND a.question.productId = ?1")
 @NamedQuery(name = "Answer.getUserAnswers", query = "SELECT a FROM Answer a WHERE a.user = ?1 AND a.question.productId = ?2")
 @NamedQuery(name = "Answer.getSpecificAnswer", query = "SELECT a FROM Answer a WHERE a.user = ?1 AND a.question = ?2 AND a.question.productId = ?3")
+@NamedQuery(name = "Answer.getSubmittedUsernames", query =
+    "SELECT a.user FROM Answer a where a.question.productId = ?1 group by a.user.username")
 public class Answer implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -63,4 +65,6 @@ public class Answer implements Serializable {
     public void setQuestion(Question question) {
         this.question = question;
     }
+
+
 }

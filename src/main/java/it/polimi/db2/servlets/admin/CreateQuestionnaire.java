@@ -20,6 +20,7 @@ import java.util.List;
 
 @WebServlet("/CreateQuestionnaire")
 public class CreateQuestionnaire extends HttpServlet {
+
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/QuestionService")
@@ -37,7 +38,7 @@ public class CreateQuestionnaire extends HttpServlet {
         Date date = null;
         try {
             //TODO check if it the right date format, if not convert it
-            date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+            date = new SimpleDateFormat("yyyy-mm-gg").parse(sDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -46,6 +47,7 @@ public class CreateQuestionnaire extends HttpServlet {
         Admin admin = adminService.getAdmin(adminId);
 
         Product product = productService.insertProduct(productName, date, description, admin);
+
         //TODO the admin still needs to upload the image, if he wants
 
         List<String> adminInputs = Arrays.asList(request.getParameterValues("questions[]"));

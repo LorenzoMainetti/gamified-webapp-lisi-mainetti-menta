@@ -8,10 +8,12 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Query;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -84,5 +86,24 @@ public class AnswerService {
             throw e;
         }
     }
+
+    public List<String> getSubmissionUsernames(int productId) {
+
+        List<User> users = em.createNamedQuery("Answer.getSubmittedUsernames", User.class)
+                .setParameter(1, productId)
+                .getResultList();
+        if (users == null) {
+            throw new InvalidParameterException("No answer present for this combination");
+        }
+        else if(users.size()>0) {
+            List<String> usernames = new LinkedList<>();
+            for (User user : users) usernames.add(user.getUsername());
+            return usernames;
+        }
+        else {
+            throw new InvalidParameterException("internal database error");
+        }
+    }
+
 
 }
