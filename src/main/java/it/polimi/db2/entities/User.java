@@ -73,7 +73,11 @@ public class User implements Serializable {
         this.banned = banned;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
     public void removeProduct(Product product) {
         products.remove(product);
+
     }
 }

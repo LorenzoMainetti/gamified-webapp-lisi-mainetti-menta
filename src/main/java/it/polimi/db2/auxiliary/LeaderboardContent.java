@@ -17,11 +17,16 @@ public class LeaderboardContent implements Serializable {
     }
 
     public ArrayList<LeaderboardEntry> convert(List<Reward> info){
-        ArrayList<LeaderboardEntry> leaderboard = new ArrayList<>();
-        for(Reward reward : info){
-            leaderboard.add(new LeaderboardEntry(reward.getUser().getUsername(), reward.getPoints()));
+        if(info == null){
+            return null;
         }
-        return leaderboard;
+        else {
+            ArrayList<LeaderboardEntry> leaderboard = new ArrayList<>();
+            for (Reward reward : info) {
+                leaderboard.add(new LeaderboardEntry(reward.getUser().getUsername(), reward.getPoints()));
+            }
+            return leaderboard;
+        }
     }
 
     public ArrayList<LeaderboardEntry> getLeaderboard() {

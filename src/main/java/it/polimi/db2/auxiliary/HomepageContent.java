@@ -11,19 +11,22 @@ public class HomepageContent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    String username;
-    boolean admin;
+    private String username;
+    private UserStatus userStatus;
+    private boolean admin;
 
-    String prodName, prodDescription, encodedImg;
-    ArrayList<String> reviews;
-    byte[] img; //todo serve?!?
+
+    private String prodName, prodDescription, encodedImg;
+    private ArrayList<String> reviews;
+    private byte[] img;
+
 
     public HomepageContent(String username) {
         this.username = username;
         this.admin = false;
     }
 
-    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, byte[] img, String encodedImg, ArrayList<String> reviews) {
+    public HomepageContent(String username, boolean admin, String prodName, String prodDescription, byte[] img, String encodedImg, ArrayList<String> reviews, UserStatus userStatus) {
         this.username = username;
         this.admin = admin;
         this.prodName = prodName;
@@ -31,6 +34,7 @@ public class HomepageContent implements Serializable {
         this.img = img;
         this.reviews = reviews;
         this.encodedImg = encodedImg;
+        this.userStatus = userStatus;
     }
 
     public String getUsername() {

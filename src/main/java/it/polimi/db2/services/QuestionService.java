@@ -48,6 +48,7 @@ public class QuestionService {
         copy.setProductId(base.getProductId());
         copy.setText(text);
         copy.setMandatory(false);
+
         return copy;
     }
 
@@ -55,12 +56,12 @@ public class QuestionService {
      * Method to retrieve a question from its key
      * @param key identifier of the question
      * @return the searched question
-     * @throws InvalidParameterException
+     * @throws InvalidParameterException if the question does not exist or there is more than 1 question
      */
     public Question getQuestion(QuestionKey key)throws InvalidParameterException {
         List<Question> result = em.createNamedQuery("Question.getQuestion", Question.class).setParameter(1, key.getQuestionId()).setParameter(2, key.getProductId())
                 .getResultList();
-        if (result == null) {
+        if (result == null || result.isEmpty()) {
             throw new InvalidParameterException("productID or questionID are wrong");
         }
         else if(result.size()==1) {
@@ -72,12 +73,14 @@ public class QuestionService {
     }
 
     /**
-     * UNDERSTAND IF IT IS NECESSARY!!!
      * Method that updates the list of user who answered to a question
      * @param key identifier of the question
      * @param user user who filled the question
+     * @throws PersistenceException if a problem happens managing the entity (for example it does not exists)
+     * @throws IllegalArgumentException if the argument of the merge is not an entity or it's a removed entity
+     * @// TODO: 05/01/2021 understand if it is necessary
      */
-    public void updateUserRef(QuestionKey key, User user){
+    public void updateUserRef(QuestionKey key, User user) throws PersistenceException, IllegalArgumentException {
         Question question = getQuestion(key);
         question.getUsers().add(user);
         em.merge(question);

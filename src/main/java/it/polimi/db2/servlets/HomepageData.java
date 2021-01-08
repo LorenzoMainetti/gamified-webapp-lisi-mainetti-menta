@@ -2,11 +2,14 @@ package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
 import it.polimi.db2.auxiliary.HomepageContent;
+import it.polimi.db2.auxiliary.UserStatus;
 import it.polimi.db2.auxiliary.images.ImageProcessor;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.ReviewService;
+import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
+import jakarta.ejb.EJBException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,10 +17,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import javax.imageio.ImageIO;
+import javax.naming.directory.InvalidAttributesException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.InvalidParameterException;
+import java.security.Provider;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -25,14 +31,21 @@ import java.util.Base64;
 
 @WebServlet("/HomepageData")
 public class HomepageData extends HttpServlet {
-
+    @EJB(name = "it.polimi.db2.entities.services/UserService")
+    private UserService userService;
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/ReviewService")
     private ReviewService reviewService;
 
-    Product getProductOfTheDay() throws ParseException {
-        return productService.getProductOfTheDay();
+    protected void sendError(HttpServletRequest request, HttpServletResponse response, String errorType, String errorInfo) throws IOException {
+        request.getSession().setAttribute ("errorType", errorType);
+        request.getSession().setAttribute ("errorInfo", errorInfo);
+        try {
+            getServletConfig().getServletContext().getRequestDispatcher("/error.html").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,18 +58,38 @@ public class HomepageData extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         String username = (String) request.getSession().getAttribute("user");
 
-        Product podt = null;
+        Product prodOfTheDay = null;
         try {
-            podt = getProductOfTheDay();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            prodOfTheDay = productService.getProductOfTheDay();
         }
-        //TODO HARDCODED
-        String productImageURI = "#";
-        String encoded = Base64.getEncoder().encodeToString(podt.getImage());
-        HomepageContent gg = new HomepageContent(username, false, podt.getName(),
-                podt.getDescription(), podt.getImage(), encoded, reviewService.getRandomReviews());
-        String jsonHomepage = new Gson().toJson(gg);
-        out.print(jsonHomepage);
+        catch (InvalidParameterException | EJBException e){
+            System.out.println(e.getMessage());
+            if(e.getCause().getMessage().equals("No product of the Day")){
+                HomepageContent homepageContent = new HomepageContent(username, false,
+                        null, null, null, null,
+                        null, UserStatus.NOT_AVAILABLE);
+                String jsonHomepage = new Gson().toJson(homepageContent);
+                out.write(jsonHomepage);
+                return;
+            }
+            else{
+                sendError(request, response, "Database Error", e.getMessage());
+                return;
+            }
+        }
+        UserStatus userStatus = userService.checkUserStatus(userService.getUser(username), prodOfTheDay, productService);
+        ArrayList<String> reviews = null;
+        try {
+            reviews = reviewService.getRandomReviews();
+        }
+        catch (InvalidParameterException | EJBException e){
+            System.out.println(e.getMessage());
+        }
+        String encoded = Base64.getEncoder().encodeToString(prodOfTheDay.getImage());
+        HomepageContent homepageContent = new HomepageContent(username, false,
+                prodOfTheDay.getName(), prodOfTheDay.getDescription(), prodOfTheDay.getImage(),
+                encoded, reviews, userStatus);
+        String jsonHomepage = new Gson().toJson(homepageContent);
+        out.write(jsonHomepage);
     }
 }

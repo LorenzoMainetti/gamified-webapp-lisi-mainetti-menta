@@ -24,12 +24,10 @@ public class RewardService {
      * Method to retrieve all the questionnaires related to a specific product
      * @param product the product you want to retrieve
      * @return the list of entries of the leaderboard
-     * @throws PersistenceException
-     * @throws InvalidParameterException
+     * @throws InvalidParameterException if the product does not exist or there is more than 1 product
      */
-    public List<Reward> getLeaderboard(Product product) throws PersistenceException, InvalidParameterException{
-        List<Reward> leaderboard = null;
-        leaderboard = em.createNamedQuery("Reward.getLeaderboard", Reward.class).setParameter(1, product).getResultList();
+    public List<Reward> getLeaderboard(Product product) throws InvalidParameterException{
+        List<Reward> leaderboard = em.createNamedQuery("Reward.getLeaderboard", Reward.class).setParameter(1, product).getResultList();
         if (leaderboard == null) {
             throw new InvalidParameterException("No questionnaires available for this product");
         }
@@ -42,14 +40,12 @@ public class RewardService {
      * Method to retrieve a specific questionnaire
      * @param rewardKey key of the the reward table, containing both user and product information
      * @return the reward entity desired
-     * @throws PersistenceException
-     * @throws InvalidParameterException
+     * @throws InvalidParameterException if the reward does not exist or there is more than 1 reward
      */
-    public Reward getReward(RewardKey rewardKey) throws PersistenceException, InvalidParameterException{
-        List<Reward> rewardList = null;
-        rewardList = em.createNamedQuery("Reward.getReward", Reward.class).setParameter(1, rewardKey).getResultList();
-        if (rewardList == null) {
-            throw new InvalidParameterException("invalid rewardKey");
+    public Reward getReward(RewardKey rewardKey) throws InvalidParameterException{
+        List<Reward> rewardList = em.createNamedQuery("Reward.getReward", Reward.class).setParameter(1, rewardKey).getResultList();
+        if (rewardList == null || rewardList.isEmpty()) {
+            throw new InvalidParameterException("Invalid rewardKey");
         }
         else if(rewardList.size()==1) {
             return rewardList.get(0);
@@ -65,18 +61,11 @@ public class RewardService {
      * Could be used only by the ADMIN
      * @param product product to be removed
      * @return the number of elements removed
+     * @throws InvalidParameterException if the product does not exist or there is more than 1 product
+     * @// TODO: 06/01/2021 check if it's still needed
      */
-    public int deleteQuestionnaire(Product product){
+    public int deleteQuestionnaire(Product product) throws InvalidParameterException{
         em.flush(); //to store cached entities that could be possibly deleted by the following query
-        Query query = em.createNamedQuery("Reward.deleteQuestionnaire", Reward.class);
-        try{
-            return query.setParameter(1, product).executeUpdate();
-        }
-        catch (EJBTransactionRolledbackException | PersistenceException e){
-            throw e;
-        }
+        return em.createNamedQuery("Reward.deleteQuestionnaire", Reward.class).setParameter(1, product).executeUpdate();
     }
-
-
-
 }

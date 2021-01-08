@@ -7,6 +7,8 @@ import it.polimi.db2.services.AnswerService;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
+import jakarta.ejb.EJBException;
+import jakarta.persistence.PersistenceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,53 +31,74 @@ public class SubmitAnswer extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/UserService")
     private UserService userService;
 
+    protected void sendError(HttpServletRequest request, HttpServletResponse response, String errorType, String errorInfo) throws IOException {
+        request.getSession().setAttribute ("errorType", errorType);
+        request.getSession().setAttribute ("errorInfo", errorInfo);
+        try {
+            getServletConfig().getServletContext().getRequestDispatcher("/error.html").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        List<String> mandatoryAnswers = Arrays.asList(request.getParameterValues("man[]"));
-        System.out.println(mandatoryAnswers);
         String username = (String) request.getSession().getAttribute("user");
 
-        //check validity (no bad words) or reject and ban user
-        for(String answer: mandatoryAnswers)
-            if(answerService.multipleWordsCheck(answer)) {
-                userService.banUser(username);
-                displayBanError(response);
-                return;
+        String sub = request.getHeader("submitted");
+        if(sub.equals("true")) {
+            List<String> mandatoryAnswers = Arrays.asList(request.getParameterValues("man[]"));
+            System.out.println(mandatoryAnswers);
+
+            //check validity (no bad words) or reject and ban user
+            for (String answer : mandatoryAnswers) {
+                if (answerService.multipleWordsCheck(answer)) {
+                    try {
+                        userService.banUser(username);
+                        displayBanError(response);
+                        return;
+                    } catch (PersistenceException | IllegalArgumentException | EJBException e) {
+                        sendError(request, response, "Persistence Error", "Unable to ban the User");
+                    }
+                }
             }
+            try {
+                User user = userService.getUser(username);
+                if (!user.isBanned()) {
+                    Product product = productService.getProductOfTheDay();
+                    List<Question> questions = product.getQuestions();
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.setContentType("text/plain");
+                    response.getWriter().println("funziona");
 
-        /*Enum ... = (String) request.getParameter("gender");
-        (int) request.getParameter("age")
-                if () */
+                    for (int i = 0; i < mandatoryAnswers.size(); i++) {
+                        answerService.insertAnswer(user, questions.get(i), mandatoryAnswers.get(i));
+                    }
 
-        User user = userService.getUser(username);
-        //if the user has not been banned, save his answers in the database
-        if(!user.isBanned()) {
-            Product product = productService.getProductOfTheDay();
-            List<Question> questions = product.getQuestions();
-            //TODO ESCAPE WHEN READING CHARACTERS
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType("text/plain");
-            response.getWriter().println("funziona");
-
-            for (int i = 0; i < mandatoryAnswers.size(); i++) {
-                answerService.insertAnswer(user, questions.get(i), mandatoryAnswers.get(i));
+                    String age = request.getParameterValues("age")[0];
+                    String gender = request.getParameterValues("gender")[0];
+                    String expertise = request.getParameterValues("expertise level")[0];
+                    int index = mandatoryAnswers.size();
+                    if (!age.equals("")) answerService.insertAnswer(user, questions.get(index), age);
+                    if (!gender.equals("not-specified"))
+                        answerService.insertAnswer(user, questions.get(index + 1), gender);
+                    if (!expertise.equals("choose"))
+                        answerService.insertAnswer(user, questions.get(index + 2), expertise);
+                } else {
+                    displayBanError(response);
+                }
+            } catch (PersistenceException | IllegalArgumentException | EJBException e) {
+                sendError(request, response, "Persistence Error", "Problem during questionnaire submission");
             }
-
-            String age = request.getParameterValues("age")[0];
-            String gender = request.getParameterValues("gender")[0];
-            String expertise = request.getParameterValues("expertise level")[0];
-            int index = mandatoryAnswers.size();
-
-            if (!age.equals(""))
-                answerService.insertAnswer(user, questions.get(index), age);
-            if (!gender.equals("not-specified"))
-                answerService.insertAnswer(user, questions.get(index + 1), gender);
-            if (!expertise.equals("choose"))
-                answerService.insertAnswer(user, questions.get(index + 2), expertise);
         }
+        else {
+            try{
+                productService.addCancelledUser(productService.getProductOfTheDay(), userService.getUser(username));
+            }
+            catch (IllegalArgumentException | PersistenceException | EJBException e){
+                sendError(request, response, "Persistence Error", "Problem during questionnaire submission");
+            }
 
-        else displayBanError(response);
+        }
     }
 
     private void displayBanError(HttpServletResponse response) throws IOException {
@@ -84,8 +108,5 @@ public class SubmitAnswer extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
     }
 }

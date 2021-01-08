@@ -10,7 +10,6 @@ import java.security.InvalidParameterException;
 
 @Stateless
 public class AdminService {
-
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 

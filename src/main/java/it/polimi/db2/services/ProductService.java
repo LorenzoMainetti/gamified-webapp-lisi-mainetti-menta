@@ -17,7 +17,6 @@ import java.util.*;
 
 @Stateless
 public class ProductService {
-
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 
@@ -30,35 +29,39 @@ public class ProductService {
      * @param date date of the questionnaire
      * @param description small description of the product
      * @param admin the admin who created the questionnaire
-     * @throws EJBTransactionRolledbackException
-     * @throws PersistenceException
+
+     * @param questions list of questions created by the admin
+     * @throws PersistenceException if a problem happens managing the entity (for example it already exists)
+     * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
-    public Product insertProduct(String name, Date date, String description, Admin admin) throws EJBTransactionRolledbackException, PersistenceException{
+    public Product insertProduct(String name, Date date, String description, Admin admin) throws PersistenceException, IllegalArgumentException{
+
         Product product = new Product();
         product.setName(name);
         product.setDate(date);
         product.setDescription(description);
+
         product.setCreatorId(admin.getAdminId());
         admin.getCreatedProducts().add(product); //TODO this should be better due to cascading, product should have the admin automatically
         //product.setCreator(admin);
-        try {
-            em.persist(product);
-        } catch (EJBTransactionRolledbackException | PersistenceException e) {
-            throw e;
-        }
+
+        em.persist(product);
+
         return product;
+
     }
 
     /**
      * Method to retrieve the questionnaire related to a specific product
      * @param productId id of the requested product
      * @return the product searched
+     * @throws InvalidParameterException if the product does not exist or there is more than 1 product
      */
     public Product getProduct(int productId) throws InvalidParameterException{
         List<Product> products = em.createNamedQuery("Product.getProduct", Product.class).setParameter(1, productId)
                 .getResultList();
-        if (products == null) {
-            throw new InvalidParameterException("invalid productID");
+        if (products == null || products.isEmpty()) {
+            throw new InvalidParameterException("Invalid productID");
         }
         else if(products.size()==1) {
             return products.get(0);
@@ -68,12 +71,20 @@ public class ProductService {
         }
     }
 
+    /**
+     * Method to retrieve the questionnaire related to the product of the day
+     * @return the product of the day
+     * @throws InvalidParameterException if the product does not exist or there is more than 1 product
+     * @// TODO: 05/01/2021 remove dummy query
+     */
     public Product getProductOfTheDay() throws InvalidParameterException {
-        List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo")
-                .getResultList();
-        if (products == null) {
-            throw new InvalidParameterException("product not found");
-            //throw new ProductNotFoundException("no product of the day has been found"); //todo da sostituire
+
+        List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo").getResultList();
+        //Date date = java.sql.Date.valueOf(LocalDate.now());
+        //List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
+        if (products == null || products.isEmpty()) {
+            throw new InvalidParameterException("No product of the Day");
+
         }
         else if(products.size()==1) {
             return products.get(0);
@@ -105,16 +116,21 @@ public class ProductService {
      * @param product product of interest
      * @param user user who compiled the questionnaire
      * @return list of user's answers
-     * @throws InvalidParameterException
+     * @throws InvalidParameterException if the product does not exist or there is more than 1 product, or the user hasn't filled the questionnaire
+     * @// TODO: 05/01/2021 check if it's still usable
      */
     public List<Answer> getUserAnswers(Product product, User user) throws InvalidParameterException{
         List<User> users = getProductUsers(product, false);
-        if(users.contains(user)){
+        ArrayList<String> ids = new ArrayList<>();
+        for(User u :users){
+            ids.add(u.getUsername());
+        }
+        if(ids.contains(user.getUsername())){
             throw new InvalidParameterException("The user has cancelled his questionnaire, so there are no answers");
         }
         else {
             List<Answer> ans = em.createNamedQuery("Answer.getUserAnswers", Answer.class).setParameter(1, user.getUsername()).setParameter(2, product.getProductId()).getResultList();
-            if (ans == null) {
+            if (ans == null || ans.isEmpty()) {
                 throw new InvalidParameterException("No user's answers about this product");
             } else {
                 return ans;
@@ -128,10 +144,11 @@ public class ProductService {
      * @param product object of the questionnaire
      * @param QuestFilled for filled questionnaire, false for empty ones
      * @return list of users
+     * @throws InvalidParameterException if the product does not exist
      */
-    public List<User> getProductUsers(Product product, Boolean QuestFilled){
+    public List<User> getProductUsers(Product product, Boolean QuestFilled) throws InvalidParameterException{
         List<User> users = em.createNamedQuery("Answer.getUserFill", User.class).setParameter(1, product.getProductId()).getResultList();
-        if (users == null) {
+        if (users == null || users.isEmpty()) {
             if(QuestFilled){
                 return null;
             }
@@ -155,23 +172,48 @@ public class ProductService {
         }
     }
 
-    public static List<String> getQuestions(Product product) {
-
+    /**
+     * Method that returns the questions related to a specific product
+     * @param product product to which belong the questions
+     * @return list of questions in string format, excluding the statistical ones
+     * @throws InvalidParameterException if there are no question related to the product
+     */
+    public static List<String> getQuestions(Product product) throws InvalidParameterException{
         List <String> questionTexts = new ArrayList<>();
         List<Question> questions = product.getQuestions();
-        questions.forEach( question -> {
-            questionTexts.add(question.getText());
-        });
-        questionTexts.remove(questionTexts.size()-1);
-        questionTexts.remove(questionTexts.size()-1);
-        questionTexts.remove(questionTexts.size()-1);
-        return questionTexts;
-
+        if(questions == null || questions.isEmpty()){
+            throw new InvalidParameterException("No questions present related to the product");
+        }
+        else {
+            questions.forEach(question -> {
+                questionTexts.add(question.getText());
+            });
+            questionTexts.remove(questionTexts.size() - 1);
+            questionTexts.remove(questionTexts.size() - 1);
+            questionTexts.remove(questionTexts.size() - 1);
+            return questionTexts;
+        }
     }
 
-    public void dummyImageLoad(Product product, byte[] img){
+    /**
+     * SUDO Method to set an image to a product in the db
+     * @param product product to which add the photo
+     * @param img photo to add
+     * @throws PersistenceException if a problem happens managing the entity (for example it does not exists)
+     * @throws IllegalArgumentException if the argument of the merge is not an entity or it's a removed entity
+     */
+    public void dummyImageLoad(Product product, byte[] img) throws IllegalArgumentException, PersistenceException{
         product.setImage(img);
         em.merge(product);
+        em.flush();
+    }
+
+
+    public void addCancelledUser(Product product, User user) throws IllegalArgumentException, PersistenceException{
+        product.getUsers().add(user);
+        user.getProducts().add(product);
+        em.merge(product);
+        em.merge(user);
         em.flush();
     }
 
@@ -209,5 +251,6 @@ public class ProductService {
             throw new ProductNotFoundException("internal database error");
         }
     }
+
 
 }
