@@ -14,9 +14,6 @@ public class AdminHomePageContent implements Serializable {
     //potd
     String prodName, prodDescription, encodedImg;
 
-    //Admin gets only the data and product name for a questionnaire (LAZY) in the homepage
-    //he can access further information by clicking to a questionnaire
-    Map<Date, String> pastQuestionnaires = new LinkedHashMap<>();
 
     public String getAdminId() {
         return adminId;
@@ -58,12 +55,4 @@ public class AdminHomePageContent implements Serializable {
         this.encodedImg = encodedImg;
     }
 
-
-    public Map<Date, String> getPastQuestionnaires() {
-        return pastQuestionnaires;
-    }
-
-    public void setPastQuestionnaires(Map<Date, String> pastQuestionnaires) {
-        this.pastQuestionnaires = pastQuestionnaires;
-    }
 }

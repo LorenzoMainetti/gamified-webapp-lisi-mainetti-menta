@@ -38,24 +38,19 @@ public class GetPastQuestionnairePageData extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        PastQuestionnairePageContent content= new PastQuestionnairePageContent();
-
         //get current date
         Date date = Date.valueOf(LocalDate.now());
         List<Product> pastQuestionnaires = productService.getPastQuestionnaires(date);
 
-        String encodedImage;
+        String encodedImage; //Serve?!
+
+        PastQuestionnairePageContent pqpc = new PastQuestionnairePageContent();
 
         for(Product product : pastQuestionnaires) {
-            content.setProdId(product.getProductId());
-            content.setProdName(product.getName());
-            content.setProdDate(product.getDate());
-            content.setProdDescription(product.getDescription());
-            encodedImage = Base64.getEncoder().encodeToString(product.getImage());
-            content.setEncodedImg(encodedImage);
+            pqpc.addEntry(product.getProductId(), product.getName(), product.getDate());
         }
 
-        out.print(new Gson().toJson(content));
+        out.print(new Gson().toJson(pqpc.getJsonRepresentation()));
 
     }
 

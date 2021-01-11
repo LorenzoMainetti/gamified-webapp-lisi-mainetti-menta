@@ -49,6 +49,7 @@ public class Login extends HttpServlet {
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
         String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
         String isSignUp = StringEscapeUtils.escapeJava(request.getParameter("SIGNUP"));
+       // String isSignUp = StringEscapeUtils.escapeJava(request.getParameter("SIGNUP"));
 
         //SIGNUP OR LOGIN
         if (isSignUp != null && isSignUp.equals("true")) { //SIGNUP

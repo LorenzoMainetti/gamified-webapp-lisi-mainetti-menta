@@ -1,46 +1,44 @@
 package it.polimi.db2.admin;
 
+import com.google.gson.Gson;
+
+import javax.xml.crypto.Data;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class PastQuestionnairePageContent {
-    int prodId;
-    String prodName, prodDescription, encodedImg;
-    Date prodDate;
 
-    public int getProdId() {
-        return prodId;
+
+
+public class PastQuestionnairePageContent implements Serializable {
+
+    static class DataEntry implements Serializable {
+
+        public DataEntry(int id, String name, Date date) {
+            this.id = id;
+            this.name = name;
+            this.date = date;
+        }
+
+        int id;
+        String name;
+        Date date;
+
     }
 
-    public void setProdId(int id) {
-        this.prodId = prodId;
+    List<DataEntry> pastQuestionnaires;
+
+    public PastQuestionnairePageContent() {
+        this.pastQuestionnaires = new LinkedList<>();
     }
 
-    public String getProdName() {
-        return prodName;
+    public void addEntry(int id, String name, Date date) {
+        pastQuestionnaires.add(new DataEntry(id, name, date));
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public String getJsonRepresentation() {
+        return new Gson().toJson(this);
     }
-
-    public Date getProdDate() { return prodDate; }
-
-    public void setProdDate(Date prodDate) { this.prodDate = prodDate; }
-
-    public String getProdDescription() {
-        return prodDescription;
-    }
-
-    public void setProdDescription(String prodDescription) {
-        this.prodDescription = prodDescription;
-    }
-
-    public String getEncodedImg() {
-        return encodedImg;
-    }
-
-    public void setEncodedImg(String encodedImg) {
-        this.encodedImg = encodedImg;
-    }
-
 }
