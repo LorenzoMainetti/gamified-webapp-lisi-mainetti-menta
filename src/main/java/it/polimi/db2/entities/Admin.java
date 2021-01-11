@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "admin", schema = "db_gamified_app")
+@NamedQuery(name = "Admin.checkCredentials", query = "SELECT r FROM Admin r WHERE r.adminId = ?1 and r.password = ?2")
 public class Admin {
     private static final long serialVersionUID = 1L;
 

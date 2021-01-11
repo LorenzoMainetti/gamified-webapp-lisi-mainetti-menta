@@ -1,6 +1,8 @@
 package it.polimi.db2.servlets;
 
+import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.User;
+import it.polimi.db2.services.AdminService;
 import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
 import jakarta.ejb.EJBException;
@@ -21,6 +23,8 @@ import java.security.InvalidParameterException;
 public class Login extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/UserService")
     private UserService userService;
+    @EJB(name = "it.polimi.db2.entities.services/AdminService")
+    private AdminService adminService;
 
     protected void sendError(HttpServletResponse response, HttpServletRequest request, String errorType, String errorInfo) throws IOException {
         request.getSession().setAttribute ("errorType", errorType);
@@ -86,7 +90,15 @@ public class Login extends HttpServlet {
                 response.sendRedirect(path);
             }
             catch (InvalidParameterException | EJBException e) {
-                sendError(response, request, "Invalid Completion", e.getCause().getMessage());
+                try {
+                    Admin admin = adminService.checkAdminCredentials(username, password);
+                    request.getSession().setAttribute("admin", admin.getAdminId());
+                    String path = getServletContext().getContextPath() + "/Admin/index.html";
+                    response.sendRedirect(path);
+                }
+                catch (InvalidParameterException | EJBException f) {
+                    sendError(response, request, "Invalid Completion", f.getCause().getMessage());
+                }
             }
         }
     }

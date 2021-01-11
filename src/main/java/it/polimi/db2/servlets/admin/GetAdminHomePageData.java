@@ -59,7 +59,7 @@ public class GetAdminHomePageData extends HttpServlet {
             return;
         } */
 
-        String adminId = (String) request.getSession().getAttribute("user");
+        String adminId = (String) request.getSession().getAttribute("admin");
         Admin admax = adminService.getAdmin(adminId);
 
 

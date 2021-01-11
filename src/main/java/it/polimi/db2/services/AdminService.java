@@ -1,12 +1,14 @@
 package it.polimi.db2.services;
 
 import it.polimi.db2.entities.Admin;
+import it.polimi.db2.entities.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
+import java.util.List;
 
 @Stateless
 public class AdminService {
@@ -24,6 +26,20 @@ public class AdminService {
     }
 
 
+
+    public Admin checkAdminCredentials(String adminId, String password) throws InvalidParameterException{
+        List<Admin> admins = em.createNamedQuery("Admin.checkCredentials", Admin.class).setParameter(1, adminId).setParameter(2, password)
+                .getResultList();
+        if (admins == null || admins.isEmpty()) {
+            throw new InvalidParameterException("Provided username or password is wrong");
+        }
+        else if(admins.size()==1) {
+            return admins.get(0);
+        }
+        else {
+            throw new InvalidParameterException("internal database error");
+        }
+    }
 
     /*
     1) create new questionnaire => productService
