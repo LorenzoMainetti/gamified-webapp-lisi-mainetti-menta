@@ -117,17 +117,17 @@ public class ProductService {
      * @throws InvalidParameterException if the product does not exist or there is more than 1 product, or the user hasn't filled the questionnaire
      * @// TODO: 05/01/2021 check if it's still usable
      */
-    public List<Answer> getUserAnswers(Product product, User user) throws InvalidParameterException{
+    public List<Answer> getUserAnswers(Product product, String user) throws InvalidParameterException{
         List<User> users = getProductUsers(product, false);
         ArrayList<String> ids = new ArrayList<>();
         for(User u :users){
             ids.add(u.getUsername());
         }
-        if(ids.contains(user.getUsername())){
+        if(ids.contains(user)){
             throw new InvalidParameterException("The user has cancelled his questionnaire, so there are no answers");
         }
         else {
-            List<Answer> ans = em.createNamedQuery("Answer.getUserAnswers", Answer.class).setParameter(1, user.getUsername()).setParameter(2, product.getProductId()).getResultList();
+            List<Answer> ans = em.createNamedQuery("Answer.getUserAnswers", Answer.class).setParameter(1, user).setParameter(2, product.getProductId()).getResultList();
             if (ans == null || ans.isEmpty()) {
                 throw new InvalidParameterException("No user's answers about this product");
             } else {

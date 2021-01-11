@@ -1,11 +1,16 @@
 package it.polimi.db2.servlets.admin;
 
-import it.polimi.db2.entities.Admin;
-import it.polimi.db2.entities.Product;
-import it.polimi.db2.entities.User;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import it.polimi.db2.admin.InspectionPageContent;
+import it.polimi.db2.admin.PastQuestionnairePageContent;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.exception.ProductNotFoundException;
 import it.polimi.db2.services.*;
 import jakarta.ejb.EJB;
+import jakarta.json.Json;
 import jakarta.persistence.Tuple;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,8 +18,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Link;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,42 +44,69 @@ public class GetInspectionData extends HttpServlet {
 
     }
 
+    boolean checkProductId (int productId) {
+        return productId > 0;
+    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int productId = Integer.parseInt(request.getParameter("pid"));
+        int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
 
-        try {
+        if(checkProductId(productId)) {
+            try {
 
-            //String productJson = productService.getProductToGson(productId); //TODO IT CRASHED
-            List<String> usersWhoSubmitted, usersWhoCanceled;
-            Map<String, Map<String, String>> qnaForEachUser;
+                //String productJson = productService.getProductToGson(productId); //TODO IT CRASHED
+                List<String> usersWhoSubmitted, usersWhoCanceled;
+                Map<String, List<String>> answersForEachUser = new HashMap<>();
 
-            usersWhoSubmitted = new LinkedList<>();
-            usersWhoCanceled = new LinkedList<>();
+                usersWhoSubmitted = new LinkedList<>();
+                usersWhoCanceled = new LinkedList<>();
 
-            //get lists
-            Product product = productService.getProduct(productId);
-            productService.getProductUsers(product, false).forEach( u -> {
-                usersWhoCanceled.add(u.getUsername());
-            });
-            productService.getProductUsers(product, true).forEach( u -> {
-                usersWhoSubmitted.add(u.getUsername());
-            });
+                //get lists
+                Product product = productService.getProduct(productId);
+                productService.getProductUsers(product, false).forEach( u -> {
+                    usersWhoCanceled.add(u.getUsername());
+                });
+                productService.getProductUsers(product, true).forEach( u -> {
+                    usersWhoSubmitted.add(u.getUsername());
+                });
+
+                //get all the questions for current product
+
+                List<String> questions = product.getQuestionsText();
 
 
-            /*
-            USERS WHO CANCELED THE QUESTIONNAIRE
-            
-             */
+                for (String s : usersWhoSubmitted) {
 
-            /*
-            QUESTIONNAIRE Q & A FOR EACH USER
-             */
+                    List <Answer> answersFromUser = productService.getUserAnswers(product, s);
 
-            System.out.println();
+                    //get only the text
+                    List<String> answers = new LinkedList<>();
+                    for (Answer answer : answersFromUser) {
+                        answers.add(answer.getText());
+                    }
 
-        } catch (Exception e) {
-            //todo mentaaaahhh 🌱
+                    answersForEachUser.put(s, answers );
+                }
+
+
+                InspectionPageContent content = new InspectionPageContent(usersWhoSubmitted, usersWhoCanceled, answersForEachUser, questions);
+
+                String jsonResponse = new Gson().toJson(content);
+
+                PrintWriter out = response.getWriter();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(HttpServletResponse.SC_OK);
+
+                out.print(jsonResponse);
+
+
+
+            } catch (Exception e) {
+               //todo mentaaaahhh 🌱
+            }
         }
+
+
     }
 }

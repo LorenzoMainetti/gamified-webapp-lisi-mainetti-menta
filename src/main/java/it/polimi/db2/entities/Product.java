@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -115,6 +116,12 @@ public class Product implements Serializable {
         return questions;
     }
 
+    public List <String> getQuestionsText() {
+
+        List <String> texts = new LinkedList<>();
+        questions.forEach( q -> texts.add(q.getText()) );
+        return texts;
+    }
     public void setImage(byte[] image) {
         this.image = image;
     }
