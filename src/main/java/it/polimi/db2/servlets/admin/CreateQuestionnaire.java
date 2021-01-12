@@ -38,7 +38,7 @@ public class CreateQuestionnaire extends HttpServlet {
         Date date = null;
         try {
             //TODO check if it the right date format, if not convert it
-            date = new SimpleDateFormat("yyyy-mm-gg").parse(sDate);
+            date = new SimpleDateFormat("yyyy-MM-gg").parse(sDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }

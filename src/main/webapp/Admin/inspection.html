@@ -2,9 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Past Questionnaires</title>
+    <title>Inspection Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="../scripts/admin.js" defer></script>
 </head>
 <body>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <div class="row"><h3 id="id_product_title">Product Name</h3></div>
+                <!--div class="row"><img id="id_product_image" alt="error: image not found"/></div!-->
+                <div class="row"><img id="id_product_image" width="321" height="321"/></div>
+                <div class="row">
+                    <div id="id_product_date"> this product was published the yyyy/MM/gg</div>
+                </div>
+                <div class="row">
+                    <div id="id_product_descript"> this is the product description, you should buy it</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <table id="id_inspectedProduct" style="">
+        <h3>Users&Answers:</h3>
+        <!-- table users/questions/answers -->
+        <tbody id="id_tableBody"></tbody>
+    </table>
+
+    <form class="form-inline my-2 my-lg-0" action="past.html">
+        <button class="btn btn-outline-light" type="submit">Back</button>
+    </form>
+</div>
 </body>
 </html>

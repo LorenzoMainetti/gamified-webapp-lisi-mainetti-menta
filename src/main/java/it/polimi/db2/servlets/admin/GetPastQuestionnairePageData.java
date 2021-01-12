@@ -3,9 +3,7 @@ package it.polimi.db2.servlets.admin;
 import com.google.gson.Gson;
 import it.polimi.db2.admin.PastQuestionnairePageContent;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.services.AdminService;
 import it.polimi.db2.services.ProductService;
-import it.polimi.db2.services.ReviewService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Base64;
 import java.util.List;
 
 @WebServlet("/GetPastQuestionnairePageData")
@@ -31,7 +28,7 @@ public class GetPastQuestionnairePageData extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //send all the questionnaire ids and other data to the admin
+        //send all the past questionnaire ids, names and dates to the admin
 
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
@@ -41,8 +38,6 @@ public class GetPastQuestionnairePageData extends HttpServlet {
         //get current date
         Date date = Date.valueOf(LocalDate.now());
         List<Product> pastQuestionnaires = productService.getPastQuestionnaires(date);
-
-        String encodedImage; //Serve?!
 
         PastQuestionnairePageContent pqpc = new PastQuestionnairePageContent();
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creation Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="../scripts/admin.js" defer></script>
+
+</head>
+
+<body>
+
+<div class="container">
+    <form class="needs-validation" id="questionnaire_form" novalidate>
+        <h3>Insert the product infos</h3>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="control-group"><label class="control-label" for="id_product_title">Product Name:</label></div>
+                </td>
+                <td>
+                    <div class="control-group"><input id="id_product_title" class="textbox" type="text" /></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="control-group"><label class="control-label" for="id_product_descript">Product Description:</label></div>
+                </td>
+                <td>
+                    <div class="control-group"><input id="id_product_descript" class="textbox" type="text" /></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="control-group"><label class="control-label" for="id_product_date">Date:</label></div>
+                </td>
+                <td>
+                    <div class="form-group row">
+                        <div class="col-10"><input id="id_product_date" class="form-control" type="date" /></div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <div id="id_product_questions">
+                    <!-- filled by JS -->
+                </div>
+            </tr>
+            </tbody>
+        </table>
+
+        <form class="form-inline my-2 my-lg-0" action="SUDO.html">
+            <button class="btn btn-outline-light" type="submit">Submit</button>
+        </form>
+    </form>
+</div>
+
+</body>
+</html>

@@ -47,12 +47,15 @@ public class GetInspectionData extends HttpServlet {
     boolean checkProductId (int productId) {
         return productId > 0;
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
 
         if(checkProductId(productId)) {
             try {
+
+                //TODO send also inspected product (name, date, description and image)
 
                 //String productJson = productService.getProductToGson(productId); //TODO IT CRASHED
                 List<String> usersWhoSubmitted, usersWhoCanceled;
