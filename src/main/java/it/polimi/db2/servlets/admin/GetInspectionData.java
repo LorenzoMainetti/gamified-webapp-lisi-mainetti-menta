@@ -25,10 +25,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebServlet("/GetInspectionData")
 public class GetInspectionData extends HttpServlet {
@@ -50,8 +47,8 @@ public class GetInspectionData extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
-
+        //int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
+        int productId = 1; //hardcoded, uncomment previous line to proper work in general use case
         if(checkProductId(productId)) {
             try {
 
@@ -91,8 +88,9 @@ public class GetInspectionData extends HttpServlet {
                     answersForEachUser.put(s, answers );
                 }
 
-
-                InspectionPageContent content = new InspectionPageContent(usersWhoSubmitted, usersWhoCanceled, answersForEachUser, questions);
+                String encoded = Base64.getEncoder().encodeToString(product.getImage());
+                InspectionPageContent content = new InspectionPageContent(usersWhoSubmitted, usersWhoCanceled, answersForEachUser, questions,
+                        product.getName(), product.getDescription(), encoded, product.getDate());
 
                 String jsonResponse = new Gson().toJson(content);
 
@@ -101,7 +99,7 @@ public class GetInspectionData extends HttpServlet {
                 response.setCharacterEncoding("UTF-8");
                 response.setStatus(HttpServletResponse.SC_OK);
 
-                out.print(jsonResponse);
+                out.write(jsonResponse);
 
 
 

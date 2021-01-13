@@ -5,7 +5,13 @@
     <title>Inspection Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="../scripts/admin.js" defer></script>
+    <script src="../scripts/inspection.js" defer></script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
 <body>
 <div>
@@ -19,21 +25,21 @@
                     <div id="id_product_date"> this product was published the yyyy/MM/gg</div>
                 </div>
                 <div class="row">
-                    <div id="id_product_descript"> this is the product description, you should buy it</div>
+                    <div id="id_product_description"> this is the product description, you should buy it</div>
                 </div>
             </div>
         </div>
+
+        <table id="id_inspectedProduct" style="">
+            <h3>Users&Answers:</h3>
+            <!-- table users/questions/answers -->
+            <tbody id="id_tableBody"></tbody>
+        </table>
+
+        <form class="form-inline my-2 my-lg-0" action="index.html">
+            <button class="btn btn-outline-light" type="submit">Back</button>
+        </form>
     </div>
-
-    <table id="id_inspectedProduct" style="">
-        <h3>Users&Answers:</h3>
-        <!-- table users/questions/answers -->
-        <tbody id="id_tableBody"></tbody>
-    </table>
-
-    <form class="form-inline my-2 my-lg-0" action="past.html">
-        <button class="btn btn-outline-light" type="submit">Back</button>
-    </form>
 </div>
 </body>
 </html>
