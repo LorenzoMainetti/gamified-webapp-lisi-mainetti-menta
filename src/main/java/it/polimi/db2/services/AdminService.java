@@ -1,6 +1,7 @@
 package it.polimi.db2.services;
 
 import it.polimi.db2.entities.Admin;
+import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -8,6 +9,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Stateless
@@ -38,6 +40,30 @@ public class AdminService {
         }
         else {
             throw new InvalidParameterException("internal database error");
+        }
+    }
+
+    /**
+     * Method to check if a questionnaire date is usable
+     * @param product questionnaire to create
+     * @return true if the date is in the future and no other questionnaire are already present, false otherwise
+     * @throws InvalidParameterException if there is a consistency problem with the DB
+     */
+    public boolean checkQuestionnaireValidity(Product product) throws InvalidParameterException{
+        if(product.getDate().before(java.sql.Date.valueOf(LocalDate.now()))){
+            return false;
+        }
+        else{
+            List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, product.getDate()).getResultList();
+            if (products == null || products.isEmpty()) {
+                return true;
+            }
+            else if(products.size()==1) {
+                return false;
+            }
+            else {
+                throw new InvalidParameterException("internal database error");
+            }
         }
     }
 

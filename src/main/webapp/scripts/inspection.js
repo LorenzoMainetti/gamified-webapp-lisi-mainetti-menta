@@ -19,10 +19,12 @@ function makeCall(method, url, formElement, cback, reset = true) {
 function insertQuestions(con, table){
     let row = table.insertRow();
     let question = row.insertCell(-1);
-    question.innerHTML = "QUESTIONS";
+    question.innerHTML = "USERS/QUESTIONS";
+    question.style.backgroundColor = "lightblue"
     Object.keys(con.questions).forEach(function (k) {
         let question = row.insertCell(-1);
         question.innerHTML = con.questions[k];
+        question.style.backgroundColor = "azure";
     })
 }
 
@@ -32,13 +34,16 @@ function insertAnswers(con, table){
         let row = table.insertRow();
         let user = row.insertCell(-1);
         user.innerHTML = username;
+        user.style.backgroundColor = "azure";
         for (j = 0; j < con.questions.length; j++){
             let answer = row.insertCell(-1);
             if(j < con.answers[username].length){
                 answer.innerHTML = con.answers[username][j];
+                answer.style.backgroundColor="white"
             }
             else{
                 answer.innerHTML = "";
+                answer.style.backgroundColor="grey"
             }
         }
     })
@@ -47,9 +52,11 @@ function insertAnswers(con, table){
         let row = table.insertRow();
         let user = row.insertCell(-1);
         user.innerHTML = username;
+        user.style.backgroundColor = "azure"
         for (j = 0; j < con.questions.length; j++){
             let answer = row.insertCell(-1);
             answer.innerHTML = "/"
+            answer.style.backgroundColor= "lightgrey"
         }
     })
 }

@@ -1,30 +1,21 @@
 package it.polimi.db2.servlets.admin;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.polimi.db2.admin.InspectionPageContent;
-import it.polimi.db2.admin.PastQuestionnairePageContent;
-import it.polimi.db2.entities.*;
-import it.polimi.db2.exception.ProductNotFoundException;
-import it.polimi.db2.services.*;
+import it.polimi.db2.entities.Answer;
+import it.polimi.db2.entities.Product;
+import it.polimi.db2.services.AnswerService;
+import it.polimi.db2.services.ProductService;
+import it.polimi.db2.services.QuestionService;
 import jakarta.ejb.EJB;
-import jakarta.json.Json;
-import jakarta.persistence.Tuple;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.Link;
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Serializable;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 
 @WebServlet("/GetInspectionData")
@@ -87,7 +78,6 @@ public class GetInspectionData extends HttpServlet {
 
                     answersForEachUser.put(s, answers );
                 }
-
                 String encoded = Base64.getEncoder().encodeToString(product.getImage());
                 InspectionPageContent content = new InspectionPageContent(usersWhoSubmitted, usersWhoCanceled, answersForEachUser, questions,
                         product.getName(), product.getDescription(), encoded, product.getDate());
