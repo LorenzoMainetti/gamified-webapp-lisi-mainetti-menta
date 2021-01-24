@@ -11,6 +11,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -32,7 +33,6 @@ public class QuestionService {
         questions.add(copyProductInfoOptional(base, "What's your age?"));
         questions.add(copyProductInfoOptional(base,"What's your gender?"));
         questions.add(copyProductInfoOptional(base, "What's your experience level?"));
-
         return questions;
     }
 
@@ -99,6 +99,35 @@ public class QuestionService {
             throw e;
         }
         return question;
+    }
+
+    public List <Question> getAllQuestions(List<String> mandatory, Product product) {
+
+        List <Question> allQuestions = new LinkedList<>();
+        /* for each question text */
+        for (String question : mandatory) {
+            Question questionObj = new Question();
+            questionObj.setProductId(product.getProductId());
+            questionObj.setMandatory(true);
+            questionObj.setText(question);
+            questionObj.setProduct(product);
+            allQuestions.add(questionObj);
+        }
+        allQuestions = this.addStatQuestions(allQuestions);
+
+        return (allQuestions);
+
+
+        //return allQuestions;
+
+
+
+    }
+
+    public void updateProductQuestiosn(Product product, List<Question> questions) {
+        product.setQuestions(questions);
+        em.merge(product);
+        em.flush();
     }
 
 }

@@ -44,7 +44,8 @@ public class Product implements Serializable {
     @ManyToMany(mappedBy = "products")
     private List<User> users;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true) //amount of questions is limited
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true, cascade = CascadeType.ALL) //amount of questions is limited
+    //@OrderColumn(name="QUESTION_ORDER")
     private List<Question> questions;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) //removing a product must cancel all its reviews
@@ -65,6 +66,7 @@ public class Product implements Serializable {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+
     }
 
     public int getProductId() {

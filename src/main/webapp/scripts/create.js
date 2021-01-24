@@ -1,6 +1,24 @@
 var createdQuestions = 1;
 
 function sendQuestionnaire() {
+
+    const bodyFormData = new FormData(document.getElementById("creation-form"));
+
+    axios({
+        method: 'post',
+        url: '../CreateQuestionnaire',
+        data: bodyFormData,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+        .then(function (response) {
+            //handle success
+            console.log(response);
+        })
+        .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
+    /*
     var form = document.getElementById("creation-form");
     var sub = true;
     makeCall("POST", '../CreateQuestionnaire', form, sub,
@@ -23,7 +41,7 @@ function sendQuestionnaire() {
                 }
             }
         }
-    );
+    ); */
 }
 
 function addQuestionDynamic() {
