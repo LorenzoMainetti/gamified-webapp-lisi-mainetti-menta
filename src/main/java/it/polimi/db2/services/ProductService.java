@@ -49,8 +49,6 @@ public class ProductService {
 
         admin.getCreatedProducts().add(product);
 
-
-
  //TODO this should be better due to cascading, product should have the admin automatically
 
         em.persist(product);
@@ -60,10 +58,7 @@ public class ProductService {
 
     }
 
-    public void setProductQuestions(Product product, List<Question> questions) {
-        product.setQuestions(questions);
-        em.merge(product);
-    }
+
 
     /**
      * Method to retrieve the questionnaire related to a specific product
@@ -230,14 +225,9 @@ public class ProductService {
         }
     }
 
-    /**
-     * SUDO Method to set an image to a product in the db
-     * @param product product to which add the photo
-     * @param img photo to add
-     * @throws PersistenceException if a problem happens managing the entity (for example it does not exists)
-     * @throws IllegalArgumentException if the argument of the merge is not an entity or it's a removed entity
-     */
-    public void dummyImageLoad(Product product, byte[] img) throws IllegalArgumentException, PersistenceException{
+
+    public void dummyImageLoad(int productId, byte[] img) throws IllegalArgumentException, PersistenceException{
+        Product product = em.find(Product.class, productId);
         product.setImage(img);
         em.merge(product);
         em.flush();
@@ -286,6 +276,8 @@ public class ProductService {
             throw new ProductNotFoundException("internal database error");
         }
     }
+
+
 
 
 }

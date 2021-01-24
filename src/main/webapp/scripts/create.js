@@ -3,7 +3,7 @@ var createdQuestions = 1;
 function sendQuestionnaire() {
 
     const bodyFormData = new FormData(document.getElementById("creation-form"));
-
+    const errorAlert = document.getElementById("error-alert");
     axios({
         method: 'post',
         url: '../CreateQuestionnaire',
@@ -12,36 +12,13 @@ function sendQuestionnaire() {
     })
         .then(function (response) {
             //handle success
-            console.log(response);
+            alert(response);
         })
-        .catch(function (response) {
+        .catch(function (error) {
             //handle error
-            console.log(response);
+            errorAlert.innerText = error.response.data;
         });
-    /*
-    var form = document.getElementById("creation-form");
-    var sub = true;
-    makeCall("POST", '../CreateQuestionnaire', form, sub,
-        function (req) {
-            if (req.readyState == XMLHttpRequest.DONE) {
-                var message = req.responseText;
-                switch (req.status) {
-                    case 200:
 
-                        break;
-                    case 400: // bad request
-
-                        break;
-                    case 401: // unauthorized
-
-                        break;
-                    case 500: // server error
-
-                        break;
-                }
-            }
-        }
-    ); */
 }
 
 function addQuestionDynamic() {

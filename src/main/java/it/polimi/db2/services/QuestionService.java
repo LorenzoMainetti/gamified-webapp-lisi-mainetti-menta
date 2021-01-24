@@ -109,6 +109,8 @@ public class QuestionService {
             Question questionObj = new Question();
             questionObj.setProductId(product.getProductId());
             questionObj.setMandatory(true);
+            int questionNumber = mandatory.indexOf(questionObj) +1;
+            questionObj.setQuestionNumber(questionNumber);
             questionObj.setText(question);
             questionObj.setProduct(product);
             allQuestions.add(questionObj);
@@ -124,7 +126,7 @@ public class QuestionService {
 
     }
 
-    public void updateProductQuestiosn(Product product, List<Question> questions) {
+    public void updateProductQuestions(Product product, List<Question> questions) {
         product.setQuestions(questions);
         em.merge(product);
         em.flush();

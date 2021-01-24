@@ -37,6 +37,7 @@ public class Question implements Serializable {
             inverseJoinColumns={@JoinColumn(name="userId")})
     private Set<User> users;
 
+    private int questionNumber;
 
     public boolean isMandatory() {
         return isMandatory;
@@ -94,4 +95,11 @@ public class Question implements Serializable {
         return users;
     }
 
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
 }

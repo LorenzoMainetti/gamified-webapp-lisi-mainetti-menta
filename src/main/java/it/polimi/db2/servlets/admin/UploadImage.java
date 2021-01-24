@@ -1,4 +1,4 @@
-package it.polimi.db2.servlets;
+package it.polimi.db2.servlets.admin;
 
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
@@ -71,10 +71,11 @@ public class UploadImage extends HttpServlet {
             sendBackError("file is too large. It would probably jeopardize the whole web application", response);
             return;
         }
-        Product product = productService.getProductOfTheDay();
-        productService.dummyImageLoad(product, file);
-        //write image to db
-        request.getParameter("imgId");
+        int productId = (int) request.getSession().getAttribute("productId");
+        //Product product = productService.getProductOfTheDay();
+        productService.dummyImageLoad(productId, file);
+
+
 
     }
 
