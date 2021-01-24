@@ -58,19 +58,17 @@ public class CreateQuestionnaire extends HttpServlet {
         String adminId = (String) request.getSession().getAttribute("admin");
         Admin admin = adminService.getAdmin(adminId);
 
-        Product product = productService.insertProduct(productName, date, description, admin);
+
 
         //TODO the admin still needs to upload the image, if he wants
 
-        List<String> adminInputs = Arrays.asList(request.getParameterValues("man[]"));
-        //create mandatory questions
-        List<Question> questions = new ArrayList<>();
-        for (String input : adminInputs) {
-            questions.add(questionService.insertQuestion(product, input));
-        }
-        //add optional stat questions
-        questions = questionService.addStatQuestions(questions);
-        product.setQuestions(questions);
+        List<String> mandatoryQuestionsString = Arrays.asList(request.getParameterValues("man[]"));
+
+
+        Product prod = productService.insertProduct(productName, date, description, admin);
+        List <Question> questions = questionService.getAllQuestions(mandatoryQuestionsString, prod);
+        questionService.updateProductQuestiosn(prod, questions);
+
 
     }
 

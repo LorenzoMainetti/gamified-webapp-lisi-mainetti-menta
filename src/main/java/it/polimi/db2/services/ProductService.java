@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.db2.admin.AdminHomePageContent;
 import it.polimi.db2.entities.*;
 import it.polimi.db2.exception.ProductNotFoundException;
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,6 +16,10 @@ import java.util.*;
 
 @Stateless
 public class ProductService {
+
+    @EJB(name = "it.polimi.db2.entities.services/QuestionService")
+    private QuestionService questionService;
+
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 
@@ -34,19 +39,30 @@ public class ProductService {
      */
     public Product insertProduct(String name, Date date, String description, Admin admin) throws PersistenceException, IllegalArgumentException{
 
+
         Product product = new Product();
         product.setName(name);
         product.setDate(date);
-        product.setDescription(description);
 
+        product.setDescription(description);
         product.setCreatorId(admin.getAdminId());
-        admin.getCreatedProducts().add(product); //TODO this should be better due to cascading, product should have the admin automatically
-        //product.setCreator(admin);
+
+        admin.getCreatedProducts().add(product);
+
+
+
+ //TODO this should be better due to cascading, product should have the admin automatically
 
         em.persist(product);
 
+
         return product;
 
+    }
+
+    public void setProductQuestions(Product product, List<Question> questions) {
+        product.setQuestions(questions);
+        em.merge(product);
     }
 
     /**
