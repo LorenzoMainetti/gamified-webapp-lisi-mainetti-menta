@@ -5,15 +5,16 @@
     <title>Creation Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="../scripts/admin.js" defer></script>
+    <script src="../scripts/create.js" defer></script>
+    <script src="../scripts/AJAX_Call.js" defer></script>
 
 </head>
 
 <body>
 
 <div class="container">
-    <form class="needs-validation" id="questionnaire_form" novalidate>
-        <h3>Insert the product infos</h3>
+    <form class="needs-validation" id="creation-form" novalidate>
+        <h3>Create New Product</h3>
         <table>
             <tbody>
             <tr>
@@ -21,7 +22,7 @@
                     <div class="control-group"><label class="control-label" for="id_product_title">Product Name:</label></div>
                 </td>
                 <td>
-                    <div class="control-group"><input id="id_product_title" class="textbox" type="text" /></div>
+                    <input id="id_product_title" name ="name" class="textbox" type="text" />
                 </td>
             </tr>
 
@@ -30,7 +31,7 @@
                     <div class="control-group"><label class="control-label" for="id_product_descript">Product Description:</label></div>
                 </td>
                 <td>
-                    <div class="control-group"><input id="id_product_descript" class="textbox" type="text" /></div>
+                    <div class="control-group"><input name ="description" id="id_product_descript" class="textbox" type="text" /></div>
                 </td>
             </tr>
 
@@ -40,22 +41,43 @@
                 </td>
                 <td>
                     <div class="form-group row">
-                        <div class="col-10"><input id="id_product_date" class="form-control" type="date" /></div>
+                        <div class="col-10"><input id="id_product_date" name ="date" class="form-control" type="date" /></div>
                     </div>
                 </td>
             </tr>
 
+
             <tr>
+                <td>
+                    <h5>Gamification Questions:</h5>
+                </td>
+            </tr>
+
+            <tr>
+
+                <td>
                 <div id="id_product_questions">
                     <!-- filled by JS -->
+                    <div class="form-group">
+                        <label for="question1">Question #1</label>
+                        <input type="text" class="form-control" id="question1" name="man[]"  placeholder="Enter question text followed by '?' ">
+                    </div>
+
+
                 </div>
+                <div>
+                    <button type="button" class="btn btn-info" onclick="addQuestionDynamic()">+ Question</button>
+                </div>
+                </td>
+
             </tr>
             </tbody>
         </table>
 
-        <form class="form-inline my-2 my-lg-0" action="SUDO.html">
-            <button class="btn btn-outline-light" type="submit">Submit</button>
-        </form>
+
+            <button onclick="sendQuestionnaire()" type="button" class="btn btn-primary">Submit</button>
+            <button type="button" onclick="history.back()" class="btn btn-secondary">Back</button>
+
     </form>
 </div>
 
