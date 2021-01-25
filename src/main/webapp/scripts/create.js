@@ -18,7 +18,7 @@ function sendQuestionnaire() {
         })
         .catch(function (error) {
             //handle error
-            error.style.display = "block";
+            errorAlert.style.display = "block";
             errorAlert.innerText = error.response.data;
         });
 

@@ -44,7 +44,7 @@ public class Product implements Serializable {
     @ManyToMany(mappedBy = "products")
     private List<User> users;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true, cascade = CascadeType.ALL) //amount of questions is limited
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true, cascade = {CascadeType.ALL}) //amount of questions is limited
     @OrderColumn(name="questionNumber")
     private List<Question> questions;
 

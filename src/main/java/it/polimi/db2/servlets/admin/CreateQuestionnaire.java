@@ -106,6 +106,7 @@ public class CreateQuestionnaire extends HttpServlet {
                 response.getWriter().println("Please insert valid questions.");
                 return;
             }
+            //questions are good
             if (checkNoDuplicateQuestions(mandatoryQuestionsString)) {
                 Product prod = productService.insertProduct(productName, date, description, admin);
                 List<Question> questions = questionService.getAllQuestions(mandatoryQuestionsString, prod);

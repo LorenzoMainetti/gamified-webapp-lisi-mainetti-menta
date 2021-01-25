@@ -12,6 +12,7 @@ import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Tuple;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Stateless
@@ -48,8 +49,6 @@ public class ProductService {
         product.setCreatorId(admin.getAdminId());
 
         admin.getCreatedProducts().add(product);
-
- //TODO this should be better due to cascading, product should have the admin automatically
 
         em.persist(product);
 
@@ -88,9 +87,9 @@ public class ProductService {
      */
     public Product getProductOfTheDay() throws InvalidParameterException {
 
-        List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo").getResultList();
-        //Date date = java.sql.Date.valueOf(LocalDate.now());
-        //List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
+        //List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo").getResultList();
+        Date date = java.sql.Date.valueOf(LocalDate.now());
+        List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
         if (products == null || products.isEmpty()) {
             throw new InvalidParameterException("No product of the Day");
 

@@ -109,7 +109,7 @@ public class QuestionService {
             Question questionObj = new Question();
             questionObj.setProductId(product.getProductId());
             questionObj.setMandatory(true);
-            int questionNumber = mandatory.indexOf(questionObj) +1;
+            int questionNumber = mandatory.indexOf(question) +1;
             questionObj.setQuestionNumber(questionNumber);
             questionObj.setText(question);
             questionObj.setProduct(product);
@@ -128,6 +128,7 @@ public class QuestionService {
 
     public void updateProductQuestions(Product product, List<Question> questions) {
         product.setQuestions(questions);
+        //persist is already done, update it
         em.merge(product);
         em.flush();
     }

@@ -108,7 +108,7 @@ public class UserService {
         }
         else{
             List<Answer> ans = em.createNamedQuery("Answer.getUserAnswers", Answer.class)
-                    .setParameter(1, user).setParameter(2, product.getProductId()).getResultList();
+                    .setParameter(1, user.getUsername()).setParameter(2, product.getProductId()).getResultList();
             if (ans == null || ans.isEmpty()) {
                 //no user answer related to the product
                 List<User> cancelled = productService.getProductUsers(product, false);

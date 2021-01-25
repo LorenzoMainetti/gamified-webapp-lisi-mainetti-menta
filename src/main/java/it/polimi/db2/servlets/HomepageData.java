@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.InvalidParameterException;
@@ -78,9 +79,16 @@ public class HomepageData extends HttpServlet {
         catch (InvalidParameterException | EJBException e){
             System.out.println(e.getMessage());
         }
-        String encoded = Base64.getEncoder().encodeToString(prodOfTheDay.getImage());
+        byte[] image;
+        String encoded = null;
+
+        if (prodOfTheDay.getImage()!= null) encoded = Base64.getEncoder().encodeToString(prodOfTheDay.getImage());
+
+        image = prodOfTheDay.getImage();
+
+
         HomepageContent homepageContent = new HomepageContent(username, false,
-                prodOfTheDay.getName(), prodOfTheDay.getDescription(), prodOfTheDay.getImage(),
+                prodOfTheDay.getName(), prodOfTheDay.getDescription(), image,
                 encoded, reviews, userStatus);
         String jsonHomepage = new Gson().toJson(homepageContent);
         out.write(jsonHomepage);
