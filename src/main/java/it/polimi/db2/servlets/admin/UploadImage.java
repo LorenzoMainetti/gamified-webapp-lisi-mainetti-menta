@@ -74,6 +74,9 @@ public class UploadImage extends HttpServlet {
         int productId = (int) request.getSession().getAttribute("productId");
         //Product product = productService.getProductOfTheDay();
         productService.dummyImageLoad(productId, file);
+        request.getSession().removeAttribute("productId");
+
+        response.setStatus(HttpServletResponse.SC_OK);
 
 
 

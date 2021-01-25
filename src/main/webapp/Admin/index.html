@@ -29,27 +29,35 @@
     </div>
 
 
-    <div style="width:400px;">
-        <div style="float: left; width: 130px">
-            <form class="form-inline my-2 my-lg-0" action="creation.html">
-                <button class="btn btn-outline-light" type="submit">Create New</button>
-            </form>
-        </div>
-        <div style="float: right; width: 225px">
-            <form class="form-inline my-2 my-lg-0" action="past.html">
-                <button class="btn btn-outline-light" type="submit">Past Questionnaires</button>
-            </form>
-        </div>
-        <div style="float: right; width: 225px">
-            <form class="form-inline my-2 my-lg-0" action="inspection.html">
-                <button class="btn btn-outline-light" type="submit">Inspect Test</button>
-            </form>
+
+
+    <!-- BUTTON DIV -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="form-inline my-2 my-lg-0" action="creation.html">
+                    <button class="btn btn-primary" type="submit">Create New</button>
+                </form>
+            </div>
+            <div class="col">
+                <form class="form-inline my-2 my-lg-0" action="past.html">
+                    <button class="btn btn-secondary" type="submit">Past Questionnaires</button>
+                </form>
+            </div>
+            <div class="col-md">
+                <form class="form-inline my-2 my-lg-0" action="inspection.html">
+                    <button class="btn btn-warning" type="submit">Inspection</button>
+                </form>
+            </div>
+            <div class="col-md">
+                <form action="../logout" method="POST">
+                    <button type="submit" class="btn btn-danger" on>Log Out</button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <form action="../logout" method="POST">
-        <button type="submit" class="btn btn-danger" on>Log Out</button>
-    </form>
+
 
 </div>
 

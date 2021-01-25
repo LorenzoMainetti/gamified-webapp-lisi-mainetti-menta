@@ -1,5 +1,6 @@
 var createdQuestions = 1;
 
+
 function sendQuestionnaire() {
 
     const bodyFormData = new FormData(document.getElementById("creation-form"));
@@ -12,10 +13,12 @@ function sendQuestionnaire() {
     })
         .then(function (response) {
             //handle success
-            alert(response);
+            alert("New product has been added.");
+            document.location.href = "index.html";
         })
         .catch(function (error) {
             //handle error
+            error.style.display = "block";
             errorAlert.innerText = error.response.data;
         });
 

@@ -112,9 +112,18 @@ public class CreateQuestionnaire extends HttpServlet {
                 questionService.updateProductQuestions(prod, questions);
                 request.getSession().setAttribute("productId", prod.getProductId());
                 //pass upload image task to another servlet
-                ServletContext sc=getServletContext();
-                RequestDispatcher r=sc.getRequestDispatcher("/UploadImage");
-                r.forward(request, response);
+
+                //image upload, if exists
+
+                if (request.getPart("image").getInputStream().available()>0) {
+                    ServletContext sc=getServletContext();
+                    RequestDispatcher r=sc.getRequestDispatcher("/UploadImage");
+                    r.forward(request, response);
+                }
+                else {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }
+
 
             }
 
