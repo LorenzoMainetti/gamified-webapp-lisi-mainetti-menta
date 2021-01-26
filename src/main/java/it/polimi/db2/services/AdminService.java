@@ -9,6 +9,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
+import java.util.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -45,16 +46,16 @@ public class AdminService {
 
     /**
      * Method to check if a questionnaire date is usable
-     * @param product questionnaire to create
+     * @param date date of the questionnaire to create
      * @return true if the date is in the future and no other questionnaire are already present, false otherwise
      * @throws InvalidParameterException if there is a consistency problem with the DB
      */
-    public boolean checkQuestionnaireValidity(Product product) throws InvalidParameterException{
-        if(product.getDate().before(java.sql.Date.valueOf(LocalDate.now()))){
+    public boolean checkQuestionnaireValidity(Date date) throws InvalidParameterException{
+        if(date.before(java.sql.Date.valueOf(LocalDate.now()))){
             return false;
         }
         else{
-            List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, product.getDate()).getResultList();
+            List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
             if (products == null || products.isEmpty()) {
                 return true;
             }

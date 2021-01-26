@@ -80,10 +80,10 @@ public class CreateQuestionnaire extends HttpServlet {
                 response.getWriter().println("Please insert a valid date");
                 return;
             }
-            if(isBeforeToday(date)) {
+            if(!adminService.checkQuestionnaireValidity(date)) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("text/plain");
-                response.getWriter().println("You can insert a product for the current date or for a posterior one.");
+                response.getWriter().println("You can not insert a product for the selected date");
                 return;
             }
 
