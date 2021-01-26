@@ -5,6 +5,8 @@ function sendQuestionnaire() {
 
     const bodyFormData = new FormData(document.getElementById("creation-form"));
     const errorAlert = document.getElementById("error-alert");
+
+
     axios({
         method: 'post',
         url: '../CreateQuestionnaire',
