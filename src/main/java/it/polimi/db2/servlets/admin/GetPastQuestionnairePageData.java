@@ -1,10 +1,12 @@
 package it.polimi.db2.servlets.admin;
 
 import com.google.gson.Gson;
+import it.polimi.db2.admin.DataEntry;
 import it.polimi.db2.admin.PastQuestionnairePageContent;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import jakarta.ejb.EJB;
+import jakarta.json.Json;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -42,10 +44,10 @@ public class GetPastQuestionnairePageData extends HttpServlet {
         PastQuestionnairePageContent pqpc = new PastQuestionnairePageContent();
 
         for(Product product : pastQuestionnaires) {
-            pqpc.addEntry(product.getProductId(), product.getName(), product.getDate());
+            pqpc.getPastQuestionnaires().add(new DataEntry(product.getProductId(), product.getName(), product.getDate()));
         }
-
-        out.print(new Gson().toJson(pqpc.getJsonRepresentation()));
+        String jsonResponse = new Gson().toJson(pqpc);
+        out.print(jsonResponse);
 
     }
 

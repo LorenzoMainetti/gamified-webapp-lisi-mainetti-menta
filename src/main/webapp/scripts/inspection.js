@@ -66,12 +66,21 @@ function populateTable(con, table){
     insertAnswers(con, table);
 }
 
+/*function sendPid() {
+    var text = window.location.hash.substring(1);
+    text.innerHTML = "<form action=\"../GetInspectionData\" method=\"POST\" >\n" +
+        "<input type=\"submit\"/>\n" +
+        "<input name=\"pid\" type=\"hidden\" type=\"text\"/>"
+}*/
+
+
 window.addEventListener("load", () => {
-    makeCall("GET", "../GetInspectionData", null,
+    var text = window.location.hash.substring(1);
+    makeCall("GET", "../GetInspectionData?pid="+ text, null,
         function(req) {
-            if (req.readyState == 4) {
+            if (req.readyState === 4) {
                 var message = req.responseText;
-                if (req.status == 200) {
+                if (req.status === 200) {
 
                     var con = JSON.parse(message);
                     document.getElementById("id_product_title").innerText = con.prodName;

@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,8 +29,9 @@ public class GetInspectionData extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/AnswerService")
     private AnswerService answerService;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
     }
 
     boolean checkProductId (int productId) {
@@ -38,13 +40,11 @@ public class GetInspectionData extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
-        int productId = 1; //hardcoded, uncomment previous line to proper work in general use case
+        int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
+        //int productId = 1; //hardcoded, uncomment previous line to proper work in general use case
         if(checkProductId(productId)) {
             try {
-
-                //TODO send also inspected product (name, date, description and image)
-
+                //TODO handle no answers for a product
                 //String productJson = productService.getProductToGson(productId); //TODO IT CRASHED
                 List<String> usersWhoSubmitted, usersWhoCanceled;
                 Map<String, List<String>> answersForEachUser = new HashMap<>();

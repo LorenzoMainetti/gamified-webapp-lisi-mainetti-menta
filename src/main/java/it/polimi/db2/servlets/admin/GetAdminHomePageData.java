@@ -41,9 +41,7 @@ public class GetAdminHomePageData extends HttpServlet {
 
         AdminHomePageContent content = new AdminHomePageContent();
 
-        Product podt;
-
-        podt = productService.getProductOfTheDay();
+        Product potd = productService.getProductOfTheDay();
          /* catch (ProductNotFoundException e) {
             //send error -- MERGE WITH ERROR IS NEEDED
             return;
@@ -52,15 +50,15 @@ public class GetAdminHomePageData extends HttpServlet {
         String adminId = (String) request.getSession().getAttribute("admin");
         Admin admax = adminService.getAdmin(adminId);
 
+        String encoded = null;
 
-        String encodedImage = Base64.getEncoder().encodeToString(podt.getImage());
+        if (potd.getImage()!= null) encoded = Base64.getEncoder().encodeToString(potd.getImage());
 
-
-        content.setProdDescription(podt.getDescription());
-        content.setProdName(podt.getName());
+        content.setProdDescription(potd.getDescription());
+        content.setProdName(potd.getName());
         content.setEmail(admax.getEmail());
         content.setAdminId(admax.getAdminId());
-        content.setEncodedImg(encodedImage);
+        content.setEncodedImg(encoded);
 
         //LinkedHashMap<Date, String> listOfPastQuest = new LinkedHashMap<>();
 
