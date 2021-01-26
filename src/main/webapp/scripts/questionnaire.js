@@ -82,10 +82,15 @@ window.addEventListener("load", () => {
     initForms();
     makeCall("GET", "./QuestionnairePageData", null, null,
         function (req) {
+
+        document.getElementById("id_product_name").innerText
             if (req.readyState == 4) {
                 var message = req.responseText;
                 if (req.status == 200) {
-                    var con = JSON.parse(message).optionalQuestions;
+                    var parsed = JSON.parse(message)
+                    var con = parsed.optionalQuestions;
+                    document.getElementById("id_product_name").innerText = parsed.name;
+                    document.getElementById("id_product_description").innerText = "Description: \n" + parsed.description;
                     fillQuestions(con);
                 }
             } else {
