@@ -37,6 +37,9 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "users")
     private List<Question> questions;
 
+    @OneToMany(mappedBy = "user")
+    private List<Log> logs;
+
 
 
     public User() { }

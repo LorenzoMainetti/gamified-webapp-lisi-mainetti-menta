@@ -2,6 +2,7 @@ package it.polimi.db2.services;
 
 import it.polimi.db2.auxiliary.UserStatus;
 import it.polimi.db2.entities.Answer;
+import it.polimi.db2.entities.Log;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.User;
 import jakarta.ejb.EJBTransactionRolledbackException;
@@ -9,6 +10,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 
 import java.security.InvalidParameterException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class UserService {
      * @throws PersistenceException if a problem happens managing the entity (for example it already exists)
      * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
-    public void insertUser(String username, String email, String password, boolean banned) throws PersistenceException, IllegalArgumentException{
+    public User insertUser(String username, String email, String password, boolean banned) throws PersistenceException, IllegalArgumentException{
         User user = new User();
         user.setBanned(banned);
         user.setEmail(email);
@@ -38,6 +40,7 @@ public class UserService {
         user.setUsername(username);
 
         em.persist(user);
+        return user;
     }
 
     /**
@@ -127,5 +130,18 @@ public class UserService {
                 return UserStatus.COMPLETED;
             }
         }
+    }
+
+    /**
+     * method to insert the log of the user in the DB
+     * @param user user to log in
+     */
+    public void LogUser(User user) throws PersistenceException, IllegalArgumentException{
+        Log log = new Log();
+        log.setUser(user);
+        log.setUserId(user.getUsername());
+        log.setDate(new Timestamp(System.currentTimeMillis()));
+
+        em.persist(log);
     }
 }
