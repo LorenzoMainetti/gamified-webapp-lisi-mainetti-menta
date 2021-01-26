@@ -63,7 +63,8 @@ public class Login extends HttpServlet {
             }
             //try to register a new user
             try {
-                userService.insertUser(username,email,password,false);
+                User user = userService.insertUser(username,email,password,false);
+                userService.LogUser(user);
                 request.getSession().setAttribute("user", username);
                 String path = getServletContext().getContextPath() + "/homepage.html";
                 response.sendRedirect(path);
@@ -85,6 +86,7 @@ public class Login extends HttpServlet {
             }
             try {
                 User credentialCheckResultUser = userService.checkCredentials(username, password);
+                userService.LogUser(credentialCheckResultUser);
                 request.getSession().setAttribute("user", credentialCheckResultUser.getUsername());
                 String path = getServletContext().getContextPath() + "/homepage.html";
                 response.sendRedirect(path);
