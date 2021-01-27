@@ -2,6 +2,7 @@ package it.polimi.db2.servlets.admin;
 
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
+import jakarta.annotation.Resources;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -10,15 +11,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
 
 import static it.polimi.db2.auxiliary.images.ImageProcessor.*;
+import static java.nio.file.Files.readAllBytes;
+
 
 @WebServlet("/UploadImage")
 @MultipartConfig
 public class UploadImage extends HttpServlet {
+
+    public final static int FILE_SIZE = 4096*100;
+
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
 
@@ -48,9 +54,24 @@ public class UploadImage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         InputStream imgStream = request.getPart("image").getInputStream();
-        byte[] file = readImage(imgStream);
+        byte[] file;
 
-        //file = ImageProcessor.AI_Cropper(file);
+        if(!(imgStream.available() >0)) {
+            //pick a default one
+            File f  = new File("http://localhost:8989/db2_lisi_mainetti_menta_war_exploded/images/test.png");
+            file = Files.readAllBytes(f.toPath());
+        }
+        else {
+            file = readImage(imgStream);
+        }
+
+
+        if (file.length > FILE_SIZE) {
+            sendBackError("file is too large. It would probably jeopardize the whole web application", response);
+            return;
+        }
+
+        //force it to jpg if it's png, then everything goes into a byte array variable
         switch (getImageType(file)) {
             case "image/png":
                 //convert to jpeg
@@ -64,13 +85,9 @@ public class UploadImage extends HttpServlet {
                 sendBackError("format not supported. It would probably jeopardize the whole web application", response);
                 return;
 
-
         }
 
-        if (file.length < 2048) {
-            sendBackError("file is too large. It would probably jeopardize the whole web application", response);
-            return;
-        }
+
         int productId = (int) request.getSession().getAttribute("productId");
         //Product product = productService.getProductOfTheDay();
         productService.dummyImageLoad(productId, file);

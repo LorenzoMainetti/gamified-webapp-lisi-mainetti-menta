@@ -116,14 +116,14 @@ public class CreateQuestionnaire extends HttpServlet {
 
                 //image upload, if exists
 
-                if (request.getPart("image").getInputStream().available()>0) {
+              //  if (request.getPart("image").getInputStream().available()>0) {
                     ServletContext sc=getServletContext();
                     RequestDispatcher r=sc.getRequestDispatcher("/UploadImage");
                     r.forward(request, response);
-                }
-                else {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                }
+               // }
+               // else {
+                   // response.setStatus(HttpServletResponse.SC_OK);
+               // }
 
 
             }
