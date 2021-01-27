@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import static it.polimi.db2.auxiliary.images.ImageProcessor.*;
 
@@ -46,9 +47,14 @@ public class UploadImage extends HttpServlet {
         response.getWriter().println(error);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         InputStream imgStream = request.getPart("image").getInputStream();
-        byte[] file = readImage(imgStream);
+        byte[] file;
+        if(imgStream.available()==0){
+            file = readImage(getClass().getClassLoader().getResource("not_found.png").openStream());
+        }
+        else{
+            file = readImage(imgStream);
+        }
 
         //file = ImageProcessor.AI_Cropper(file);
         switch (getImageType(file)) {

@@ -82,7 +82,7 @@ public class ProductService {
      */
     public Product getProductOfTheDay() throws InvalidParameterException {
 
-        //List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "Barca Giocattolo").getResultList();
+        //List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "mvnlad").getResultList();
         Date date = java.sql.Date.valueOf(LocalDate.now());
         List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
         if (products == null || products.isEmpty()) {
@@ -164,12 +164,12 @@ public class ProductService {
      * @throws InvalidParameterException if the product does not exist
      */
     public List<User> getProductUsers(Product product, Boolean QuestFilled) throws InvalidParameterException{
-        List<User> usersSucessfullyCompleted = em.createNamedQuery("Answer.getUserFill", User.class).setParameter(1, product.getProductId()).getResultList();
+        List<User> usersSuccessfullyCompleted = em.createNamedQuery("Answer.getUserFill", User.class).setParameter(1, product.getProductId()).getResultList();
 
-        if (usersSucessfullyCompleted == null || usersSucessfullyCompleted.isEmpty()) {
+        if (usersSuccessfullyCompleted == null || usersSuccessfullyCompleted.isEmpty()) {
             if(QuestFilled){
                 //TODO we return a null it crashes
-                return null;
+                return usersSuccessfullyCompleted;
             }
             else{
                 return product.getUsers();
@@ -177,7 +177,7 @@ public class ProductService {
         }
         else {
             if(QuestFilled){
-                return usersSucessfullyCompleted;
+                return usersSuccessfullyCompleted;
             }
             //there is a list of user but I need to fetch only the one that had canceled the questionnaire
             else{
@@ -186,7 +186,7 @@ public class ProductService {
 
                 //list of username of accounts that have a leaderboard entry
                 List <User> relatedToProduct = product.getUsers();
-                Set<String> successfullyCompletedHash = getTable(usersSucessfullyCompleted);
+                Set<String> successfullyCompletedHash = getTable(usersSuccessfullyCompleted);
 
                 //for each leaderboard entry
                 for(User u : relatedToProduct){

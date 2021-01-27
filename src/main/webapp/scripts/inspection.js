@@ -62,8 +62,16 @@ function insertAnswers(con, table){
 }
 
 function populateTable(con, table){
-    insertQuestions(con, table);
-    insertAnswers(con, table);
+    if (con.completed.length===0 && con.canceled.length===0) {
+        let row = table.insertRow();
+        let noFilled = row.insertCell(-1);
+        noFilled.innerHTML = "Sorry but nobody filled or cancelled this questionnaire";
+        noFilled.style.backgroundColor = "azure"
+    }
+    else{
+        insertQuestions(con, table);
+        insertAnswers(con, table);
+    }
 }
 
 /*function sendPid() {
@@ -84,7 +92,7 @@ window.addEventListener("load", () => {
 
                     var con = JSON.parse(message);
                     document.getElementById("id_product_title").innerText = con.prodName;
-                    document.getElementById("id_product_date").innerText = con.date;
+                    document.getElementById("id_product_date").innerText = con.date.split(", 12:00:00")[0];
                     document.getElementById("id_product_image").src = "data:image/png;base64," + con.encodedImg;
                     document.getElementById("id_product_description").innerText = con.prodDescription;
                     const table = document.getElementById("id_tableBody");
