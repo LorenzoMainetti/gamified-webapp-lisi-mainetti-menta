@@ -9,7 +9,6 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
-import jakarta.persistence.Tuple;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
@@ -17,9 +16,6 @@ import java.util.*;
 
 @Stateless
 public class ProductService {
-
-    @EJB(name = "it.polimi.db2.entities.services/QuestionService")
-    private QuestionService questionService;
 
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
@@ -56,7 +52,6 @@ public class ProductService {
         return product;
 
     }
-
 
 
     /**
@@ -102,14 +97,15 @@ public class ProductService {
         }
     }
 
-    public Map<Date, String> getPastQuestionnairesMinimal(Date currentDate) {
-        //TODO I changed the NamedQuery, now it retrieves the whole product entity not just some attributes
-        Map <Date, String> queryResult = (Map<Date, String>) em.createNamedQuery("Product.getPastProducts", Tuple.class).setParameter(1, currentDate);
-        return queryResult;
-    }
-
-    public List<Product> getPastQuestionnaires(Date currentDate) throws InvalidParameterException {
-        List<Product> products = em.createNamedQuery("Product.getPastProducts", Product.class).setParameter(1,  currentDate)
+    /**
+     * Get all the past product created by the current admin
+     * @param currentDate today's date
+     * @param creator admin who is logged in
+     * @return list of past products
+     * @throws InvalidParameterException if no past product was found
+     */
+    public List<Product> getPastQuestionnaires(Date currentDate, Admin creator) throws InvalidParameterException {
+        List<Product> products = em.createNamedQuery("Product.getPastProducts", Product.class).setParameter(1,  currentDate).setParameter(2, creator)
                 .getResultList();
         if (products.isEmpty()) {
             throw new InvalidParameterException("no product found");
@@ -172,6 +168,7 @@ public class ProductService {
 
         if (usersSucessfullyCompleted == null || usersSucessfullyCompleted.isEmpty()) {
             if(QuestFilled){
+                //TODO we return a null it crashes
                 return null;
             }
             else{
@@ -244,6 +241,11 @@ public class ProductService {
     public void deleteProduct(Product product) {
         for(User user : product.getUsers())
             user.removeProduct(product);
+
+        //if entity is not managed, add it an then delete it
+        if (!em.contains(product)) {
+            product = em.merge(product);
+        }
         em.remove(product);
     }
 

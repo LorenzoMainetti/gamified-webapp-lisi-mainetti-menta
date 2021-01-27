@@ -23,12 +23,12 @@ function makeCall(method, url, formElement, cback, reset = true) {
 window.addEventListener("load", () => {
     makeCall("GET", "./HomepageData", null,
         function(req) {
-            if (req.readyState == 4) {
+            if (req.readyState === 4) {
                 var message = req.responseText;
-                if (req.status == 200) {
+                if (req.status === 200) {
                     var con = JSON.parse(message);
                     document.getElementById("var_username").innerText = "Logged in: @" + con.username;
-                    if(con.userStatus == "NOT_AVAILABLE"){
+                    if(con.userStatus === "NOT_AVAILABLE"){
                         document.getElementById("id_product_title").innerText = "No Product";
                         document.getElementById("id_product_image").innerHTML = "";
                         document.getElementById("id_product_descript").innerText = "";
@@ -59,7 +59,7 @@ window.addEventListener("load", () => {
                         else{
                             table.innerText = "No reviews present for this Product"
                         }
-                        if (con.userStatus == "BANNED") {
+                        if (con.userStatus === "BANNED") {
                             document.getElementById("id_action_row").innerHTML =
                                 "<div id=\"bannedStuff\" >\n" +
                                 " <form id=\"bannedButton\" >\n" +
@@ -70,7 +70,7 @@ window.addEventListener("load", () => {
                                 "  <footer class=\"blockquote-footer\">Staff </footer>\n" +
                                 " </blockquote>\n" +
                                 "</div>";
-                        } else if (con.userStatus == "COMPLETED") {
+                        } else if (con.userStatus === "COMPLETED") {
                             document.getElementById("id_action_row").innerHTML =
                                 "<div id=\"bannedStuff\" >\n" +
                                 " <form id=\"bannedButton\" >\n" +
@@ -81,13 +81,13 @@ window.addEventListener("load", () => {
                                 "  <footer class=\"blockquote-footer\">Staff </footer>\n" +
                                 " </blockquote>\n" +
                                 "</div>";
-                        } else if (con.userStatus == "NOT_COMPLETED") {
+                        } else if (con.userStatus === "NOT_COMPLETED") {
                             document.getElementById("id_action_row").innerHTML =
                                 "<form action=\"questionnaire.html\" method=\"post\">\n" +
                                 " <input type=\"submit\" name=\"button1\" value=\"Fill Questionnaire\"/>\n" +
                                 "</form>";
                         }
-                        else if (con.userStatus == "DELETED") {
+                        else if (con.userStatus === "DELETED") {
                             document.getElementById("id_action_row").innerHTML =
                                 "<div id=\"bannedStuff\" >\n" +
                                 " <form id=\"bannedButton\" >\n" +

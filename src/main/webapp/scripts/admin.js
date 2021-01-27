@@ -19,9 +19,9 @@ function makeCall(method, url, formElement, cback, reset = true) {
 window.addEventListener("load", () => {
     makeCall("GET", "../GetAdminHomePageData", null,
         function(req) {
-            if (req.readyState == 4) {
+            if (req.readyState === 4) {
                 var message = req.responseText;
-                if (req.status == 200) {
+                if (req.status === 200) {
 
                     var con = JSON.parse(message);
                     document.getElementById("id_adminId").innerText = con.adminId;

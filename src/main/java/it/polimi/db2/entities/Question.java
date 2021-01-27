@@ -26,18 +26,20 @@ public class Question implements Serializable {
     @NotNull
     private boolean isMandatory;
 
+    private int questionNumber;
+
     @ManyToOne
     @PrimaryKeyJoinColumn(name="productId", referencedColumnName="productId")
     private Product product;
 
-    @ManyToMany(cascade = CascadeType.REMOVE) //maybe orphan removal to delete answers too
+    @ManyToMany
     @JoinTable(name="answer",
             joinColumns={@JoinColumn(name="questionId", referencedColumnName = "questionId"),
                          @JoinColumn(name="productId", referencedColumnName = "productId")},
             inverseJoinColumns={@JoinColumn(name="userId")})
     private Set<User> users;
 
-    private int questionNumber;
+
 
     public boolean isMandatory() {
         return isMandatory;

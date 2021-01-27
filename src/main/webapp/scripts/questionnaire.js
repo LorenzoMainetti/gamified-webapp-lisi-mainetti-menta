@@ -84,9 +84,9 @@ window.addEventListener("load", () => {
         function (req) {
 
         document.getElementById("id_product_name").innerText
-            if (req.readyState == 4) {
+            if (req.readyState === 4) {
                 var message = req.responseText;
-                if (req.status == 200) {
+                if (req.status === 200) {
                     var parsed = JSON.parse(message)
                     var con = parsed.optionalQuestions;
                     document.getElementById("id_product_name").innerText = parsed.name;
@@ -121,7 +121,7 @@ document.getElementById("id_submit_questionnaire").addEventListener('click', (e)
         displayError("sending...");
         makeCall("POST", './SubmitAnswer', form, sub,
             function (req) {
-                if (req.readyState == XMLHttpRequest.DONE) {
+                if (req.readyState === XMLHttpRequest.DONE) {
                     var message = req.responseText;
                     switch (req.status) {
                         case 200:
@@ -154,7 +154,7 @@ document.getElementById("id_cancel_questionnaire").addEventListener('click', (e)
     displayError("deleting...");
     makeCall("POST", './SubmitAnswer', form, sub,
         function (req) {
-            if (req.readyState == XMLHttpRequest.DONE) {
+            if (req.readyState === XMLHttpRequest.DONE) {
                 window.location.assign("./cancelled.html");
             }
         }

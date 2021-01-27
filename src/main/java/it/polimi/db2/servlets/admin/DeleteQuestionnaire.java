@@ -20,12 +20,6 @@ import java.io.IOException;
 public class DeleteQuestionnaire extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
-    @EJB(name = "it.polimi.db2.entities.services/RewardService")
-    private RewardService rewardService;
-    @EJB(name = "it.polimi.db2.entities.services/QuestionService")
-    private QuestionService questionService;
-    @EJB(name = "it.polimi.db2.entities.services/AdminService")
-    private AdminService adminService;
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,18 +27,13 @@ public class DeleteQuestionnaire extends HttpServlet {
         int productId = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("prodId")));
         Product product = productService.getProduct(productId);
 
-        String adminId = (String) request.getSession().getAttribute("admin");
-        Admin admin = adminService.getAdmin(adminId);
-
-        rewardService.deleteQuestionnaire(product); //TODO check if really needed
-
-        //TODO delete all answers associated with the product to be deleted
+        Admin admin = product.getCreator();
 
         //delete the product and delete it also from the users' list and the admin list
         productService.deleteProduct(product);
         admin.removeCreatedProduct(product);
 
-        response.sendRedirect("past.html");
+        response.sendRedirect("Admin/past.html?");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

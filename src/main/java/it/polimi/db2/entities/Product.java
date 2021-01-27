@@ -13,7 +13,7 @@ import java.util.List;
 @NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.productId = ?1")
 @NamedQuery(name = "Product.getProductDummy", query = "SELECT p FROM Product p WHERE p.name = ?1")
 @NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date = ?1")
-@NamedQuery(name = "Product.getPastProducts", query = "SELECT p FROM Product p WHERE p.date < ?1 ORDER BY p.date")
+@NamedQuery(name = "Product.getPastProducts", query = "SELECT p FROM Product p WHERE p.date < ?1 AND p.creator = ?2 ORDER BY p.date")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class Product implements Serializable {
     @OrderColumn(name="questionNumber")
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) //removing a product must cancel all its reviews
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) //removing a product must cancel all its rewards
     private List <Reward> rewards;
 
 

@@ -3,7 +3,9 @@ package it.polimi.db2.servlets.admin;
 import com.google.gson.Gson;
 import it.polimi.db2.admin.DataEntry;
 import it.polimi.db2.admin.PastQuestionnairePageContent;
+import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
+import it.polimi.db2.services.AdminService;
 import it.polimi.db2.services.ProductService;
 import jakarta.ejb.EJB;
 import jakarta.json.Json;
@@ -24,6 +26,8 @@ public class GetPastQuestionnairePageData extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
+    @EJB(name = "it.polimi.db2.entities.services/AdminService")
+    private AdminService adminService;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -37,9 +41,12 @@ public class GetPastQuestionnairePageData extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        //get current date
+        //get current date and logged admin
         Date date = Date.valueOf(LocalDate.now());
-        List<Product> pastQuestionnaires = productService.getPastQuestionnaires(date);
+        String adminId = (String) request.getSession().getAttribute("admin");
+        Admin admin = adminService.getAdmin(adminId);
+
+        List<Product> pastQuestionnaires = productService.getPastQuestionnaires(date, admin);
 
         PastQuestionnairePageContent pqpc = new PastQuestionnairePageContent();
 

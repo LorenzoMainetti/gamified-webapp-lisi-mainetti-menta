@@ -41,7 +41,7 @@ public class GetInspectionData extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
-        //int productId = 1; //hardcoded, uncomment previous line to proper work in general use case
+
         if(checkProductId(productId)) {
             try {
                 //TODO handle no answers for a product
@@ -78,8 +78,12 @@ public class GetInspectionData extends HttpServlet {
 
                     answersForEachUser.put(s, answers );
                 }
-                String encoded = Base64.getEncoder().encodeToString(product.getImage());
-                InspectionPageContent content = new InspectionPageContent(usersWhoSubmitted, usersWhoCanceled, answersForEachUser, questions,
+                String encoded = null;
+
+                if (product.getImage()!= null) encoded = Base64.getEncoder().encodeToString(product.getImage());
+
+                InspectionPageContent content;
+                content = new InspectionPageContent(usersWhoSubmitted, usersWhoCanceled, answersForEachUser, questions,
                         product.getName(), product.getDescription(), encoded, product.getDate());
 
                 String jsonResponse = new Gson().toJson(content);

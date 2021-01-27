@@ -55,17 +55,4 @@ public class RewardService {
         }
     }
 
-    /**
-     * Method to remove a questionnaire from the reward table
-     * Removes all the entries related to a product
-     * Could be used only by the ADMIN
-     * @param product product to be removed
-     * @return the number of elements removed
-     * @throws InvalidParameterException if the product does not exist or there is more than 1 product
-     * @// TODO: 06/01/2021 check if it's still needed
-     */
-    public int deleteQuestionnaire(Product product) throws InvalidParameterException{
-        em.flush(); //to store cached entities that could be possibly deleted by the following query
-        return em.createNamedQuery("Reward.deleteQuestionnaire", Reward.class).setParameter(1, product).executeUpdate();
-    }
 }
