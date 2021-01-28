@@ -5,12 +5,14 @@
     <title>Homepage</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="ale.css">
     <script src="./scripts/homepageData.js" defer></script>
 </head>
 <body>
 
 
-
+<!--nav bar --->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">Gamified App</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -41,9 +43,9 @@
 </nav>
 
 <div class="container">
-    <div class="row">
-        <div class="column">
-            <div class="row"><h2> PRODUCT OF THE DAY: </h2></div>
+    <div class="row justify-content-md-center">
+        <div class="col-sm-8">
+            <div class="row"> <h1>Product of the Day:</h1></div>
             <div class="row"><h4 id="id_product_title">Title</h4></div>
             <!--div class="row"><img id="id_product_image" alt="error: image not found"/></div!-->
             <div class="row"><img id="id_product_image" width="321" height="321"/></div>
@@ -53,16 +55,28 @@
             <div class="row" id="id_action_row">
 
             </div>
+
+            <hr>
+            <div class="row">
+                <table id="id_Review_Table"  style="width:40%">
+
+                    <thead>
+                    <tr>
+                        <th>Reviews</th>
+                    </tr>
+                    </thead>
+                    <tbody id="id_ReviewBody"></tbody>
+                </table>
+            </div>
         </div>
+
     </div>
-    <table id="id_Review_Table"  style="width:40%">
-        <thead>
-        <tr>
-            <th>Product Reviews</th>
-        </tr>
-        </thead>
-        <tbody id="id_ReviewBody"></tbody>
-    </table>
+
+
+
+
+
 </div>
+
 </body>
 </html>

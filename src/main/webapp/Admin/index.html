@@ -6,52 +6,83 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="../scripts/admin.js" defer></script>
+    <link rel="stylesheet" href="../ale.css">
 </head>
 <body>
 
-<h1>Admin View</h1>
-<h5>Welcome back <span id="id_adminId">username</span>!</h5>
-<h6 id="id_adminEmail">admin@email.it</h6>
+<div class="container mx-auto my-5" style="max-width: 600px">
 
-<div> <h3>Published Product for Today</h3>
+    <div class="row mx-auto mt-4" id="id_login">
+        <div class="col">
+            <h1>Admin Control Panel <span><img style="width: 45px;"
+                                               src="https://image.flaticon.com/icons/png/512/270/270023.png"></span>
+            </h1>
+            <h5>Authenticated as <span id="id_adminId">username</span></h5>
+            <div id="id_adminEmail"><i>admin@email.it</i></div>
 
-    <div class="container">
-        <div class="row">
-            <div class="column">
-                <div class="row"><h6 id="id_product_title">Product Name</h6></div>
-                <!--div class="row"><img id="id_product_image" alt="error: image not found"/></div!-->
-                <div class="row"><img id="id_product_image" width="321" height="321"/></div>
-                <div class="row">
-                    <div id="id_product_descript"> this is the product description, you should buy it</div>
-                </div>
+        </div>
+    </div>
+    <hr>
+
+
+
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h4>Published Product for Today</h4>
+            </div>
+            <div class="row"><h6 id="id_product_title">Product Name</h6></div>
+            <!--div class="row"><img id="id_product_image" alt="error: image not found"/></div!-->
+            <div class="row"><img id="id_product_image" width="321" height="321"/></div>
+            <div class="row">
+                <div id="id_product_descript"> this is the product description, you should buy it</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <h4>Edit Mode</h4>
+            </div>
+            <div class="row">
+                <div><i>Use this buttons to access admin features.</i>
+                        <br>
+                        <b>Create New:</b> Insert the product of the day for a current or posterior date and insert product questions.
+                        <br>
+
+                         <b>Past Quesionnaires:</b> Inspect and access data from past questionnaires, users and answers.
+                         <br>
+
+                            <b>Delete:</b> Delete questionnaire data and user responses.
+                            <br>
+                        </div>
+            </div>
+            <div class="row">
+            <form action="creation.html">
+                <button class="btn btn-primary" type="submit">Create New</button>
+            </form>
+            </div>
+            <div class="row">
+            <form action="past.html">
+                <button class="btn btn-secondary" type="submit">Past Questionnaires</button>
+            </form>
+            </div>
+            <div class="row">
+            <form action="../logout" method="POST">
+                <button type="submit" class="btn btn-danger" on>Log Out</button>
+            </form>
             </div>
         </div>
     </div>
 
 
+</div>
 
 
-    <!-- BUTTON DIV -->
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <form class="form-inline my-2 my-lg-0" action="creation.html">
-                    <button class="btn btn-primary" type="submit">Create New</button>
-                </form>
-            </div>
-            <div class="col">
-                <form class="form-inline my-2 my-lg-0" action="past.html">
-                    <button class="btn btn-secondary" type="submit">Past Questionnaires</button>
-                </form>
-            </div>
-            <div class="col-md">
-                <form action="../logout" method="POST">
-                    <button type="submit" class="btn btn-danger" on>Log Out</button>
-                </form>
-            </div>
-        </div>
-    </div>
+</div>
 
+</div>
 
 
 </div>
