@@ -1,13 +1,17 @@
 package it.polimi.db2.services;
 
+import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.entities.ids.QuestionKey;
+import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -25,11 +29,10 @@ public class QuestionService {
      * @return the updated list
      */
     public List<Question> addStatQuestions(List<Question> questions) {
-        Question base = questions.get(0);
+        Question base = questions.get(questions.size()-1);
         questions.add(copyProductInfoOptional(base, "What's your age?"));
         questions.add(copyProductInfoOptional(base,"What's your gender?"));
         questions.add(copyProductInfoOptional(base, "What's your experience level?"));
-
         return questions;
     }
 
@@ -39,26 +42,26 @@ public class QuestionService {
      * @param text text to insert in the new question
      * @return the copy
      */
-    private Question copyProductInfoOptional(Question base, String text){
+    private Question copyProductInfoOptional(Question base, String text) {
         Question copy = new Question();
         copy.setProduct(base.getProduct());
         copy.setProductId(base.getProductId());
         copy.setText(text);
         copy.setMandatory(false);
-        return copy;
 
+        return copy;
     }
 
     /**
      * Method to retrieve a question from its key
      * @param key identifier of the question
      * @return the searched question
-     * @throws InvalidParameterException
+     * @throws InvalidParameterException if the question does not exist or there is more than 1 question
      */
     public Question getQuestion(QuestionKey key)throws InvalidParameterException {
         List<Question> result = em.createNamedQuery("Question.getQuestion", Question.class).setParameter(1, key.getQuestionId()).setParameter(2, key.getProductId())
                 .getResultList();
-        if (result == null) {
+        if (result == null || result.isEmpty()) {
             throw new InvalidParameterException("productID or questionID are wrong");
         }
         else if(result.size()==1) {
@@ -70,15 +73,64 @@ public class QuestionService {
     }
 
     /**
-     * UNDERSTAND IF IT IS NECESSARY!!!
      * Method that updates the list of user who answered to a question
      * @param key identifier of the question
      * @param user user who filled the question
+     * @throws PersistenceException if a problem happens managing the entity (for example it does not exists)
+     * @throws IllegalArgumentException if the argument of the merge is not an entity or it's a removed entity
+     * @// TODO: 05/01/2021 understand if it is necessary
      */
-    public void updateUserRef(QuestionKey key, User user){
+    public void updateUserRef(QuestionKey key, User user) throws PersistenceException, IllegalArgumentException {
         Question question = getQuestion(key);
         question.getUsers().add(user);
         em.merge(question);
         em.flush();
     }
+
+    public Question insertQuestion(Product product, String text) {
+        Question question = new Question();
+        question.setProductId(product.getProductId());
+        question.setMandatory(true);
+        question.setText(text);
+        question.setProduct(product);
+        try {
+            em.persist(question);
+        } catch (EJBTransactionRolledbackException | PersistenceException e) {
+            throw e;
+        }
+        return question;
+    }
+
+    public List <Question> getAllQuestions(List<String> mandatory, Product product) {
+
+        List <Question> allQuestions = new LinkedList<>();
+        /* for each question text */
+        for (String question : mandatory) {
+            Question questionObj = new Question();
+            questionObj.setProductId(product.getProductId());
+            questionObj.setMandatory(true);
+            int questionNumber = mandatory.indexOf(question) +1;
+            questionObj.setQuestionNumber(questionNumber);
+            questionObj.setText(question);
+            questionObj.setProduct(product);
+            allQuestions.add(questionObj);
+        }
+        allQuestions = this.addStatQuestions(allQuestions);
+
+        return (allQuestions);
+
+
+        //return allQuestions;
+
+
+
+    }
+
+    public void updateProductQuestions(Product product, List<Question> questions) {
+        product.setQuestions(questions);
+        //persist is already done, update it
+        em.merge(product);
+        em.flush();
+    }
+
 }

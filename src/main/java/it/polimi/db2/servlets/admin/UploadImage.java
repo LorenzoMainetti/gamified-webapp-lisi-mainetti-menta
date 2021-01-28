@@ -1,26 +1,19 @@
-package it.polimi.db2.servlets;
+package it.polimi.db2.servlets.admin;
 
-import it.polimi.db2.auxiliary.images.ImageProcessor;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
-import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
-import jakarta.ejb.EJBTransactionRolledbackException;
-import jakarta.persistence.PersistenceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.text.StringEscapeUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import static it.polimi.db2.auxiliary.images.ImageProcessor.*;
 
@@ -41,8 +34,7 @@ public class UploadImage extends HttpServlet {
                 outputStream.write(buffer, 0, bytesRead);
             }
 
-            byte[] imageBytes = outputStream.toByteArray();
-            return imageBytes;
+            return outputStream.toByteArray();
         } catch (IOException e) {
             throw e;
         }
@@ -55,9 +47,14 @@ public class UploadImage extends HttpServlet {
         response.getWriter().println(error);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         InputStream imgStream = request.getPart("image").getInputStream();
-        byte[] file = readImage(imgStream);
+        byte[] file;
+        if(imgStream.available()==0){
+            file = readImage(getClass().getClassLoader().getResource("not_found.png").openStream());
+        }
+        else{
+            file = readImage(imgStream);
+        }
 
         //file = ImageProcessor.AI_Cropper(file);
         switch (getImageType(file)) {
@@ -80,10 +77,14 @@ public class UploadImage extends HttpServlet {
             sendBackError("file is too large. It would probably jeopardize the whole web application", response);
             return;
         }
-        Product product = productService.getProductOfTheDay();
-        productService.dummyImageLoad(product, file);
-        //write image to db
-        request.getParameter("imgId");
+        int productId = (int) request.getSession().getAttribute("productId");
+        //Product product = productService.getProductOfTheDay();
+        productService.dummyImageLoad(productId, file);
+        request.getSession().removeAttribute("productId");
+
+        response.setStatus(HttpServletResponse.SC_OK);
+
+
 
     }
 

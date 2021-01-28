@@ -26,16 +26,19 @@ public class Question implements Serializable {
     @NotNull
     private boolean isMandatory;
 
+    private int questionNumber;
+
     @ManyToOne
     @PrimaryKeyJoinColumn(name="productId", referencedColumnName="productId")
     private Product product;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(name="answer",
             joinColumns={@JoinColumn(name="questionId", referencedColumnName = "questionId"),
                          @JoinColumn(name="productId", referencedColumnName = "productId")},
             inverseJoinColumns={@JoinColumn(name="userId")})
     private Set<User> users;
+
 
 
     public boolean isMandatory() {
@@ -94,4 +97,11 @@ public class Question implements Serializable {
         return users;
     }
 
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
 }

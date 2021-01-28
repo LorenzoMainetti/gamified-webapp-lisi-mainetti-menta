@@ -1,9 +1,11 @@
 package it.polimi.db2.servlets;
 
+import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.User;
+import it.polimi.db2.services.AdminService;
 import it.polimi.db2.services.UserService;
 import jakarta.ejb.EJB;
-import jakarta.ejb.EJBTransactionRolledbackException;
+import jakarta.ejb.EJBException;
 import jakarta.persistence.PersistenceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,114 +16,93 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
+    @EJB(name = "it.polimi.db2.entities.services/UserService")
+    private UserService userService;
+    @EJB(name = "it.polimi.db2.entities.services/AdminService")
+    private AdminService adminService;
 
-   @EJB(name = "it.polimi.db2.entities.services/UserService")
-    private UserService usrService;
-
-
-    boolean checkPassword(String password) {
-        return true;
+    protected void sendError(HttpServletResponse response, HttpServletRequest request, String errorType, String errorInfo) throws IOException {
+        request.getSession().setAttribute ("errorType", errorType);
+        request.getSession().setAttribute ("errorInfo", errorInfo);
+        try {
+            getServletConfig().getServletContext().getRequestDispatcher("/error.html").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 
-    void sendError(HttpServletResponse response, String errorText) throws IOException {
-        response.setContentType("text/plain");
-        response.getWriter().println(errorText);
-    }
     boolean isEmailValid(String email) {
-        return EmailValidator.getInstance().isValid(email);
+        return email != null && EmailValidator.getInstance().isValid(email);
     }
-    boolean isUsernameValid(String username) {
-        return username.length()<32 && username.length() > 3;
-    }
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    boolean isUsernameValid(String username) {
+        return username != null && username.length()<32 && username.length() > 3;
+    }
+
+    boolean isPasswordValid(String password){
+        return password != null && password.length()<32 && password.length() > 3;
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
         String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
         String isSignUp = StringEscapeUtils.escapeJava(request.getParameter("SIGNUP"));
-
-        //CHECK NULLITY
-        if (username == null || password == null) {
-            //TODO invalid request parameters
-            sendError(response, "some fields are missing");
-            return;
-        }
-
-
+       // String isSignUp = StringEscapeUtils.escapeJava(request.getParameter("SIGNUP"));
 
         //SIGNUP OR LOGIN
-
-        if (isSignUp != null && isSignUp.equals("true")) {
-
-            if (email == null) {
-                sendError(response, "missing email address");
-                return;
-            }
-            //Check if valid (synthax, length)
-            if (!(isEmailValid(email) && isUsernameValid(username))) {
-                sendError(response,"invalid username or password format");
+        if (isSignUp != null && isSignUp.equals("true")) { //SIGNUP
+            if (!(isEmailValid(email) && isUsernameValid(username) && isPasswordValid(password))) {
+                sendError(response, request,"Invalid Completion","invalid username, email or password format");
                 return;
             }
             //try to register a new user
             try {
-                usrService.insertUser(username,email,password,false);
+                User user = userService.insertUser(username,email,password,false);
+                userService.LogUser(user);
                 request.getSession().setAttribute("user", username);
                 String path = getServletContext().getContextPath() + "/homepage.html";
                 response.sendRedirect(path);
             }
-            catch (PersistenceException | EJBTransactionRolledbackException e) {
-                //TODO send internal server error
-
+            catch (PersistenceException | IllegalArgumentException | EJBException e) {
                 if (e.getCause().getCause().getMessage().contains("Duplicate entry")) {
-                    sendError(response, "username already taken");
+                    sendError(response, request,"Invalid Completion", "username already taken");
                 }
                 else {
-                    sendError(response, "internal server error");
+                    sendError(response, request, "Invalid Completion","internal server error");
                 }
-
             }
-
             //USER ALREADY EXISTING
-
-            return;
         }
-        else if (isSignUp == null) { // *** LOGIN existing user
-            //Check if valid (synthax, length)
-            if (!isUsernameValid(username)) {
-                sendError(response,"invalid username or password format");
+        else if (isSignUp == null) { // LOGIN
+            if (!(isUsernameValid(username) && isPasswordValid(password))) {
+                sendError(response, request,"Invalid Completion","invalid username or password format");
                 return;
             }
-
             try {
-                User credentialCheckResultUser = usrService.checkCredentials(username, password);
+                User credentialCheckResultUser = userService.checkCredentials(username, password);
+                userService.LogUser(credentialCheckResultUser);
                 request.getSession().setAttribute("user", credentialCheckResultUser.getUsername());
                 String path = getServletContext().getContextPath() + "/homepage.html";
                 response.sendRedirect(path);
             }
-            catch (Exception e) {
-                sendError(response, e.getMessage());
+            catch (InvalidParameterException | EJBException e) {
+                try {
+                    Admin admin = adminService.checkAdminCredentials(username, password);
+                    request.getSession().setAttribute("admin", admin.getAdminId());
+                    String path = getServletContext().getContextPath() + "/Admin/index.html";
+                    response.sendRedirect(path);
+                }
+                catch (InvalidParameterException | EJBException f) {
+                    sendError(response, request, "Invalid Completion", f.getCause().getMessage());
+                }
             }
         }
-        else {
-            //TODO generic error
-        }
-
-
-
-        /*
-        if (checkPassword(password) && email.length()>3) {
-            //writeUser(email,"nuovo", password);
-
-            response.setContentType("text/plain");
-            response.getWriter().println("scritto. ciao " + email.toUpperCase());
-        }
- */
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

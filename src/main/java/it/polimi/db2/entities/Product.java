@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -12,6 +13,7 @@ import java.util.List;
 @NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.productId = ?1")
 @NamedQuery(name = "Product.getProductDummy", query = "SELECT p FROM Product p WHERE p.name = ?1")
 @NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date = ?1")
+@NamedQuery(name = "Product.getPastProducts", query = "SELECT p FROM Product p WHERE p.date < ?1 AND p.creator = ?2 ORDER BY p.date")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +33,6 @@ public class Product implements Serializable {
     @NotNull
     private String creatorId;
 
-    @NotNull
     @Lob
     private byte[] image;
 
@@ -43,10 +44,11 @@ public class Product implements Serializable {
     @ManyToMany(mappedBy = "products")
     private List<User> users;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true) //amount of questions is limited
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval=true, cascade = {CascadeType.ALL}) //amount of questions is limited
+    @OrderColumn(name="questionNumber")
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) //removing a product must cancel all its reviews
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE) //removing a product must cancel all its rewards
     private List <Reward> rewards;
 
 
@@ -64,6 +66,7 @@ public class Product implements Serializable {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+
     }
 
     public int getProductId() {
@@ -114,12 +117,26 @@ public class Product implements Serializable {
         return questions;
     }
 
+    public List <String> getQuestionsText() {
+
+        List <String> texts = new LinkedList<>();
+        questions.forEach( q -> texts.add(q.getText()) );
+        return texts;
+    }
     public void setImage(byte[] image) {
         this.image = image;
     }
 
     public byte[] getImage() {
         return image;
+    }
+
+    public List<Reward> getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(List<Reward> rewards) {
+        this.rewards = rewards;
     }
 }
 

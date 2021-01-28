@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Past Questionnaires</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="../scripts/pastQ.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+            integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <table id="id_PastQ_Table" style="">
+        <h3>Past Questionnaires:</h3>
+        <!-- table date/product + inspect and delete buttons -->
+        <tbody id="id_tableBody"></tbody>
+    </table>
+
+    <button type="button" onclick="history.back()" class="btn btn-secondary">Back</button>
+</div>
+
+</body>
+</html>

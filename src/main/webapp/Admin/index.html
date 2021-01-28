@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin View</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="../scripts/admin.js" defer></script>
+</head>
+<body>
+
+<h1>Admin View</h1>
+<h5>Welcome back <span id="id_adminId">username</span>!</h5>
+<h6 id="id_adminEmail">admin@email.it</h6>
+
+<div> <h3>Published Product for Today</h3>
+
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <div class="row"><h6 id="id_product_title">Product Name</h6></div>
+                <!--div class="row"><img id="id_product_image" alt="error: image not found"/></div!-->
+                <div class="row"><img id="id_product_image" width="321" height="321"/></div>
+                <div class="row">
+                    <div id="id_product_descript"> this is the product description, you should buy it</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- BUTTON DIV -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="form-inline my-2 my-lg-0" action="creation.html">
+                    <button class="btn btn-primary" type="submit">Create New</button>
+                </form>
+            </div>
+            <div class="col">
+                <form class="form-inline my-2 my-lg-0" action="past.html">
+                    <button class="btn btn-secondary" type="submit">Past Questionnaires</button>
+                </form>
+            </div>
+            <div class="col-md">
+                <form action="../logout" method="POST">
+                    <button type="submit" class="btn btn-danger" on>Log Out</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+</body>
+</html>

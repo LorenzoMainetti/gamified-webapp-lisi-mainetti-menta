@@ -33,9 +33,12 @@ public class User implements Serializable {
             inverseJoinColumns={@JoinColumn(name="productId")})
     private List<Product> products;
 
-    //mapped by: matched pair of uni-directional relationships
+    /* useless
     @ManyToMany(mappedBy = "users")
-    private List<Question> questions;
+    private List<Question> questions;*/
+
+    @OneToMany(mappedBy = "user")
+    private List<Log> logs;
 
 
 
@@ -71,5 +74,14 @@ public class User implements Serializable {
 
     public void setBanned(boolean banned) {
         this.banned = banned;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+
     }
 }

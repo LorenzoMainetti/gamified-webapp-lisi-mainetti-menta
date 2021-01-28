@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creation Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="../scripts/create.js" defer></script>
+    <script src="../scripts/AJAX_Call.js" defer></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+            integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+            crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+<div class="container mx-auto my-5" style="max-width: 600px">
+    <div class="row mx-auto mt-4">
+        <form class="needs-validation" id="creation-form" novalidate>
+            <h3>Create New Product</h3>
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="control-group"><label class="control-label" for="id_product_title">Product
+                            Name:</label></div>
+                    </td>
+                    <td>
+                        <input id="id_product_title" name="name" class="textbox" type="text"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="control-group"><label class="control-label" for="id_product_descript">Product
+                            Description:</label></div>
+                    </td>
+                    <td>
+                        <div class="control-group"><input name="description" id="id_product_descript" class="textbox"
+                                                          type="text"/></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="control-group"><label class="control-label" for="id_product_date">Date:</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-10"><input id="id_product_date" name="date" class="form-control"
+                                                       type="date"/></div>
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <h5>Gamification Questions:</h5>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td>
+                        <div id="id_product_questions">
+                            <!-- filled by JS -->
+                            <div class="form-group">
+                                <label for="question1">Question #1</label>
+                                <input type="text" class="form-control" id="question1" name="man[]"
+                                       placeholder="Enter question text followed by '?' ">
+                            </div>
+
+
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-info" onclick="addQuestionDynamic()">+ Question
+                            </button>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="form-group row">
+                <div class="col text-center">
+                    <img src="https://static.thenounproject.com/png/625182-200.png" width="30px"/>
+                <h5>Upload Image (optional) </h5>
+                <input type="text" id="imgid" name="imgId"/>
+                <input type="file" id="myFile" name="image"/>
+            </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col text-center">
+                    <div class="alert alert-danger" style="display: none;"id="error-alert" role="alert">
+
+                    </div>
+                </div>
+            </div>
+
+
+            <button onclick="sendQuestionnaire()" type="button" class="btn btn-primary">Submit</button>
+            <button type="button" onclick="history.back()" class="btn btn-secondary">Back</button>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
