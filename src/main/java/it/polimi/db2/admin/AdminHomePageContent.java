@@ -1,5 +1,7 @@
 package it.polimi.db2.admin;
 
+import it.polimi.db2.auxiliary.AdminStatus;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,16 @@ public class AdminHomePageContent implements Serializable {
     //potd
     String prodName, prodDescription, encodedImg;
 
+    AdminStatus adminStatus;
+
+    public AdminHomePageContent(String adminId, String email, String prodName, String prodDescription, String encodedImg, AdminStatus adminStatus) {
+        this.adminId = adminId;
+        this.email = email;
+        this.prodName = prodName;
+        this.prodDescription = prodDescription;
+        this.encodedImg = encodedImg;
+        this.adminStatus = adminStatus;
+    }
 
     public String getAdminId() {
         return adminId;
@@ -55,4 +67,11 @@ public class AdminHomePageContent implements Serializable {
         this.encodedImg = encodedImg;
     }
 
+    public AdminStatus getAdminStatus() {
+        return adminStatus;
+    }
+
+    public void setAdminStatus(AdminStatus adminStatus) {
+        this.adminStatus = adminStatus;
+    }
 }

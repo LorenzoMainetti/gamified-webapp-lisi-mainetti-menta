@@ -22,22 +22,21 @@ window.addEventListener("load", () => {
             if (req.readyState === 4) {
                 var message = req.responseText;
                 if (req.status === 200) {
-
                     var con = JSON.parse(message);
-                    document.getElementById("id_adminId").innerText = con.adminId;
-                    document.getElementById("id_adminEmail").innerText = con.email;
-                    document.getElementById("id_product_title").innerText = con.prodName;
-                    document.getElementById("id_product_image").src = "data:image/png;base64," + con.encodedImg;
-                    document.getElementById("id_product_descript").innerText = con.prodDescription;
-
-                    const table = document.getElementById("id_table_minimal");
-                    /*Object.keys(con.pastQuestionnaires).forEach(function (k) {
-                        let row = table.insertRow();
-                        let date = row.insertCell(0);
-                        let name = row.insertCell(0);
-                        date.innerHTML = con.pastQuestionnaires[k];
-                        name.innerHTML = con.pastQuestionnaires[k];
-                    }) */
+                    if(con.adminStatus === "NOT_AVAILABLE"){
+                        document.getElementById("id_adminId").innerText = con.adminId;
+                        document.getElementById("id_adminEmail").innerText = con.email;
+                        document.getElementById("id_product_title").innerText = "No Product";
+                        document.getElementById("id_product_image").innerHTML = "";
+                        document.getElementById("id_product_descript").innerText = "No product available for today";
+                    }
+                    else {
+                        document.getElementById("id_adminId").innerText = con.adminId;
+                        document.getElementById("id_adminEmail").innerText = con.email;
+                        document.getElementById("id_product_title").innerText = con.prodName;
+                        document.getElementById("id_product_image").src = "data:image/png;base64," + con.encodedImg;
+                        document.getElementById("id_product_descript").innerText = con.prodDescription;
+                    }
                 }
             } else {
                 //display error
