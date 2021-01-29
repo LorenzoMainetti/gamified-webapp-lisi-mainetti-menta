@@ -2,7 +2,7 @@ package it.polimi.db2.servlets.admin;
 
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.services.*;
+import it.polimi.db2.services.ProductService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;

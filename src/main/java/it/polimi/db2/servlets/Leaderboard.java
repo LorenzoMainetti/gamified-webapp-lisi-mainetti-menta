@@ -31,6 +31,14 @@ public class Leaderboard extends HttpServlet {
         super();
     }
 
+    /**
+     * Method to handle errors, redirects to an error page
+     * @param request request
+     * @param response response
+     * @param errorType type of error
+     * @param errorInfo information about the error
+     * @throws IOException if there are problems redirecting
+     */
     protected void sendError(HttpServletRequest request, HttpServletResponse response, String errorType, String errorInfo) throws IOException {
         request.getSession().setAttribute ("errorType", errorType);
         request.getSession().setAttribute ("errorInfo", errorInfo);

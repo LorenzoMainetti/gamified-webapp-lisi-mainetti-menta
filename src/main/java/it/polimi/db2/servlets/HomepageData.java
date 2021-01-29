@@ -1,8 +1,8 @@
 package it.polimi.db2.servlets;
 
 import com.google.gson.Gson;
-import it.polimi.db2.auxiliary.json.HomepageContent;
 import it.polimi.db2.auxiliary.UserStatus;
+import it.polimi.db2.auxiliary.json.HomepageContent;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.ReviewService;
@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.InvalidParameterException;
@@ -32,6 +31,14 @@ public class HomepageData extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/ReviewService")
     private ReviewService reviewService;
 
+    /**
+     * Method to handle errors, redirects to an error page
+     * @param request request
+     * @param response response
+     * @param errorType type of error
+     * @param errorInfo information about the error
+     * @throws IOException if there are problems redirecting
+     */
     protected void sendError(HttpServletRequest request, HttpServletResponse response, String errorType, String errorInfo) throws IOException {
         request.getSession().setAttribute ("errorType", errorType);
         request.getSession().setAttribute ("errorInfo", errorInfo);
@@ -60,7 +67,7 @@ public class HomepageData extends HttpServlet {
             System.out.println(e.getMessage());
             if(e.getCause().getMessage().equals("No product of the Day")){
                 HomepageContent homepageContent = new HomepageContent(username, false,
-                        null, null, null, null,
+                        null, null, null,
                         null, UserStatus.NOT_AVAILABLE);
                 String jsonHomepage = new Gson().toJson(homepageContent);
                 out.write(jsonHomepage);
@@ -79,17 +86,12 @@ public class HomepageData extends HttpServlet {
         catch (InvalidParameterException | EJBException e){
             System.out.println(e.getMessage());
         }
-        byte[] image;
         String encoded = null;
 
         if (prodOfTheDay.getImage()!= null) encoded = Base64.getEncoder().encodeToString(prodOfTheDay.getImage());
 
-        image = prodOfTheDay.getImage();
-
-
         HomepageContent homepageContent = new HomepageContent(username, false,
-                prodOfTheDay.getName(), prodOfTheDay.getDescription(), image,
-                encoded, reviews, userStatus);
+                prodOfTheDay.getName(), prodOfTheDay.getDescription(), encoded, reviews, userStatus);
         String jsonHomepage = new Gson().toJson(homepageContent);
         out.write(jsonHomepage);
     }

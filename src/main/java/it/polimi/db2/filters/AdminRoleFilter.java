@@ -1,11 +1,10 @@
 package it.polimi.db2.filters;
 
-import java.io.IOException;
-
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
 
 @jakarta.servlet.annotation.WebFilter(filterName = "AdminRoleFilter")
 public class AdminRoleFilter implements jakarta.servlet.Filter {

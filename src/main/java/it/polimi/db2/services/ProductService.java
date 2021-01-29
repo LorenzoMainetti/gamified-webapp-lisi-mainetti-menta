@@ -1,10 +1,6 @@
 package it.polimi.db2.services;
 
-import com.google.gson.Gson;
-import it.polimi.db2.admin.AdminHomePageContent;
 import it.polimi.db2.entities.*;
-import it.polimi.db2.exception.ProductNotFoundException;
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,7 +12,6 @@ import java.util.*;
 
 @Stateless
 public class ProductService {
-
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
 
@@ -29,30 +24,21 @@ public class ProductService {
      * @param date date of the questionnaire
      * @param description small description of the product
      * @param admin the admin who created the questionnaire
-
-
      * @throws PersistenceException if a problem happens managing the entity (for example it already exists)
      * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
     public Product insertProduct(String name, Date date, String description, Admin admin) throws PersistenceException, IllegalArgumentException{
-
-
         Product product = new Product();
         product.setName(name);
         product.setDate(date);
-
         product.setDescription(description);
         product.setCreatorId(admin.getAdminId());
 
         admin.getCreatedProducts().add(product);
 
         em.persist(product);
-
-
         return product;
-
     }
-
 
     /**
      * Method to retrieve the questionnaire related to a specific product
@@ -78,10 +64,8 @@ public class ProductService {
      * Method to retrieve the questionnaire related to the product of the day
      * @return the product of the day
      * @throws InvalidParameterException if the product does not exist or there is more than 1 product
-     * @// TODO: 05/01/2021 remove dummy query
      */
     public Product getProductOfTheDay() throws InvalidParameterException {
-
         //List<Product> products = em.createNamedQuery("Product.getProductDummy", Product.class).setParameter(1, "mvnlad").getResultList();
         Date date = java.sql.Date.valueOf(LocalDate.now());
         List<Product> products = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter(1, date).getResultList();
@@ -107,7 +91,7 @@ public class ProductService {
     public List<Product> getPastQuestionnaires(Date currentDate, Admin creator) throws InvalidParameterException {
         List<Product> products = em.createNamedQuery("Product.getPastProducts", Product.class).setParameter(1,  currentDate).setParameter(2, creator)
                 .getResultList();
-        if (products.isEmpty()) {
+        if (products == null ||products.isEmpty()) {
             throw new InvalidParameterException("no product found");
         }
         else {
@@ -121,7 +105,6 @@ public class ProductService {
      * @param user user who compiled the questionnaire
      * @return list of user's answers
      * @throws InvalidParameterException if the product does not exist or there is more than 1 product, or the user hasn't filled the questionnaire
-     * @// TODO: 05/01/2021 check if it's still usable
      */
     public List<Answer> getUserAnswers(Product product, String user) throws InvalidParameterException{
         List<User> users = getProductUsers(product, false);
@@ -142,8 +125,12 @@ public class ProductService {
         }
     }
 
-
-    private Set<String> getTable (List <User> users) {
+    /**
+     * Method to get the hash map of a list of user
+     * @param users list of users
+     * @return hash map of the users
+     */
+    private Set<String> getTable (List<User> users) {
         Set<String> success = new HashSet<>();
         for (User user : users) {
             success.add(user.getUsername());
@@ -152,9 +139,16 @@ public class ProductService {
 
     }
 
+    /**
+     * Method that checks if a user is contained in the hash map of usernames (utility)
+     * @param u user to find
+     * @param usernames hash map of usernames
+     * @return true if present otherwise false
+     */
     private boolean exists(User u, Set<String> usernames) {
         return usernames.contains(u.getUsername());
     }
+
     /**
      * Method that returns the list of user who compiled the questionnaire (if QuestFilled is true),
      * otherwise the list of user who cancelled their questionnaire
@@ -165,10 +159,8 @@ public class ProductService {
      */
     public List<User> getProductUsers(Product product, Boolean QuestFilled) throws InvalidParameterException{
         List<User> usersSuccessfullyCompleted = em.createNamedQuery("Answer.getUserFill", User.class).setParameter(1, product.getProductId()).getResultList();
-
         if (usersSuccessfullyCompleted == null || usersSuccessfullyCompleted.isEmpty()) {
             if(QuestFilled){
-                //TODO we return a null it crashes
                 return usersSuccessfullyCompleted;
             }
             else{
@@ -183,11 +175,9 @@ public class ProductService {
             else{
                 //to be filled
                 List<User> notFilled = new LinkedList<>();
-
                 //list of username of accounts that have a leaderboard entry
                 List <User> relatedToProduct = product.getUsers();
                 Set<String> successfullyCompletedHash = getTable(usersSuccessfullyCompleted);
-
                 //for each leaderboard entry
                 for(User u : relatedToProduct){
                     //check if this user has successfully completed the questionnaire
@@ -221,7 +211,13 @@ public class ProductService {
         }
     }
 
-
+    /**
+     * Load the image related to a given product
+     * @param productId id of the product
+     * @param img byte array containing the image
+     * @throws PersistenceException if a problem happens managing the entity (for example it doesn't exists)
+     * @throws IllegalArgumentException if the argument of the persist is not an entity
+     */
     public void dummyImageLoad(int productId, byte[] img) throws IllegalArgumentException, PersistenceException{
         Product product = em.find(Product.class, productId);
         product.setImage(img);
@@ -229,7 +225,14 @@ public class ProductService {
         em.flush();
     }
 
-
+    /**
+     * Method to add the user who cancelled the questionnaire to the list of users
+     * that interacted with the questionnaire
+     * @param product questionnaire of the day
+     * @param user user who cancelled the questionnaire
+     * @throws PersistenceException if a problem happens managing the entity (for example it doesn't exists)
+     * @throws IllegalArgumentException if the argument of the persist is not an entity
+     */
     public void addCancelledUser(Product product, User user) throws IllegalArgumentException, PersistenceException{
         product.getUsers().add(user);
         user.getProducts().add(product);
@@ -238,10 +241,13 @@ public class ProductService {
         em.flush();
     }
 
+    /**
+     * Method that deletes the product
+     * @param product product to delete
+     */
     public void deleteProduct(Product product) {
         for(User user : product.getUsers())
             user.removeProduct(product);
-
         //if entity is not managed, add it an then delete it
         if (!em.contains(product)) {
             product = em.merge(product);

@@ -5,9 +5,10 @@ import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Log;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.User;
-import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
 import java.sql.Timestamp;
@@ -92,19 +93,17 @@ public class UserService {
     public void banUser(String username) throws PersistenceException, IllegalArgumentException{
         User toBeBanned = getUser(username);
         toBeBanned.setBanned(true);
-        updateProfile(toBeBanned);
+        em.merge(toBeBanned);
     }
 
     /**
-     * Method to update a User
-     * @param user user to be updated
-     * @throws PersistenceException if a problem happens managing the entity (for example it does not exists)
-     * @throws IllegalArgumentException if the argument of the merge is not an entity or is a removed entity
+     * Method to check the status of the user, in relationship with the product
+     * @param user user to check
+     * @param product product to compare with
+     * @param productService utility to make query
+     * @return userstatus of the user
+     * @throws InvalidParameterException if there is a problem with the query execution
      */
-    public void updateProfile(User user) throws PersistenceException, IllegalArgumentException {
-        em.merge(user);
-    }
-
     public UserStatus checkUserStatus(User user, Product product, ProductService productService) throws InvalidParameterException{
         if(user.isBanned()){
             return UserStatus.BANNED;
@@ -113,7 +112,6 @@ public class UserService {
             List<Answer> ans = em.createNamedQuery("Answer.getUserAnswers", Answer.class)
                     .setParameter(1, user.getUsername()).setParameter(2, product.getProductId()).getResultList();
             if (ans == null || ans.isEmpty()) {
-                //no user answer related to the product
                 List<User> cancelled = productService.getProductUsers(product, false);
                 ArrayList<String> ids = new ArrayList<>();
                 for(User u :cancelled){
@@ -135,6 +133,8 @@ public class UserService {
     /**
      * method to insert the log of the user in the DB
      * @param user user to log in
+     * @throws PersistenceException if there is a problem managing the entity
+     * @throws IllegalArgumentException if the user is not present in the DB
      */
     public void LogUser(User user) throws PersistenceException, IllegalArgumentException{
         Log log = new Log();

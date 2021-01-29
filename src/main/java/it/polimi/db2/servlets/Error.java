@@ -8,7 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/Error")
 public class Error extends HttpServlet {

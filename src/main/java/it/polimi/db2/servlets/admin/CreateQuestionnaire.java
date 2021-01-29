@@ -3,7 +3,9 @@ package it.polimi.db2.servlets.admin;
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
-import it.polimi.db2.services.*;
+import it.polimi.db2.services.AdminService;
+import it.polimi.db2.services.ProductService;
+import it.polimi.db2.services.QuestionService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
@@ -16,8 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +27,6 @@ import java.util.*;
 @WebServlet("/CreateQuestionnaire")
 @MultipartConfig
 public class CreateQuestionnaire extends HttpServlet {
-
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
     @EJB(name = "it.polimi.db2.entities.services/QuestionService")
@@ -35,16 +34,31 @@ public class CreateQuestionnaire extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/AdminService")
     private AdminService adminService;
 
+    /**
+     * Method to get the date in the correct format
+     * @param param date to parse
+     * @return date parsed
+     */
     private LocalDate getDateFromRequestParameter(String param) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //convert String to LocalDate
         return LocalDate.parse(param, formatter);
     }
 
+    /**
+     * Method to convert a LocalDate to a Date
+     * @param localDate date to convert
+     * @return date converted
+     */
     private Date asDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
+    /**
+     * Method that checks if the name and the description are correct
+     * @param name name of the product tp check
+     * @param description description of the product to check
+     * @return control string to express the error
+     */
     private String checkNameDescription(String name, String description) {
         if (name == null || description == null) {
             return "Some fields are missing";
@@ -57,20 +71,17 @@ public class CreateQuestionnaire extends HttpServlet {
     }
 
     /**
-     * @param request  contains all parameters from Create Questionnaire form
-     * @param response
+     * @param request contains all parameters from Create Questionnaire form
+     * @param response response
      * @author Ale Lisi & Main
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO ESCAPE WHEN READING CHARACTERS
         String productName = StringEscapeUtils.escapeJava(request.getParameterValues("name")[0]);
         String description = StringEscapeUtils.escapeJava(request.getParameterValues("description")[0]);
 
-        if (checkNameDescription(productName, description) == "GO_FLIGHT") {
+        if (checkNameDescription(productName, description).equals("GO_FLIGHT")) {
             String sDate = request.getParameterValues("date")[0];
-            Date date = null;
-
-            //TODO check if it the right date format, if not convert it
+            Date date;
             try {
                 date = asDate(getDateFromRequestParameter(sDate));
             }
@@ -87,10 +98,8 @@ public class CreateQuestionnaire extends HttpServlet {
                 return;
             }
 
-
             String adminId = (String) request.getSession().getAttribute("admin");
             Admin admin = adminService.getAdmin(adminId);
-
 
             List<String> mandatoryQuestionsString = Arrays.asList(request.getParameterValues("man[]"));
 
@@ -113,13 +122,11 @@ public class CreateQuestionnaire extends HttpServlet {
                 questionService.updateProductQuestions(prod, questions);
                 request.getSession().setAttribute("productId", prod.getProductId());
                 //pass upload image task to another servlet
-
                 //image upload, if exists
                 ServletContext sc=getServletContext();
                 RequestDispatcher r=sc.getRequestDispatcher("/UploadImage");
                 r.forward(request, response);
             }
-
             else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("text/plain");
@@ -134,11 +141,15 @@ public class CreateQuestionnaire extends HttpServlet {
 
     }
 
+    /**
+     * Method that checks if there are no duplicate questions
+     * @param questions list of questions
+     * @return true if the list has no duplicates, false otherwise
+     */
     protected boolean checkNoDuplicateQuestions(List<String> questions) {
         HashSet<String> testSet = new LinkedHashSet<>();
-
         for (String name : questions) {
-            if (testSet.add(name) == false) {
+            if (!testSet.add(name)) {
                 return false;
             }
         }
@@ -146,29 +157,18 @@ public class CreateQuestionnaire extends HttpServlet {
 
     }
 
+    /**
+     * Method that check the length of the questions
+     * @param questions list of questions
+     * @return true if the question have correct length, false otherwise
+     */
     protected boolean checkQuestionsLength(List<String> questions) {
-
         for (String question : questions) {
             if (question.length()<2) return false;
         }
         return true;
     }
 
-    private  Date getStartOfDay(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
-    protected boolean isBeforeToday(Date date) {
-        Date currentDate = getStartOfDay(new Date());
-
-        return date.before(currentDate);
-    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

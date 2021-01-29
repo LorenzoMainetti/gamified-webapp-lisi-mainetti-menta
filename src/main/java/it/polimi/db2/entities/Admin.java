@@ -3,7 +3,6 @@ package it.polimi.db2.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,5 +48,4 @@ public class Admin {
     public void removeCreatedProduct(Product product) {
         createdProducts.remove(product);
     }
-
 }

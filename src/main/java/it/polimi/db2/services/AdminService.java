@@ -2,15 +2,14 @@ package it.polimi.db2.services;
 
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.entities.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
 import java.security.InvalidParameterException;
-import java.util.Date;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -20,6 +19,13 @@ public class AdminService {
 
     public AdminService() { }
 
+    /**
+     * Method to obtain admin reference from id
+     * @param adminId id of the admin
+     * @return admin instance
+     * @throws PersistenceException if there is a persistence problem with the DB
+     * @throws InvalidParameterException if there is a consistency problem with the DB
+     */
     public Admin getAdmin(String adminId) throws PersistenceException, InvalidParameterException {
         Admin adminFromDB = em.find(Admin.class, adminId);
         if (adminFromDB == null)
@@ -28,8 +34,13 @@ public class AdminService {
             return adminFromDB;
     }
 
-
-
+    /**
+     * Method to check if there exist an admin with these credentials
+     * @param adminId id of the admin
+     * @param password password of the admin
+     * @return admin instance if exist
+     * @throws InvalidParameterException if there is no admin with these credentials
+     */
     public Admin checkAdminCredentials(String adminId, String password) throws InvalidParameterException{
         List<Admin> admins = em.createNamedQuery("Admin.checkCredentials", Admin.class).setParameter(1, adminId).setParameter(2, password)
                 .getResultList();
@@ -67,11 +78,4 @@ public class AdminService {
             }
         }
     }
-
-    /*
-    1) create new questionnaire => productService
-    2) inspect past questionnaire (users who submitted, users who cancelled, answers of each user)
-    3) delete past questionnaire
-     */
-
 }

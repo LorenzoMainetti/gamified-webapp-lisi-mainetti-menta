@@ -1,5 +1,6 @@
 package it.polimi.db2.servlets;
 
+import com.google.gson.Gson;
 import it.polimi.db2.auxiliary.json.QuestionnaireContent;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
@@ -21,6 +22,14 @@ public class QuestionnairePageData extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
 
+    /**
+     * Method to handle errors, redirects to an error page
+     * @param request request
+     * @param response response
+     * @param errorType type of error
+     * @param errorInfo information about the error
+     * @throws IOException if there are problems redirecting
+     */
     protected void sendError(HttpServletRequest request, HttpServletResponse response, String errorType, String errorInfo) throws IOException {
         request.getSession().setAttribute ("errorType", errorType);
         request.getSession().setAttribute ("errorInfo", errorInfo);
@@ -39,13 +48,13 @@ public class QuestionnairePageData extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Product prodOfTheDay = null;
+        Product prodOfTheDay;
         try {
             prodOfTheDay = productService.getProductOfTheDay();
             response.setStatus(HttpServletResponse.SC_OK);
             QuestionnaireContent pageData = new QuestionnaireContent(prodOfTheDay.getName(),
                     prodOfTheDay.getDescription(), ProductService.getQuestions(prodOfTheDay));
-            out.print(pageData.toJson());
+            out.print(new Gson().toJson(pageData));
         }
         catch (InvalidParameterException | EJBException e){
             sendError(request, response, "Database Error", e.getMessage());

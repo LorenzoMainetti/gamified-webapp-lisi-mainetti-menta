@@ -9,7 +9,7 @@ import java.util.List;
 public class LeaderboardContent implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private ArrayList<LeaderboardEntry> leaderboard;
+    private final ArrayList<LeaderboardEntry> leaderboard;
 
     public LeaderboardContent(List<Reward> leaderboard){
         this.leaderboard = convert(leaderboard);
@@ -31,5 +31,4 @@ public class LeaderboardContent implements Serializable {
     public ArrayList<LeaderboardEntry> getLeaderboard() {
         return leaderboard;
     }
-
 }

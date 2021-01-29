@@ -1,13 +1,10 @@
 package it.polimi.db2.services;
 
-import it.polimi.db2.entities.*;
-import it.polimi.db2.entities.ids.RewardKey;
-import jakarta.ejb.EJBTransactionRolledbackException;
+import it.polimi.db2.entities.Product;
+import it.polimi.db2.entities.Reward;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.Query;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -35,24 +32,4 @@ public class RewardService {
             return leaderboard;
         }
     }
-
-    /**
-     * Method to retrieve a specific questionnaire
-     * @param rewardKey key of the the reward table, containing both user and product information
-     * @return the reward entity desired
-     * @throws InvalidParameterException if the reward does not exist or there is more than 1 reward
-     */
-    public Reward getReward(RewardKey rewardKey) throws InvalidParameterException{
-        List<Reward> rewardList = em.createNamedQuery("Reward.getReward", Reward.class).setParameter(1, rewardKey).getResultList();
-        if (rewardList == null || rewardList.isEmpty()) {
-            throw new InvalidParameterException("Invalid rewardKey");
-        }
-        else if(rewardList.size()==1) {
-            return rewardList.get(0);
-        }
-        else {
-            throw new InvalidParameterException("internal database error");
-        }
-    }
-
 }

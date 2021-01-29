@@ -26,6 +26,14 @@ public class Login extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/AdminService")
     private AdminService adminService;
 
+    /**
+     * Method to handle errors, redirects to an error page
+     * @param request request
+     * @param response response
+     * @param errorType type of error
+     * @param errorInfo information about the error
+     * @throws IOException if there are problems redirecting
+     */
     protected void sendError(HttpServletResponse response, HttpServletRequest request, String errorType, String errorInfo) throws IOException {
         request.getSession().setAttribute ("errorType", errorType);
         request.getSession().setAttribute ("errorInfo", errorInfo);
@@ -36,14 +44,29 @@ public class Login extends HttpServlet {
         }
     }
 
+    /**
+     * Method to check email validity
+     * @param email email to check
+     * @return true if it's valid, false otherwise
+     */
     boolean isEmailValid(String email) {
         return email != null && EmailValidator.getInstance().isValid(email);
     }
 
+    /**
+     * Method to check username validity
+     * @param username username to check
+     * @return true if it's valid, false otherwise
+     */
     boolean isUsernameValid(String username) {
         return username != null && username.length()<32 && username.length() > 3;
     }
 
+    /**
+     * Method to check username validity
+     * @param password password to check
+     * @return true if it's valid, false otherwise
+     */
     boolean isPasswordValid(String password){
         return password != null && password.length()<32 && password.length() > 3;
     }
@@ -106,6 +129,5 @@ public class Login extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

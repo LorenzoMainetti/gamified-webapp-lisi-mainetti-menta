@@ -7,8 +7,7 @@ import java.util.List;
 
 
 public class PastQuestionnairePageContent implements Serializable {
-
-    List<DataEntry> pastQuestionnaires;
+    private final List<DataEntry> pastQuestionnaires;
 
     public PastQuestionnairePageContent() {
         this.pastQuestionnaires = new LinkedList<>();

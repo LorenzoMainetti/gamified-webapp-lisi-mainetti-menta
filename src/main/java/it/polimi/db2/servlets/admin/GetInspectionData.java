@@ -4,9 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.db2.admin.InspectionPageContent;
 import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Product;
-import it.polimi.db2.services.AnswerService;
 import it.polimi.db2.services.ProductService;
-import it.polimi.db2.services.QuestionService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,38 +19,33 @@ import java.util.*;
 
 @WebServlet("/GetInspectionData")
 public class GetInspectionData extends HttpServlet {
-
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
-    @EJB(name = "it.polimi.db2.entities.services/QuestionService")
-    private QuestionService questionService;
-    @EJB(name = "it.polimi.db2.entities.services/AnswerService")
-    private AnswerService answerService;
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);
     }
 
+    /**
+     * Method to check if the productId is valid
+     * @param productId id of the product to check
+     * @return true if it's correct, false otherwise
+     */
     boolean checkProductId (int productId) {
         return productId > 0;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         int productId = (Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("pid"))));
 
         if(checkProductId(productId)) {
             try {
-                //TODO handle no answers for a product
-                //String productJson = productService.getProductToGson(productId); //TODO IT CRASHED
                 List<String> usersWhoSubmitted, usersWhoCanceled;
                 Map<String, List<String>> answersForEachUser = new HashMap<>();
 
                 usersWhoSubmitted = new LinkedList<>();
                 usersWhoCanceled = new LinkedList<>();
 
-                //get lists
                 Product product = productService.getProduct(productId);
                 productService.getProductUsers(product, false).forEach( u -> {
                     usersWhoCanceled.add(u.getUsername());
@@ -61,21 +54,15 @@ public class GetInspectionData extends HttpServlet {
                     usersWhoSubmitted.add(u.getUsername());
                 });
 
-                //get all the questions for current product
-
                 List<String> questions = product.getQuestionsText();
 
-
                 for (String s : usersWhoSubmitted) {
-
                     List <Answer> answersFromUser = productService.getUserAnswers(product, s);
-
                     //get only the text
                     List<String> answers = new LinkedList<>();
                     for (Answer answer : answersFromUser) {
                         answers.add(answer.getText());
                     }
-
                     answersForEachUser.put(s, answers );
                 }
                 String encoded = null;
@@ -94,14 +81,27 @@ public class GetInspectionData extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_OK);
 
                 out.write(jsonResponse);
-
-
-
             } catch (Exception e) {
-               //todo mentaaaahhh 🌱
+                sendError(request, response, "Inspection Error", e.getCause().getMessage());
             }
         }
+    }
 
-
+    /**
+     * Method to handle errors, redirects to an error page
+     * @param request request
+     * @param response response
+     * @param errorType type of error
+     * @param errorInfo information about the error
+     * @throws IOException if there are problems redirecting
+     */
+    protected void sendError(HttpServletRequest request, HttpServletResponse response, String errorType, String errorInfo) throws IOException {
+        request.getSession().setAttribute ("errorType", errorType);
+        request.getSession().setAttribute ("errorInfo", errorInfo);
+        try {
+            getServletConfig().getServletContext().getRequestDispatcher("/error.html").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 }

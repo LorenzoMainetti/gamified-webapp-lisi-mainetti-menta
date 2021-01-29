@@ -2,15 +2,10 @@ package it.polimi.db2.services;
 
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Question;
-import it.polimi.db2.entities.User;
-import it.polimi.db2.entities.ids.QuestionKey;
-import jakarta.ejb.EJBTransactionRolledbackException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
 
-import java.security.InvalidParameterException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,58 +48,13 @@ public class QuestionService {
     }
 
     /**
-     * Method to retrieve a question from its key
-     * @param key identifier of the question
-     * @return the searched question
-     * @throws InvalidParameterException if the question does not exist or there is more than 1 question
+     * Method that returns the list of questions created for a product (both mandatory and optional)
+     * @param mandatory list of mandatory questions
+     * @param product product related to the questions
+     * @return list of questions of the profuct
      */
-    public Question getQuestion(QuestionKey key)throws InvalidParameterException {
-        List<Question> result = em.createNamedQuery("Question.getQuestion", Question.class).setParameter(1, key.getQuestionId()).setParameter(2, key.getProductId())
-                .getResultList();
-        if (result == null || result.isEmpty()) {
-            throw new InvalidParameterException("productID or questionID are wrong");
-        }
-        else if(result.size()==1) {
-            return result.get(0);
-        }
-        else {
-            throw new InvalidParameterException("internal database error");
-        }
-    }
-
-    /**
-     * Method that updates the list of user who answered to a question
-     * @param key identifier of the question
-     * @param user user who filled the question
-     * @throws PersistenceException if a problem happens managing the entity (for example it does not exists)
-     * @throws IllegalArgumentException if the argument of the merge is not an entity or it's a removed entity
-     * @// TODO: 05/01/2021 understand if it is necessary
-     */
-    public void updateUserRef(QuestionKey key, User user) throws PersistenceException, IllegalArgumentException {
-        Question question = getQuestion(key);
-        question.getUsers().add(user);
-        em.merge(question);
-        em.flush();
-    }
-
-    public Question insertQuestion(Product product, String text) {
-        Question question = new Question();
-        question.setProductId(product.getProductId());
-        question.setMandatory(true);
-        question.setText(text);
-        question.setProduct(product);
-        try {
-            em.persist(question);
-        } catch (EJBTransactionRolledbackException | PersistenceException e) {
-            throw e;
-        }
-        return question;
-    }
-
-    public List <Question> getAllQuestions(List<String> mandatory, Product product) {
-
-        List <Question> allQuestions = new LinkedList<>();
-        /* for each question text */
+    public List<Question> getAllQuestions(List<String> mandatory, Product product) {
+        List<Question> allQuestions = new LinkedList<>();
         for (String question : mandatory) {
             Question questionObj = new Question();
             questionObj.setProductId(product.getProductId());
@@ -118,19 +68,16 @@ public class QuestionService {
         allQuestions = this.addStatQuestions(allQuestions);
 
         return (allQuestions);
-
-
-        //return allQuestions;
-
-
-
     }
 
+    /**
+     * Method that sets the list of question to a product and then updates it in the DB
+     * @param product product to which add the questions
+     * @param questions list of questions to add to the product
+     */
     public void updateProductQuestions(Product product, List<Question> questions) {
         product.setQuestions(questions);
-        //persist is already done, update it
         em.merge(product);
         em.flush();
     }
-
 }

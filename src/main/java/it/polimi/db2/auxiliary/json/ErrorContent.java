@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class ErrorContent implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String errorType;
-    private String errorInfo;
+    private final String errorType;
+    private final String errorInfo;
 
     public ErrorContent(String errorType, String errorInfo) {
         this.errorType = errorType;

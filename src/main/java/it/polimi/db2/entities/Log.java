@@ -3,7 +3,6 @@ package it.polimi.db2.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
