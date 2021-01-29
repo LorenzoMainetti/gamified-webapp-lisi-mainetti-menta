@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="./scripts/leaderboard.js" defer></script>
+
+    <link rel="stylesheet" href="ale.css">
 </head>
 <body>
 
@@ -40,16 +42,23 @@
 </nav>
 
 <div class="container">
+
+    <div class="row">
+
+        <div class="col">
     <table id="id_Leaderboard_Table"  style="width:40%">
-        <h3>Product of the Day Leaderboard</h3>
+        <h3>Product of the Day: Leaderboard</h3>
         <thead>
             <tr>
                 <th>Username</th>
                 <th>Score</th>
             </tr>
         </thead>
+        <hr>
         <tbody id="id_tableBody"></tbody>
     </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>
