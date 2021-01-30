@@ -40,13 +40,9 @@ public class ImageProcessor {
     }
 
     public static BufferedImage prepareImage(byte [] imageArray, boolean convert) throws IOException {
-
         BufferedImage cropped = crop(fromByteArray(imageArray), STORED_H, STORED_W);
         if (convert) return fromByteArray(forceToJPEG(cropped));
         else return cropped;
-
-
-
     }
 
 
@@ -70,9 +66,8 @@ public class ImageProcessor {
         try {
             return ImageIO.read(bis);
         } catch (IOException e) {
-
-            e.printStackTrace(); //todo
-            return null; //TODO !!!!
+            e.printStackTrace();
+            return null;
         }
 
     }

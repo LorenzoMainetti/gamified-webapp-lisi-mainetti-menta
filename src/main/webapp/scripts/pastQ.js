@@ -31,6 +31,7 @@ function populateTable(con, table){
         let inspect_button = row.insertCell(2);
 
         var button1 = document.createElement('button');
+        button1.className = "btn btn-success";
         button1.innerHTML = "Inspect";
         button1.setAttribute('content', con.pastQuestionnaires[k].id);
         button1.addEventListener('click', () => sendProductId(button1.getAttribute('content')));
@@ -39,10 +40,9 @@ function populateTable(con, table){
 
         //add deletion button
         let delete_button = row.insertCell(3);
-
         var button2 = document.createElement("div");
         button2.innerHTML = "<form action=\"../DeleteQuestionnaire\" method=\"POST\" >\n" +
-            "<input type=\"submit\" value=\"Delete\" />\n" +
+            "<input type=\"submit\" value=\"Dele6\te\" />\n" +
             "<input name=\"prodId\" class =\"btn btn-danger\" type=\"hidden\" type=\"text\"  />"
 
         button2.getElementsByClassName("btn btn-danger")[0].value = con.pastQuestionnaires[k].id;
