@@ -33,14 +33,8 @@ public class User implements Serializable {
             inverseJoinColumns={@JoinColumn(name="productId")})
     private List<Product> products;
 
-    /* useless
-    @ManyToMany(mappedBy = "users")
-    private List<Question> questions;*/
-
     @OneToMany(mappedBy = "user")
     private List<Log> logs;
-
-
 
     public User() { }
 

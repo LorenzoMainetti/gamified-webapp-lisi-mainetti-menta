@@ -43,10 +43,6 @@ function fillQuestions(questionsList) {
     })
 }
 
-function forceLocalLogout() {
-    //todo
-}
-
 function displayFirstPart() {
     let form1 = document.getElementById("id_mandatory");
     let form2 = document.getElementById("id_optional");
@@ -100,11 +96,9 @@ window.addEventListener("load", () => {
                         break;
                     case 401: // unauthorized
                         displayError("unauthorized");
-                        forceLocalLogout();
                         break;
                     case 500: // server error
                         displayError("internal server error");
-                        forceLocalLogout();
                         break;
                 }
             }

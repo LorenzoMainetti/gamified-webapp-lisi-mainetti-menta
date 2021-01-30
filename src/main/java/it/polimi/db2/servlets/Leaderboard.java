@@ -69,11 +69,9 @@ public class Leaderboard extends HttpServlet {
                 LeaderboardContent leaderboardContent = new LeaderboardContent(null);
                 String jsonLeaderboard = new Gson().toJson(leaderboardContent);
                 out.write(jsonLeaderboard);
-                return;
             }
             else{
                 sendError(request, response, "Database Error", e.getMessage());
-                return;
             }
         }
     }

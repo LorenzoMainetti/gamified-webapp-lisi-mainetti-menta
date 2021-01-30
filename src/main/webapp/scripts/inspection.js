@@ -74,13 +74,6 @@ function populateTable(con, table){
     }
 }
 
-/*function sendPid() {
-    var text = window.location.hash.substring(1);
-    text.innerHTML = "<form action=\"../GetInspectionData\" method=\"POST\" >\n" +
-        "<input type=\"submit\"/>\n" +
-        "<input name=\"pid\" type=\"hidden\" type=\"text\"/>"
-}*/
-
 
 window.addEventListener("load", () => {
     var text = window.location.hash.substring(1);

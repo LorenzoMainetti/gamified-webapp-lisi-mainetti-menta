@@ -58,12 +58,7 @@ public class GetInspectionData extends HttpServlet {
 
                 for (String s : usersWhoSubmitted) {
                     List <Answer> answersFromUser = productService.getUserAnswers(product, s);
-                    //get only the text
-                    List<String> answers = new LinkedList<>();
-                    for (Answer answer : answersFromUser) {
-                        answers.add(answer.getText());
-                    }
-                    answersForEachUser.put(s, answers );
+                    answersForEachUser.put(s, productService.getOrderedAnswers(product.getQuestions(), answersFromUser));
                 }
                 String encoded = null;
 

@@ -254,4 +254,16 @@ public class ProductService {
         }
         em.remove(product);
     }
+
+    public List<String> getOrderedAnswers(List<Question> questions, List<Answer> answers){
+        LinkedList<String> orderedAnswers = new LinkedList<>();
+        Map<Integer, String> map = new HashMap<>();
+        for (Answer answer : answers) {
+            map.put(answer.getId().getQuestionKey().getQuestionId(), answer.getText());
+        }
+        for (Question question : questions) {
+            orderedAnswers.add(map.get(question.getQuestionId()));
+        }
+        return orderedAnswers;
+    }
 }

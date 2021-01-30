@@ -66,7 +66,7 @@ window.addEventListener("load", () => {
                                 "  <button type=\"button\" class=\"btn btn-danger\" disabled>Banned</button>\n" +
                                 " </form>\n" +
                                 " <blockquote class=\"blockquote text-center\">\n" +
-                                "  <p class=\"mb-0\">You've been banned due to \"inappropriate language during the questionnaire submission</p>\n" +
+                                "  <p class=\"mb-0\">You've been banned due to \"inappropriate language during the questionnaire submission\"</p>\n" +
                                 "  <footer class=\"blockquote-footer\">Staff </footer>\n" +
                                 " </blockquote>\n" +
                                 "</div>";
