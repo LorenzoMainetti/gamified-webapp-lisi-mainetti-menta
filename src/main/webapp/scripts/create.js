@@ -15,7 +15,7 @@ function sendQuestionnaire() {
     })
         .then(function (response) {
             //handle success
-            alert("New product has been added.");
+            alert(response.data);
             document.location.href = "index.html";
         })
         .catch(function (error) {

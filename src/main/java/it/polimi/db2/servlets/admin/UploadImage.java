@@ -21,15 +21,18 @@ public class UploadImage extends HttpServlet {
     @EJB(name = "it.polimi.db2.entities.services/ProductService")
     private ProductService productService;
 
+    private final static int FILE_SIZE = 2000 * 2000;
+
     /**
      * Method to read the image from an input stream and convert it into a byte array
+     *
      * @param imageInputStream input stream
      * @return byte array of the image
      * @throws IOException exception if there is a problem reading from the input stream
      */
     public static byte[] readImage(InputStream imageInputStream) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];// image can be maximum of 4MB
+        byte[] buffer = new byte[FILE_SIZE];// image can be maximum of 4MB
         int bytesRead = -1;
         try {
             while ((bytesRead = imageInputStream.read(buffer)) != -1) {
@@ -43,47 +46,61 @@ public class UploadImage extends HttpServlet {
 
     /**
      * Method to send error in case of bad request
-     * @param error type of error generated
+     *
+     * @param error    type of error generated
      * @param response response
      * @throws IOException exception if there is a problem reading with the stream
      */
-    private void sendBackError(String error, HttpServletResponse response) throws IOException {
+    private void sendBackMessage(String error, HttpServletResponse response) throws IOException {
         response.setContentType("text/plain");
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(error);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         InputStream imgStream = request.getPart("image").getInputStream();
+
+        boolean defaultImg = false;
         byte[] file;
-        if(imgStream.available()==0){
+        if (imgStream.available() == 0) {
             file = readImage(getClass().getClassLoader().getResource("not_found.png").openStream());
-        }
-        else{
+        } else {
             file = readImage(imgStream);
         }
-        //file = ImageProcessor.AI_Cropper(file);
-        switch (getImageType(file)) {
-            case "image/png":
-                //convert to jpeg
-                file = toByteArray(prepareImage(file, true), "jpg");
-                break;
-            case "image/jpeg":
-                file = toByteArray(prepareImage(file, false), "jpg");
-                break;
-            default:
-                sendBackError("format not supported. It would probably jeopardize the whole web application", response);
-                return;
+
+        if (file.length > FILE_SIZE) {
+            defaultImg = true;
+            file = readImage(getClass().getClassLoader().getResource("not_found.png").openStream());
+        } else {
+            try {
+                //try conversion
+                switch (getImageType(file)) {
+                    case "image/png":
+                        //convert to jpeg
+                        file = toByteArray(prepareImage(file, true), "jpg");
+                        break;
+                    case "image/jpeg":
+                        file = toByteArray(prepareImage(file, false), "jpg");
+                        break;
+                    default:
+                        file = readImage(getClass().getClassLoader().getResource("not_found.png").openStream());
+                        defaultImg = true;
+                        break;
+                }
+            } catch (NullPointerException e) {
+                //if there are problems use the default image
+                file = readImage(getClass().getClassLoader().getResource("not_found.png").openStream());
+                defaultImg = true;
+            }
         }
-        if (file.length < 2048) {
-            sendBackError("file is too large. It would probably jeopardize the whole web application", response);
-            return;
-        }
+
         int productId = (int) request.getSession().getAttribute("productId");
-        productService.dummyImageLoad(productId, file);
+        productService.imageLoad(productId, file);
         request.getSession().removeAttribute("productId");
 
         response.setStatus(HttpServletResponse.SC_OK);
+        if (defaultImg) sendBackMessage("Product Created but with a default image because uploaded file is not supported", response);
+        else sendBackMessage("Product Successfully Created!", response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

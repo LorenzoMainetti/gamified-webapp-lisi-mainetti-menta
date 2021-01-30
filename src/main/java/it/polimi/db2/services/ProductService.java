@@ -33,6 +33,7 @@ public class ProductService {
         product.setDate(date);
         product.setDescription(description);
         product.setCreatorId(admin.getAdminId());
+        product.setCreator(admin);
 
         admin.getCreatedProducts().add(product);
 
@@ -218,7 +219,7 @@ public class ProductService {
      * @throws PersistenceException if a problem happens managing the entity (for example it doesn't exists)
      * @throws IllegalArgumentException if the argument of the persist is not an entity
      */
-    public void dummyImageLoad(int productId, byte[] img) throws IllegalArgumentException, PersistenceException{
+    public void imageLoad(int productId, byte[] img) throws IllegalArgumentException, PersistenceException{
         Product product = em.find(Product.class, productId);
         product.setImage(img);
         em.merge(product);
