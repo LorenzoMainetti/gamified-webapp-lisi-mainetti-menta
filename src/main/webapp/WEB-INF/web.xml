@@ -42,7 +42,7 @@
 
         <!--- all pages after 'Admin/ -->
         <url-pattern>/Admin</url-pattern>
-        <url-pattern>/Admin/</url-pattern>
+        <url-pattern>/Admin/*</url-pattern>
 
 
     </filter-mapping>
