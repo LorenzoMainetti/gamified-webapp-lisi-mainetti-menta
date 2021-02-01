@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InspectionPageContent implements Serializable{
+
     private final String prodName, prodDescription, encodedImg;
     private final Date date;
     private final List<String> completed, canceled;

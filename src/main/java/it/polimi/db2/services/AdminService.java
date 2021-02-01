@@ -56,7 +56,7 @@ public class AdminService {
     }
 
     /**
-     * Method to check if a questionnaire date is usable
+     * Method to check if a questionnaire date is correct (today or next day)
      * @param date date of the questionnaire to create
      * @return true if the date is in the future and no other questionnaire are already present, false otherwise
      * @throws InvalidParameterException if there is a consistency problem with the DB

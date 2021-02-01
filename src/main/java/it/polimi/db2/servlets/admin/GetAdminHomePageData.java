@@ -43,6 +43,9 @@ public class GetAdminHomePageData extends HttpServlet {
         try {
             prodOfTheDay = productService.getProductOfTheDay();
         }
+        /**
+         * product of the day does not exist
+         */
         catch (InvalidParameterException | EJBException e){
             System.out.println(e.getMessage());
             if(e.getCause().getMessage().equals("No product of the Day")){

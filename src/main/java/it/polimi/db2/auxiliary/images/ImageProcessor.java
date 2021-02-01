@@ -9,6 +9,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLConnection;
 
+/**
+ * a class that provides all the functions and utils to manipulate, crop, convert an image.
+ * Used by /UploadImage
+ *
+ */
 public class ImageProcessor {
 
     public static final short STORED_H = 512;
