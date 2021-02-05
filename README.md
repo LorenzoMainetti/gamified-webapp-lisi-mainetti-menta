@@ -1,4 +1,4 @@
-Gamified DB2 LMM
+PROJECT SPECS
 
 Functional Specifications::
 
