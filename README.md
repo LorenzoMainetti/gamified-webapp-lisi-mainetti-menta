@@ -1,3 +1,5 @@
+![alt text](https://i.ibb.co/fr3cP7K/Screenshot-2021-02-05-at-14-33-09.png)
+
 PROJECT SPECS
 
 Functional Specifications::
@@ -26,3 +28,7 @@ The application should be realized with the following technologies:
 4. EJB (stateless or stateful) for the business objects
 5. JPA for object relational mapping and transaction management
 6. Triggers and constraints for database-level business constraints and rules.
+
+DATABASE DESIGN
+
+![alt text](https://pasteboard.co/JMX4SmF.png)
