@@ -1,6 +1,4 @@
 # Data Bases 2 Project - a.y. 2020-2021
-![alt text](https://i.ibb.co/fr3cP7K/Screenshot-2021-02-05-at-14-33-09.png)
-
 The goal of the project is to implement a web app that deals with gamified consumer data collection.
 - User View: a user can access the homepage where the product of the day is published, and he can complete the related questionnaire. The application computes the gamification points of each user that can be checked in the leaderboard.
 - Admin View: an admin can access a reserved homepage where he is able to create a new questionnaire for the day of for a future date, inspect or delete a past questionnaire.
@@ -25,8 +23,31 @@ The ER Diagram of the project and other design choices are accurately described 
 ## Screenshots
 Here are some screenshots from the web app, showing the user view and the admin view.
 #### User View
+Homepage
+
+![alt text](https://i.ibb.co/QmVzJwV/User-Homepage.png)
+
+Leaderboard Page
+
+![alt text](https://i.ibb.co/9hcy25j/User-Leaderboard.png)
+
+Questionnaire Page
+
+![alt text](https://i.ibb.co/PYqpWnR/User-Questionnaire2.png)
 
 #### Admin View
+Homepage
+
+![alt text](https://i.ibb.co/VYxLvkt/Admin-Homepage.png)
+
+Past Questionnaires Page
+
+![alt text](https://i.ibb.co/jLgVfL3/Admin-Past-Questionnaires.png)
+
+Inspection Page
+
+![alt text](https://i.ibb.co/g6JVgJP/Admin-Inspection-Page.png)
+
 
 ## Group Members
 - [__Alessandro Lisi__](https://github.com/PrivateAbstractAleLisi)
