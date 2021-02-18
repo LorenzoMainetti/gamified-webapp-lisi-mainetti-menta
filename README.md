@@ -23,28 +23,16 @@ The ER Diagram of the project and other design choices are accurately described 
 ## Screenshots
 Here are some screenshots from the web app, showing the user view and the admin view.
 #### User View
-Homepage
-
 ![alt text](https://i.ibb.co/QmVzJwV/User-Homepage.png)
 
-Leaderboard Page
-
 ![alt text](https://i.ibb.co/9hcy25j/User-Leaderboard.png)
-
-Questionnaire Page
 
 ![alt text](https://i.ibb.co/PYqpWnR/User-Questionnaire2.png)
 
 #### Admin View
-Homepage
-
 ![alt text](https://i.ibb.co/VYxLvkt/Admin-Homepage.png)
 
-Past Questionnaires Page
-
 ![alt text](https://i.ibb.co/jLgVfL3/Admin-Past-Questionnaires.png)
-
-Inspection Page
 
 ![alt text](https://i.ibb.co/g6JVgJP/Admin-Inspection-Page.png)
 
