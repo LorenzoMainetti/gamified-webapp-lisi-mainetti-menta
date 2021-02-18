@@ -1,7 +1,7 @@
 package it.polimi.db2.servlets.admin;
 
 import com.google.gson.Gson;
-import it.polimi.db2.admin.AdminHomePageContent;
+import it.polimi.db2.auxiliary.json.admin.AdminHomePageContent;
 import it.polimi.db2.auxiliary.AdminStatus;
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
@@ -43,9 +43,8 @@ public class GetAdminHomePageData extends HttpServlet {
         try {
             prodOfTheDay = productService.getProductOfTheDay();
         }
-        /**
-         * product of the day does not exist
-         */
+
+        //product of the day does not exist
         catch (InvalidParameterException | EJBException e){
             System.out.println(e.getMessage());
             if(e.getCause().getMessage().equals("No product of the Day")){

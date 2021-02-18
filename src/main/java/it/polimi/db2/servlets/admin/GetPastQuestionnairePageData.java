@@ -1,8 +1,8 @@
 package it.polimi.db2.servlets.admin;
 
 import com.google.gson.Gson;
-import it.polimi.db2.admin.DataEntry;
-import it.polimi.db2.admin.PastQuestionnairePageContent;
+import it.polimi.db2.auxiliary.json.admin.DataEntry;
+import it.polimi.db2.auxiliary.json.admin.PastQuestionnairePageContent;
 import it.polimi.db2.entities.Admin;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.AdminService;

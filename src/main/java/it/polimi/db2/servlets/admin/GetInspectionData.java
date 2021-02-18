@@ -1,7 +1,7 @@
 package it.polimi.db2.servlets.admin;
 
 import com.google.gson.Gson;
-import it.polimi.db2.admin.InspectionPageContent;
+import it.polimi.db2.auxiliary.json.admin.InspectionPageContent;
 import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.services.ProductService;
@@ -47,12 +47,8 @@ public class GetInspectionData extends HttpServlet {
                 usersWhoCanceled = new LinkedList<>();
 
                 Product product = productService.getProduct(productId);
-                productService.getProductUsers(product, false).forEach( u -> {
-                    usersWhoCanceled.add(u.getUsername());
-                });
-                productService.getProductUsers(product, true).forEach( u -> {
-                    usersWhoSubmitted.add(u.getUsername());
-                });
+                productService.getProductUsers(product, false).forEach( u -> usersWhoCanceled.add(u.getUsername()));
+                productService.getProductUsers(product, true).forEach( u -> usersWhoSubmitted.add(u.getUsername()));
 
                 List<String> questions = product.getQuestionsText();
 

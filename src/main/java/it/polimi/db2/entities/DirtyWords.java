@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "dirtyWords", schema = "db_gamified_app")
-@NamedQuery(name = "DirtyWords.checkAnswer", query = "SELECT a FROM DirtyWords a WHERE a.word = ?1")
 @NamedQuery(name = "DirtyWords.CheckSentence", query = "SELECT d FROM DirtyWords d WHERE d.word in ?1")
 public class DirtyWords implements Serializable {
 

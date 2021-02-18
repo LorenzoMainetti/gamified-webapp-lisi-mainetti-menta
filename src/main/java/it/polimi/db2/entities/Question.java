@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @IdClass(QuestionKey.class)
 @Table(name = "question", schema = "db_gamified_app")
-@NamedQuery(name = "Question.getQuestion", query = "SELECT q FROM Question q  WHERE q.questionId = ?1 AND q.productId = ?2")
 public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
 

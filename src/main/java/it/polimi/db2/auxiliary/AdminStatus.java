@@ -7,5 +7,5 @@ import java.io.Serializable;
  * if the product is there or not.
  */
 public enum AdminStatus implements Serializable {
-    AVAILABLE ,NOT_AVAILABLE;
+    AVAILABLE, NOT_AVAILABLE
 }

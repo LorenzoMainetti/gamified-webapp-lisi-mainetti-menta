@@ -131,7 +131,6 @@ public class CreateQuestionnaire extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("text/plain");
                 response.getWriter().println("Please remove duplicated entries.");
-                return;
             }
         } else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

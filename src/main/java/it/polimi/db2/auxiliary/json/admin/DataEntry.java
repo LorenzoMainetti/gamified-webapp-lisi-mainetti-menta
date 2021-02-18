@@ -1,4 +1,4 @@
-package it.polimi.db2.admin;
+package it.polimi.db2.auxiliary.json.admin;
 
 import java.io.Serializable;
 import java.util.Date;

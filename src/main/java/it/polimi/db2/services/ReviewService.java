@@ -14,7 +14,6 @@ import java.util.Random;
 public class ReviewService {
     @PersistenceContext(unitName = "gamifiedApp")
     private EntityManager em;
-    private final int reviewNumber = 5;
 
     public ReviewService(){
     }
@@ -27,13 +26,14 @@ public class ReviewService {
     public ArrayList<String> getRandomReviews() throws InvalidParameterException {
         ArrayList<String> result = new ArrayList<>();
         long totalReview = em.createNamedQuery("Review.getReviewNumber", long.class).getSingleResult();
+        int reviewNumber = 5;
         if((int) totalReview < reviewNumber){
             throw new InvalidParameterException("Not enough review in the DB");
         }
         else {
             Random random = new Random();
             List<Review> review;
-            ArrayList<Integer> selected = new ArrayList<Integer>();
+            ArrayList<Integer> selected = new ArrayList<>();
             int index;
             int i = 0;
             while (i < reviewNumber) {
