@@ -3,6 +3,8 @@ The goal of the project is to implement a web app that deals with gamified cons
 - User View: a user can access the homepage where the product of the day is published, and he can complete the related questionnaire. The application computes the gamification points of each user that can be checked in the leaderboard.
 - Admin View: an admin can access a reserved homepage where he is able to create a new questionnaire for the day of for a future date, inspect or delete a past questionnaire.
 
+More infos on the specifications here -> [specs](https://github.com/PrivateAbstractAleLisi/gamified-webapp-lisi-mainetti-menta/tree/main/specs)
+
 ## Technical specifications
 The application has been realized in a JEE (Java Enterprise Edition) environment, particularly exploiting JPA, EJBs and Servelts.
 The following technologies are employed:
@@ -18,7 +20,7 @@ The following technologies are employed:
 - JavaScript for dynamically modifying the pages
 
 ## Documentation
-The ER Diagram of the project and other design choices are accurately described here -> [Design](https://github.com/PrivateAbstractAleLisi/gamified-webapp-lisi-mainetti-menta/tree/main/design)
+The ER Diagram of the project and other design choices are accurately described here -> [design](https://github.com/PrivateAbstractAleLisi/gamified-webapp-lisi-mainetti-menta/tree/main/design)
 
 ## Screenshots
 Here are some screenshots from the web app, showing the user view and the admin view.
