@@ -6,7 +6,7 @@ The goal of the project is to implement a web app that deals with gamified cons
 More infos on the specifications here -> [specs](https://github.com/PrivateAbstractAleLisi/gamified-webapp-lisi-mainetti-menta/tree/main/specs)
 
 ## Technical specifications
-The application has been realized in a JEE (Java Enterprise Edition) environment, particularly exploiting JPA, EJBs and Servelts.
+The application has been realized in a JEE (Java Enterprise Edition) environment, particularly exploiting JPA, EJBs and Servlets.
 The following technologies are employed:
 - MySQL DBMS
 - TomEE JEE application/web server
