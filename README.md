@@ -1,7 +1,7 @@
 # Data Bases 2 Project - a.y. 2020-2021
 The goal of the project is to implement a web app that deals with gamified consumer data collection.
-- User View: a user can access the homepage where the product of the day is published, and he can complete the related questionnaire. The application computes the gamification points of each user that can be checked in the leaderboard.
-- Admin View: an admin can access a reserved homepage where he is able to create a new questionnaire for the day of for a future date, inspect or delete a past questionnaire.
+- **User View**: a user can access the homepage where the product of the day is published, and he can complete the related questionnaire. The application computes the gamification points of each user that can be checked in the leaderboard.
+- **Admin View**: an admin can access a reserved homepage where he is able to create a new questionnaire for the day of for a future date, inspect or delete a past questionnaire.
 
 More infos on the specifications here -> [specs](https://github.com/PrivateAbstractAleLisi/gamified-webapp-lisi-mainetti-menta/tree/main/specs)
 
