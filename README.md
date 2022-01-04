@@ -25,19 +25,30 @@ The ER Diagram of the project and other design choices are accurately described 
 ## Screenshots
 Here are some screenshots from the web app, showing the user view and the admin view.
 #### User View
-![alt text](https://i.ibb.co/QmVzJwV/User-Homepage.png)
-
-![alt text](https://i.ibb.co/9hcy25j/User-Leaderboard.png)
-
-![alt text](https://i.ibb.co/PYqpWnR/User-Questionnaire2.png)
+<kbd>
+  <img src="https://i.ibb.co/QmVzJwV/User-Homepage.png">
+</kbd>
+<br/><br/>
+<kbd>
+  <img src="https://i.ibb.co/9hcy25j/User-Leaderboard.png">
+</kbd>
+<br/><br/>
+<kbd>
+  <img src="https://i.ibb.co/PYqpWnR/User-Questionnaire2.png">
+</kbd>
 
 #### Admin View
-![alt text](https://i.ibb.co/VYxLvkt/Admin-Homepage.png)
-
-![alt text](https://i.ibb.co/jLgVfL3/Admin-Past-Questionnaires.png)
-
-![alt text](https://i.ibb.co/g6JVgJP/Admin-Inspection-Page.png)
-
+<kbd>
+  <img src="https://i.ibb.co/VYxLvkt/Admin-Homepage.png">
+</kbd>
+<br/><br/>
+<kbd>
+  <img src="https://i.ibb.co/jLgVfL3/Admin-Past-Questionnaires.png">
+</kbd>
+<br/><br/>
+<kbd>
+  <img src="https://i.ibb.co/g6JVgJP/Admin-Inspection-Page.png">
+</kbd>
 
 ## Group Members
 - [__Alessandro Lisi__](https://github.com/PrivateAbstractAleLisi)
